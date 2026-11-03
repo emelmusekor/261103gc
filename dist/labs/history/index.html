@@ -1,6 +1,6 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><style>.extension{box-sizing:border-box;max-width:1160px;margin:32px auto;padding:24px;border:1px solid #cbd8d0;border-radius:12px;background:#f5f8f2;color:#21392f;font:15px/1.7 "Malgun Gothic",sans-serif}.extension h2{font-size:22px;margin:0 0 10px}.extension button,.extension input{font:inherit;border:1px solid #adbcaf;border-radius:6px;padding:8px 12px;margin:4px;background:white;color:#21392f}.extension button{cursor:pointer}.extension table{width:100%;border-collapse:collapse}.extension th,.extension td{border-bottom:1px solid #cad7cc;padding:9px;text-align:left}.extension output{display:block;margin-top:12px}.lab-back{display:flex;gap:16px;align-items:center;padding:12px 20px;background:#183d32;color:#fff;font:13px/1.5 sans-serif}.lab-back a{color:#fff;text-decoration:none}.lab-back span{margin-left:auto;font-size:12px}@media(max-width:600px){.extension{margin:16px 8px;padding:16px;overflow-x:auto}}</style><nav class="lab-back"><a href="../../index.html">← 탐구 실험실</a><a href="../../lab.html?id=history&view=feedback">개선 내용</a><span id="notebookStatus">탐구 기록</span></nav><aside class="inquiry-banner"><span>탐구 질문</span><h2>자료를 더 읽으면 서술은 언제나 더 균형 잡힐까?</h2><p>서술을 고정하기 전에, 어떤 기록이 들어오면 사건의 이름이 달라질지 예상해 보세요.</p><details><summary>실험 뒤에 생각해 보기</summary><p>무엇을 고정했고, 무엇을 바꿨나요? 달라진 결과를 근거와 연결해 설명하고, 내 설명을 확인할 다른 실험도 생각해 보세요.</p></details></aside><style>.inquiry-banner{max-width:1160px;margin:24px auto;padding:24px 28px;background:#edf2df;color:#2a4934;border-left:3px solid #709058;border-radius:0 8px 8px 0;font:14px/1.8 sans-serif}.inquiry-banner>span{font-size:11px;color:#758766}.inquiry-banner h2{font-size:22px;margin:7px 0 10px;line-height:1.5}.inquiry-banner summary{cursor:pointer;font-size:12px;margin-top:12px}.inquiry-banner p{margin:0}@media(max-width:600px){.inquiry-banner{margin:16px 8px;padding:18px}.inquiry-banner h2{font-size:19px}}</style><section class="extension" id="inquiry-experiment"><h2>두 서술 비교하기</h2><p>현재 사료 조합을 고정한 뒤 다른 기록을 켜고 꺼 보세요.</p><button id="pinNarrative">현재 서술 고정</button><button id="clearNarrative">고정 해제</button><div id="pinnedNarrative" aria-live="polite">아직 고정한 서술이 없습니다.</div></section>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="stylesheet" href="../../assets/program.css?v=2"><script>if(self!==top)document.documentElement.classList.add('embedded');</script></head><body data-program="history"><nav class="program-nav"><a href="../../index.html">실험 모음</a><a href="../../lab.html?id=history&view=feedback">피드백</a></nav>
 <title>1894 사료 실험실</title>
-
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -164,7 +164,7 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;font-si
   <aside class="machine" aria-live="polite">
     <div class="mhead"><h2>AI 역사 서술기</h2><span class="count" id="count">0 / 10 사료</span></div>
     <p class="prompt">질문: <b>“1894년에 일어난 일을 설명해 줘.”</b></p>
-    <div class="answer" id="answer"></div>
+    <div class="inline-tools"><button type="button" id="saveNarrative">비교 기준 저장</button><button type="button" id="clearNarrative">비교 지우기</button></div><div class="answer" id="answer"></div>
     <p class="disclaim">켠 기록만 학습했다고 가정한 모의 AI입니다. 각 문장 뒤의 표시는 그 문장을 만든 근거 사료입니다.</p>
 
     <div class="gauges">
@@ -178,10 +178,10 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;font-si
         <div class="bars" id="bars"></div>
       </div>
       <div class="gap">
-        <div class="gapbox conf"><span class="k">서술의 말투</span><span class="n" id="conf">–</span><span class="d">답변의 말투가 얼마나 단정적인가</span></div>
+        <div class="gapbox conf"><span class="k">AI가 말하는 확신도</span><span class="n" id="conf">–</span><span class="d">답변의 말투가 얼마나 단정적인가</span></div>
         <div class="gapbox"><span class="k">실제 관점 다양성</span><span class="n" id="div">–</span><span class="d">다섯 갈래 관점 중 몇 개를 읽었나</span></div>
         <div class="groupsrow" id="groupsrow"></div>
-        <p class="gapnote" id="gapnote"></p>
+        <p id="narrativeDelta" class="comparison-text" aria-live="polite"></p><p class="gapnote" id="gapnote"></p>
       </div>
     </div>
   </aside>
@@ -200,7 +200,7 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;font-si
 <section class="block">
   <h2>탐구 미션</h2>
   <p class="sub">사료를 켜고 끄며 아래 조건을 만족시켜 보세요. 조건을 채우면 자동으로 표시됩니다.</p>
-  <div class="missions" id="missions"></div>
+  <details id="savedNarrative" class="plain-details" hidden><summary>저장한 서술 보기</summary><p id="savedNarrativeText"></p></details><div class="missions" id="missions"></div>
 </section>
 
 <section class="block">
@@ -208,7 +208,7 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;font-si
   <p class="sub">적은 내용은 이 화면에만 남고 어디에도 전송되지 않습니다.</p>
   <div class="qs">
     <div class="q"><span class="no">一</span><div><label for="q1">AI의 서술이 가장 크게 달라진 순간은 어떤 사료를 켜거나 껐을 때였나요? 그 사료는 누가, 언제, 왜 남긴 기록인가요?</label><textarea id="q1"></textarea></div></div>
-    <div class="q"><span class="no">二</span><div><label for="q2">사료가 한두 개뿐일 때도 AI의 말투는 단정적이었습니다. AI의 답을 믿기 전에 우리는 무엇을 확인해야 할까요?</label><textarea id="q2"></textarea></div></div>
+    <div class="q"><span class="no">二</span><div><label for="q2">사료가 한두 개뿐일 때도 AI의 확신도는 높았습니다. AI의 답을 믿기 전에 우리는 무엇을 확인해야 할까요?</label><textarea id="q2"></textarea></div></div>
     <div class="q"><span class="no">三</span><div><label for="q3">이 사건을 ‘동학란’, ‘동학 농민 운동’, ‘동학 농민 혁명’으로 부를 때 각각 어떤 관점이 담기나요? 여러분은 어떤 이름이 알맞다고 생각하나요?</label><textarea id="q3"></textarea></div></div>
     <div class="q"><span class="no">四</span><div><label for="q4">‘끝내 켤 수 없는 기록’의 빈자리를 채우려면 역사가는 어떤 방법을 쓸 수 있을까요? AI가 그 빈자리를 그럴듯하게 채워 준다면 그것을 역사라고 할 수 있을까요?</label><textarea id="q4"></textarea></div></div>
   </div>
@@ -366,9 +366,9 @@ function render(){
     needle.style.left=((a.view+2)/4*100)+"%";
     document.getElementById("viewLbl").textContent=viewLabel(a.view);
     bars.innerHTML=CAUSES.map((c,k)=>`<div class="bar"><span>${c}</span><span class="track"><span class="fill" style="width:${Math.round(a.cp[k]*100)}%"></span></span><span class="v">${Math.round(a.cp[k]*100)}%</span></div>`).join("");
-    const cf="단정적";
+    const cf=Math.min(97,91+ids.length%4+(a.groups.size===1?3:0));
     const dv=Math.round(a.groups.size/5*100);
-    conf.textContent=cf;div.textContent=dv+"%";
+    conf.textContent=cf+"%";div.textContent=dv+"%";
     note.textContent=dv<=40?"근거는 한쪽 관점뿐인데 AI는 거의 확신하고 있습니다. 답의 말투만 보고는 근거가 얼마나 빈약한지 알 수 없습니다."
       :dv<100?"여러 관점을 읽었지만 아직 빠진 목소리가 있습니다. 빠진 관점은 무엇이고, 그 관점이 들어오면 답이 어떻게 바뀔까요?"
       :"다섯 갈래 관점을 모두 읽었습니다. 그래도 ‘끝내 켤 수 없는 기록’은 여전히 비어 있습니다.";
@@ -381,7 +381,6 @@ function render(){
     el.querySelector(".st").textContent=done?"완료":(i===3&&(m4.neg||m4.pos)?"절반 완료":"진행 중")});
 }
 render();
-document.getElementById("pinNarrative").onclick=()=>{const box=document.getElementById("pinnedNarrative");box.replaceChildren();const info=document.createElement("p");info.textContent="고정한 사료: "+[...on].join(", ");const text=document.createElement("p");text.textContent=document.getElementById("answer").innerText;box.append(info,text)};document.getElementById("clearNarrative").onclick=()=>document.getElementById("pinnedNarrative").textContent="아직 고정한 서술이 없습니다.";document.getElementById("answer").addEventListener("click",e=>{const tag=e.target.closest(".tag");if(tag){document.getElementById("src-"+tag.textContent)?.scrollIntoView({behavior:"smooth",block:"center"});document.getElementById("src-"+tag.textContent)?.focus()}});new MutationObserver(()=>document.querySelectorAll("#answer .tag").forEach(t=>{t.tabIndex=0;t.setAttribute("role","button");t.setAttribute("aria-label",t.textContent+" 근거 사료 보기");t.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t.click()}}})).observe(document.getElementById("answer"),{childList:true});render();
 </script>
 
-<script src="../../assets/notebook.js"></script></body></html>
+<script>(()=>{let saved=null;const q=id=>document.getElementById(id);function compare(){if(!saved)return;q('narrativeDelta').textContent='저장: '+saved.ids.length+'개 사료 / 현재: '+on.size+'개 사료. '+(saved.text===q('answer').innerText?'서술이 같습니다.':'서술이 달라졌습니다. 저장한 문장과 근거를 비교해 보세요.');}q('saveNarrative').onclick=()=>{saved={ids:[...on],text:q('answer').innerText};q('savedNarrative').hidden=false;q('savedNarrativeText').textContent='선택한 사료 '+saved.ids.join(', ')+'\n\n'+saved.text;compare()};q('clearNarrative').onclick=()=>{saved=null;q('savedNarrative').hidden=true;q('narrativeDelta').textContent=''};new MutationObserver(compare).observe(q('answer'),{childList:true});})();</script><script src="../../assets/drafts.js?v=2"></script></body></html>
