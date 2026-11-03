@@ -2,3 +2,5 @@
 body[data-program=drone] #app>header{background:#fff;color:#222;border-bottom:1px solid #ddd}body[data-program=drone] #app>header:after{display:none}body[data-program=drone] header .pill{color:#555;border-color:#ddd}body[data-program=drone] .control,body[data-program=drone] .checkrow label,body[data-program=drone] .resultbox,body[data-program=drone] .formula,body[data-program=drone] .feedback{background:#fff;border-radius:0;border-color:#ddd}body[data-program=drone] .control{border-width:0 0 1px;padding:12px 0}body[data-program=drone] #drone{width:100%;max-width:none;border-top:1px solid #bbb;padding-top:20px}
 
 @media(max-width:650px){#sensorKSweep table{table-layout:fixed}#sensorKSweep th,#sensorKSweep td{white-space:normal;overflow-wrap:anywhere}#sensorKSweep th:first-child{width:35px}#sensorKSweep th:nth-child(2){width:90px}body[data-program=drone] .grid{grid-template-columns:minmax(0,1fr)}}
+
+body[data-program=drone] #drone{margin:20px 0!important}
