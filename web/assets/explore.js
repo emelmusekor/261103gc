@@ -1,7 +1,7 @@
 (()=>{
 const start=()=>{
 const id=document.body.dataset.program,$=s=>document.getElementById(s),el=(t,text)=>{const n=document.createElement(t);if(text)n.textContent=text;return n},button=(text,fn)=>{const b=el('button',text);b.type='button';b.onclick=fn;return b};
-async function ask(task,question,context){const r=await fetch('/api/analyze',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({apiKey:window.LabAPI?.key()||"",task,question,context})});const d=await r.json();if(!r.ok)throw Error(d.message||'다시 시도해 주세요.');return d.result}
+async function ask(task,question,context){const r=await fetch('/api/analyze',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({apiKey:window.LabAPI?.key()||"",task,question,context})});const d=await r.json();if(!r.ok)throw Error(d.message||'다시 시도해 주세요.');document.dispatchEvent(new CustomEvent("lab:analysis",{detail:{task,question,context,result:d.result}}));return d.result}
 if(id==='history'){
 const root=$('history'),details=el('details'),title=el('input'),text=el('textarea'),use=el('input');use.type='checkbox';use.id='useSourceK';title.placeholder='사료의 제목·출처';text.placeholder='비교할 사료의 본문을 붙여 넣으세요.';text.rows=5;text.maxLength=12000;title.maxLength=200;
 details.append(el('summary','직접 찾은 사료를 더해 비교하기'));const label=el('label');label.append(use,document.createTextNode(' 이 자료를 근거 K로 포함'));const card=el('div');card.id='src-K';card.tabIndex=-1;card.append(title,text,label);details.append(card);root.prepend(details);
@@ -23,7 +23,7 @@ const compare=el('div');compare.id='poseAngleComparison';let saved=null;const sa
 if(id==='drone'){
 const root=$('drone'),heading=document.querySelector('main');root.querySelector('h3').textContent='센서 기록으로 다음 실험 만들기';$('droneQuestion').value='현재 판단을 바꾸는 원인이 센서인지 이웃 수인지 확인할 실험을 제안해 줘.';
 const old=window.LabBridge.apply;window.LabBridge.apply=e=>{const before=window.LabBridge.context(),after=old(e);const c=window.LabBridge.context();let table=$('droneComparison');if(!table){table=el('div');table.id='droneComparison';root.append(table)}table.replaceChildren(el('h4','실행 전후의 실제 결과'));for(const [title,v]of [['실행 전',before],['실행 후',c]])table.append(el('p',title+' · '+v.prediction+' / 기울기 '+v.reading.t.toFixed(1)+'°, 진동 '+v.reading.v.toFixed(1)+', K='+v.settings.k),el('p','참고한 이웃: '+v.neighbors.map(n=>n.label).join(', ')));table.append(el('p','제안은 가설이며 위 분류는 실제 계산 결과입니다. 여러 조건을 바꿨다면 원인을 하나씩 다시 확인하세요.'));return after};
-const panel=root.closest('section.panel')||root.parentElement;const anchor=document.querySelector('.hero');if(anchor)anchor.after(root);
+const grid=document.querySelector('main.wrap>.grid');if(grid){root.classList.add('wide');grid.children[2].before(root);}
 }
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 })();
