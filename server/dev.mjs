@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {handleAI} from './ai.mjs';
 const root=path.resolve('web'),env={};
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml'};
 let server;
 async function handler(req,res){
  try{
