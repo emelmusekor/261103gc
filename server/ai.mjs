@@ -4,6 +4,7 @@ const object=properties=>({type:'object',properties,required:Object.keys(propert
 const array=items=>({type:'array',items});
 const step=object({title:str,detail:str});
 const tasks={
+'ml.evaluate':{schema:object({summary:str,evidence:strings,limits:strings,next_question:str}),instruction:'학습자가 실행한 K-NN 검증 결과만 근거로 해석한다. 학습과 검증은 서로 분리되어 있고 검증은 가상 데이터 내부 결과다. 제공된 정확도, 혼동행렬, 유형별 재현율, 기준선과 선택 사례의 실제 이웃을 구체적으로 인용한다. 수치를 재창작하거나 새로운 실험의 결과를 단정하지 않는다. 학습 자료 자체 점수와 검증 점수의 차이, 표본 수와 레이블 오류, 학습에서 제외된 유형의 영향을 설명한다. 같은 검증 자료를 반복 확인하며 K를 고르는 것은 최종 시험이 아니며 새로운 독립 자료가 필요함을 연결한다. 사람의 적성, 진로 성공이나 실제 비행 안전성을 판정하지 않는다. 다음에 바꿀 한 요인과 확인할 지표를 질문으로 제시한다.'},
 'history.write':{
  schema:object({title:str,paragraphs:array(object({text:str,source_ids:strings})),missing_questions:strings,next_question:str}),
  instruction:'선택된 사료만 근거로 역사 서술을 작성한다. 각 문단에는 실제로 뒷받침하는 선택 사료의 id만 source_ids에 담는다. 사료에 없는 내용을 사실처럼 보태지 않는다. 사료의 주장과 확인된 사실을 구분한다. 서로 충돌하는 주장은 지우지 말고 어느 사료가 어떻게 다른지 설명한다. 3~5개의 짧은 문단을 쓰고, 누락된 관점과 추가 확인 질문을 제시한다.'
