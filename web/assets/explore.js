@@ -1,0 +1,29 @@
+(()=>{
+const start=()=>{
+const id=document.body.dataset.program,$=s=>document.getElementById(s),el=(t,text)=>{const n=document.createElement(t);if(text)n.textContent=text;return n},button=(text,fn)=>{const b=el('button',text);b.type='button';b.onclick=fn;return b};
+async function ask(task,question,context){const r=await fetch('/api/analyze',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({apiKey:window.LabAPI?.key()||"",task,question,context})});const d=await r.json();if(!r.ok)throw Error(d.message||'다시 시도해 주세요.');return d.result}
+if(id==='history'){
+const root=$('history'),details=el('details'),title=el('input'),text=el('textarea'),use=el('input');use.type='checkbox';use.id='useSourceK';title.placeholder='사료의 제목·출처';text.placeholder='비교할 사료의 본문을 붙여 넣으세요.';text.rows=5;text.maxLength=12000;title.maxLength=200;
+details.append(el('summary','직접 찾은 사료를 더해 비교하기'));const label=el('label');label.append(use,document.createTextNode(' 이 자료를 근거 K로 포함'));const card=el('div');card.id='src-K';card.tabIndex=-1;card.append(title,text,label);details.append(card);root.prepend(details);
+const old=window.LabBridge.context;window.LabBridge.context=()=>{const c=old();if(use.checked&&text.value.trim())c.sources.push({id:'K',title:title.value.trim()||'직접 입력한 자료',gist:text.value.trim(),warn:'사용자가 제공한 자료로 출처와 사실을 교차 확인해야 함'});return c};text.oninput=()=>use.checked=!!text.value.trim();
+}
+if(id==='math'){
+$('interpret').textContent='이 질문으로 AI에 묻기';$('prompt').querySelector('.label').textContent='실제 응답';
+const root=$('math'),d=el('details');d.append(el('summary','두 질문을 나란히 풀어 비교하기'));
+const a=el('textarea'),b=el('textarea'),out=el('div'),state=el('p');a.id='compareQuestionA';b.id='compareQuestionB';a.rows=b.rows=2;a.value='사과 24개를 6명에게 똑같이 나누면 한 명당 몇 개일까?';b.value='사과 24개를 한 사람에게 6개씩 주면 몇 명에게 줄 수 있을까?';const go=button('두 질문 풀기',async()=>{go.disabled=true;state.textContent='두 질문을 각각 풀고 있습니다…';out.replaceChildren();try{const results=await Promise.all([a,b].map(n=>ask('math.solve',n.value,{comparison:true})));for(let i=0;i<2;i++){const section=el('section');section.append(el('h4',i===0?'질문 A':'질문 B'),el('p',[a,b][i].value),el('strong',results[i].answer));for(const s of results[i].steps)section.append(el('p',s.title+' · '+s.detail));section.append(el('p',results[i].verification));out.append(section)}state.textContent='답의 숫자뿐 아니라 무엇을 세는지 비교해 보세요.'}catch(e){state.textContent=e.message}finally{go.disabled=false}});go.id='compareQuestions';out.className='paired-results';out.id='questionComparison';d.append(el('label','질문 A'),a,el('label','질문 B'),b,go,state,out);root.append(d);
+}
+if(id==='pose'){
+window.LabBridge.photoMode(true);
+const root=$('poseAI'),upload=root.querySelector('.ai-upload'),video=el('video'),cameraStatus=el('p');video.autoplay=true;video.playsInline=true;video.hidden=true;video.style.maxWidth='100%';let stream;
+const open=button('카메라 켜기',async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});video.srcObject=stream;video.hidden=false;await video.play();cameraStatus.textContent='사진 찍기를 눌러 분석할 장면을 선택하세요.'}catch{cameraStatus.textContent='카메라 권한을 확인하거나 사진 파일을 선택하세요.'}});
+const snap=button('사진 찍기',async()=>{if(!video.videoWidth){cameraStatus.textContent='카메라를 먼저 켜 주세요.';return}const c=document.createElement('canvas');c.width=video.videoWidth;c.height=video.videoHeight;c.getContext('2d').drawImage(video,0,0);const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.88)),dt=new DataTransfer();dt.items.add(new File([blob],'movement.jpg',{type:'image/jpeg'}));$('poseImage').files=dt.files;$('poseImage').dispatchEvent(new Event('change',{bubbles:true}));stream.getTracks().forEach(t=>t.stop());video.hidden=true;cameraStatus.textContent='장면을 선택했습니다. 관절 찾고 분석하기를 눌러 주세요.'});
+upload.after(open,snap,cameraStatus,video);window.addEventListener('pagehide',()=>stream?.getTracks().forEach(t=>t.stop()));
+const compare=el('div');compare.id='poseAngleComparison';let saved=null;const save=button('현재 관절·각도를 비교 기준으로 저장',()=>{const angle=$('poseMeasuredAngle').textContent;if(!angle.includes('°')){compare.textContent='세 관절을 확인한 뒤 저장해 주세요.';return}saved={angle:Number(angle.match(/([\d.]+)°/)[1]),image:$('posePhoto').querySelector('image').getAttribute('href')};compare.textContent='기준 각도 '+saved.angle+'°. 다른 사진을 분석하거나 점을 움직여 비교하세요.'});save.id='savePhotoAngle';$('posePointControls').append(save,compare);new MutationObserver(()=>{if(!saved)return;const match=$('poseMeasuredAngle').textContent.match(/([\d.]+)°/);if(match)compare.textContent='기준 '+saved.angle+'° → 현재 '+match[1]+'° / 차이 '+(Number(match[1])-saved.angle).toFixed(1)+'°. 같은 관절과 촬영 방향인지 확인하세요.'}).observe($('poseMeasuredAngle'),{childList:true});
+}
+if(id==='drone'){
+const root=$('drone'),heading=document.querySelector('main');root.querySelector('h3').textContent='센서 기록으로 다음 실험 만들기';$('droneQuestion').value='현재 판단을 바꾸는 원인이 센서인지 이웃 수인지 확인할 실험을 제안해 줘.';
+const old=window.LabBridge.apply;window.LabBridge.apply=e=>{const before=window.LabBridge.context(),after=old(e);const c=window.LabBridge.context();let table=$('droneComparison');if(!table){table=el('div');table.id='droneComparison';root.append(table)}table.replaceChildren(el('h4','실행 전후의 실제 결과'));for(const [title,v]of [['실행 전',before],['실행 후',c]])table.append(el('p',title+' · '+v.prediction+' / 기울기 '+v.reading.t.toFixed(1)+'°, 진동 '+v.reading.v.toFixed(1)+', K='+v.settings.k),el('p','참고한 이웃: '+v.neighbors.map(n=>n.label).join(', ')));table.append(el('p','제안은 가설이며 위 분류는 실제 계산 결과입니다. 여러 조건을 바꿨다면 원인을 하나씩 다시 확인하세요.'));return after};
+const panel=root.closest('section.panel')||root.parentElement;const anchor=document.querySelector('.hero');if(anchor)anchor.after(root);
+}
+};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+})();
