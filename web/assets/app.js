@@ -1,0 +1,14 @@
+(async function learnerApp(){
+const data=await fetch('catalog.json').then(r=>{if(!r.ok)throw Error();return r.json()}),page=document.body.dataset.page,$=s=>document.querySelector(s);
+if(page==='home'){
+let selected='전체';const cats=['전체',...new Set(data.map(d=>d.category))];$('#categoryFilters').innerHTML=cats.map(c=>`<button type="button" data-category="${c}" aria-pressed="${c===selected}">${c}</button>`).join('');
+function draw(){const query=$('#search').value.trim().toLowerCase(),list=data.filter(d=>(selected==='전체'||d.category===selected)&&[d.title,d.category,d.desc,...d.skills].join(' ').toLowerCase().includes(query));$('#labList').innerHTML=list.map(d=>`<article class="lab-row"><span class="row-number">${d.n}</span><div><h2><a href="labs/${d.id}/index.html">${d.title}</a></h2><p>${d.desc}</p></div><div class="row-links"><a href="labs/${d.id}/index.html">실험하기</a></div></article>`).join('');$('#searchStatus').textContent=list.length+'개 실험';$('#emptyState').hidden=!!list.length;}
+$('#categoryFilters').onclick=e=>{const b=e.target.closest('button');if(!b)return;selected=b.dataset.category;$('#categoryFilters').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()};$('#search').oninput=draw;$('#clearSearch').onclick=()=>{$('#search').value='';selected='전체';$('#categoryFilters').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.category===selected)));draw()};draw();
+}
+if(page==='lab'){
+const d=data.find(d=>d.id===new URLSearchParams(location.search).get('id'));if(!d){$('#main').innerHTML='<h1>실험을 찾을 수 없습니다.</h1><a href="index.html">실험 모음으로</a>';return;}
+document.title=d.title;$('#labHeading').innerHTML=`<div class="page-title"><h1>${d.title}</h1><p>${d.desc}</p></div>`;const f=document.createElement('iframe');f.className='program-frame';f.title=d.title;f.style.height='700px';f.setAttribute('sandbox','allow-scripts allow-same-origin allow-downloads allow-modals');$('#labViewer').append(f);
+f.addEventListener('load',()=>{try{const doc=f.contentDocument,css=doc.createElement('style');css.textContent='html,body,#app{min-height:0!important}';doc.head.append(css);function resize(){const style=getComputedStyle(doc.body),height=doc.body.getBoundingClientRect().height+parseFloat(style.marginTop||0)+parseFloat(style.marginBottom||0);if(Math.abs(parseFloat(f.style.height)-height)>4)f.style.height=Math.max(500,Math.ceil(height)+3)+'px';}new ResizeObserver(resize).observe(doc.body);doc.fonts?.ready.then(resize);resize();}catch{}});
+f.src=`labs/${d.id}/index.html?v=3`;
+}
+})().catch(()=>document.getElementById('main').textContent='실험'+'을 불러오지 못했습니다. 새로고침해 주세요.');

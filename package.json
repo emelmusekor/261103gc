@@ -1,0 +1,12 @@
+{
+  "name": "learning-lab",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server/dev.mjs",
+    "build": "node scripts/build-worker.cjs",
+    "check": "node scripts/check.cjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "type": "module"
+}
