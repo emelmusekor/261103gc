@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>서양의복 도감 정밀 실루엣 분석기 (30종 전면 수록)</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <!-- Tailwind CSS CDN -->
+  <link rel="stylesheet" href="../../assets/fashion.css"><script>window.tailwind={};</script>
+  <!-- FontAwesome 6 CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script>
     tailwind.config = {
@@ -55,7 +55,7 @@
 </head>
 <body class="bg-noir-950 text-slate-200 min-h-screen flex flex-col font-sans selection:bg-amber-700/40 selection:text-amber-100 paper-grid">
 
-  
+  <!-- Header -->
   <header class="border-b border-white/10 bg-noir-900/95 backdrop-blur sticky top-0 z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950 flex items-center justify-center shadow-lg border border-amber-400/30">
@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    
+    <!-- Navigation Tabs -->
     <div class="flex items-center gap-2">
       <div class="flex bg-noir-850 p-1 rounded-xl border border-white/10 text-xs">
         <button id="tabClassifier" class="px-3.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 bg-amber-600 text-white shadow-sm">
@@ -87,16 +87,16 @@
     </div>
   </header>
 
-  
+  <!-- Main Workspace -->
   <main class="flex-1 max-w-[1720px] w-full mx-auto p-4 lg:p-6 flex flex-col gap-6">
 
-    
+    <!-- TAB 1: CLASSIFIER / DRAWING & UPLOAD -->
     <div id="classifierView" class="grid grid-cols-1 xl:grid-cols-12 gap-6">
       
-      
+      <!-- LEFT CANVAS SECTION (5 cols) -->
       <div class="xl:col-span-5 flex flex-col gap-4">
         
-        
+        <!-- Canvas Card -->
         <div class="bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 shadow-xl">
           <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
             <span class="text-xs font-semibold text-amber-200 flex items-center gap-1.5">
@@ -112,7 +112,7 @@
             </div>
           </div>
 
-          
+          <!-- Category Focus Selector -->
           <div class="bg-noir-850 p-2 rounded-xl border border-white/5 flex flex-col gap-1.5">
             <div class="flex items-center justify-between text-[11px]">
               <span class="text-slate-400 flex items-center gap-1">
@@ -131,7 +131,7 @@
             </div>
           </div>
 
-          
+          <!-- Drawing Tools Toolbar -->
           <div class="flex flex-wrap items-center justify-between gap-2 bg-noir-850 p-2 rounded-xl border border-white/5 text-xs">
             <div class="flex items-center gap-1">
               <button id="toolPen" class="px-2.5 py-1 rounded bg-amber-600 text-white font-medium flex items-center gap-1">
@@ -157,25 +157,25 @@
             </div>
           </div>
 
-          
+          <!-- Canvas Stack -->
           <div class="relative w-full aspect-square rounded-xl bg-noir-950 border border-white/10 overflow-hidden select-none">
-            
+            <!-- Background Mannequin Guideline -->
             <canvas id="guideCanvas" width="400" height="400" class="absolute inset-0 w-full h-full pointer-events-none opacity-45"></canvas>
             
-            
+            <!-- User Drawing Canvas -->
             <canvas id="drawCanvas" width="400" height="400" class="absolute inset-0 w-full h-full cursor-crosshair touch-none"></canvas>
 
-            
+            <!-- Analysis Visualizer Overlay -->
             <canvas id="debugOverlay" width="400" height="400" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
             
-            
+            <!-- Live Status floating badge -->
             <div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded bg-black/80 border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1.5 shadow">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span id="canvasStatusText">입력 대기 중</span>
             </div>
           </div>
 
-          
+          <!-- Execution & Presets -->
           <div class="flex items-center justify-between gap-2">
             <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none">
               <input type="checkbox" id="chkAutoLive" checked class="accent-amber-500 rounded">
@@ -189,7 +189,7 @@
 
         </div>
 
-        
+        <!-- 1-Click Fast Category Presets -->
         <div class="bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col gap-2.5 shadow-lg">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -199,16 +199,16 @@
             <span class="text-[10px] text-amber-400 font-mono">형태학 테스트</span>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="presetButtonsGrid">
-            
+            <!-- Dynamically populated -->
           </div>
         </div>
 
       </div>
 
-      
+      <!-- RIGHT DIAGNOSIS & REASONING (7 cols) -->
       <div class="xl:col-span-7 flex flex-col gap-4">
         
-        
+        <!-- Primary Match Result Banner -->
         <div class="bg-gradient-to-r from-noir-900 via-amber-950/20 to-noir-900 border border-amber-500/30 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
           <div class="flex items-center gap-4">
             <div class="w-16 h-16 rounded-2xl bg-noir-950 border border-amber-500/40 p-2 flex items-center justify-center shrink-0 shadow-inner">
@@ -245,7 +245,7 @@
           </div>
         </div>
 
-        
+        <!-- 6 Core Measurable Silhouette Metrics -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
           <div class="bg-noir-900 border border-white/10 p-2.5 rounded-xl shadow">
             <span class="text-[9px] text-slate-400 block mb-0.5">하단 플레어 (Hem)</span>
@@ -273,10 +273,10 @@
           </div>
         </div>
 
-        
+        <!-- AI Reasoning Explanation + Top 4 Ranking -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
           
-          
+          <!-- Top 4 Ranking (5 cols) -->
           <div class="md:col-span-5 bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
             <div>
               <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-3">
@@ -287,7 +287,7 @@
                 <span class="text-[10px] text-slate-400 font-mono">Similarity</span>
               </div>
               <div class="space-y-2.5" id="topCandidatesRanking">
-                
+                <!-- Dynamically updated -->
               </div>
             </div>
 
@@ -296,7 +296,7 @@
             </div>
           </div>
 
-          
+          <!-- Explainable AI (XAI) Reason & Pattern Notes (7 cols) -->
           <div class="md:col-span-7 bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
             <div>
               <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-2.5">
@@ -308,10 +308,10 @@
               </div>
               
               <div id="reasoningBox" class="p-3 bg-noir-950/80 rounded-xl border border-white/5 mb-3 text-xs text-slate-300 leading-relaxed space-y-1.5">
-                
+                <!-- Dynamic reasoning text -->
               </div>
 
-              
+              <!-- Pattern Characteristics -->
               <div>
                 <span class="text-[11px] font-semibold text-amber-300 block mb-1">도감 공식 정의:</span>
                 <p id="resDescription" class="text-xs text-slate-300 leading-relaxed mb-2"></p>
@@ -327,7 +327,7 @@
 
         </div>
 
-        
+        <!-- Silhouette Profile Visualizer Bar -->
         <div class="bg-noir-900 border border-white/10 rounded-2xl p-4 shadow-lg">
           <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/5">
             <span class="text-xs font-bold text-white flex items-center gap-1.5">
@@ -337,7 +337,7 @@
             <span class="text-[10px] font-mono text-slate-400">Normalized Width Profile</span>
           </div>
           <div class="h-14 flex items-end justify-between gap-1 bg-noir-950 p-2 rounded-xl border border-white/5" id="profileSliceBars">
-            
+            <!-- 20 bars rendered by JS -->
           </div>
         </div>
 
@@ -345,24 +345,24 @@
 
     </div>
 
-    
+    <!-- TAB 2: LEXICON BROWSER (30종 도감 사전) -->
     <div id="lexiconView" class="hidden flex flex-col gap-5">
       
-      
+      <!-- Category Filter Buttons -->
       <div class="bg-noir-900 border border-white/10 p-3 rounded-2xl flex flex-wrap items-center gap-2" id="lexiconCategoryFilters">
-        
+        <!-- Buttons added by JS -->
       </div>
 
-      
+      <!-- Lexicon Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" id="lexiconGridContainer">
-        
+        <!-- Cards generated by JS -->
       </div>
 
     </div>
 
   </main>
 
-  
+  <!-- SCRIPT LOGIC -->
   <script>
     // FULL WESTERN GARMENT LEXICON (30 ITEMS FROM SCAN)
     const GARMENT_LEXICON = [

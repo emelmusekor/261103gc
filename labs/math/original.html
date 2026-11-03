@@ -15,14 +15,14 @@ label{display:block;font-weight:700;font-size:14px;margin:10px 0 5px}select,inpu
 </style></head><body>
 <header><div class="wrap"><h1>🕵️ AI 수학 탐정단</h1><p>AI는 어떻게 수학 문제를 풀고, 언제 틀릴 수 있을까? 조건을 바꾸고 풀이를 검증해 보자!</p></div></header>
 <main>
-<div class="notice"><b>먼저 알아두기:</b> 인터넷 없이 실행되는 학습용 시뮬레이션이야. 실제 생성형 AI를 연결하지 않고, 정해 둔 규칙과 로 AI의 원리와 한계를 탐구해.</div>
+<div class="notice"><b>먼저 알아두기:</b> 인터넷 없이 실행되는 학습용 시뮬레이션이야. 실제 생성형 AI를 연결하지 않고, 정해 둔 규칙과 예시로 AI의 원리와 한계를 탐구해.</div>
 <div class="tabs"><button class="tab active" data-tab="lab">① 계산 실험실</button><button class="tab" data-tab="prompt">② 질문 바꾸기</button><button class="tab" data-tab="detective">③ 오류 찾기</button><button class="tab" data-tab="verify">④ 답 검증하기</button><button class="tab" data-tab="journal">📝 탐구 기록</button></div>
 <section class="panel active" id="lab"><h2>① 계산 실험실</h2><p class="sub">숫자와 풀이 방식을 바꾸며 계산 원리를 살펴봐.</p>
 <div class="grid"><div class="card soft"><label for="a">첫 번째 수 (10~99)</label><input id="a" type="number" min="10" max="99" value="23"><label for="b">두 번째 수 (2~9)</label><input id="b" type="number" min="2" max="9" value="4"><label for="method">풀이 방식</label><select id="method"><option value="split">자릿값으로 나누기</option><option value="repeat">같은 수 여러 번 더하기</option><option value="standard">곱셈식으로 계산하기</option></select><button class="btn" id="solve" style="margin-top:13px">풀이 살펴보기</button></div>
 <div class="card"><div class="label">문제</div><div class="big" id="equation">23 × 4 = ?</div><div id="steps"></div><div class="result good"><b>계산 결과</b><div class="big" id="answer">92</div></div></div></div>
 <div class="result warn"><b>생각해 보기</b><br>이 화면은 정해진 수학 규칙으로 계산해. 생성형 AI가 문장을 이해하고 답을 만들어 내는 과정과는 다를 수 있어. 두 방식은 어떻게 다를까?</div></section>
 <section class="panel" id="prompt"><h2>② 질문을 바꾸면 결과도 달라질까?</h2><p class="sub">숫자가 같아도 문제 상황의 표현에 따라 필요한 계산이 달라질 수 있어.</p>
-<div class="grid"><div class="card soft"><label for="wording">문제 표현 선택</label><select id="wording"><option value="share">사과 24개를 6명에게 똑같이 나누면 한 명당 몇 개일까?</option><option value="groups">사과 24개를 한 사람에게 6개씩 주면 몇 명에게 줄 수 있을까?</option><option value="ambiguous">사과 24개와 6명이 있어. 답을 구해 봐.</option></select><button class="btn" id="interpret" style="margin-top:13px"> AI의 답 보기</button></div><div class="card"><div class="label">시뮬레이션 결과</div><div id="promptResult" class="result">문제를 선택하고 버튼을 눌러 봐.</div></div></div>
+<div class="grid"><div class="card soft"><label for="wording">문제 표현 선택</label><select id="wording"><option value="share">사과 24개를 6명에게 똑같이 나누면 한 명당 몇 개일까?</option><option value="groups">사과 24개를 한 사람에게 6개씩 주면 몇 명에게 줄 수 있을까?</option><option value="ambiguous">사과 24개와 6명이 있어. 답을 구해 봐.</option></select><button class="btn" id="interpret" style="margin-top:13px">예시 AI의 답 보기</button></div><div class="card"><div class="label">시뮬레이션 결과</div><div id="promptResult" class="result">문제를 선택하고 버튼을 눌러 봐.</div></div></div>
 <div class="result"><b>탐구 질문</b><br>마지막 문제에는 어떤 정보가 부족할까? 실제 AI가 질문을 잘못 해석했다면 어떻게 다시 질문하면 좋을까?</div></section>
 <section class="panel" id="detective"><h2>③ AI 풀이의 오류를 찾아라!</h2><p class="sub">풀이를 읽고 처음으로 잘못된 단계가 어디인지 찾아봐.</p><div class="card soft"><div class="label">문제</div><div class="big">½ + ⅓ = ?</div><div class="step">1단계: 분자는 1과 1이므로 더해서 2로 쓴다.</div><div class="step">2단계: 분모는 2와 3이므로 더해서 5로 쓴다.</div><div class="step"><b>결론: ½ + ⅓ = ⅖</b></div><label for="errorStep">어디에서 오류가 시작되었을까?</label><select id="errorStep"><option value="">선택해 줘</option><option value="1">1단계</option><option value="2">2단계</option><option value="3">3단계</option><option value="none">오류가 없다</option></select><button class="btn" id="checkError" style="margin-top:12px">내 답 확인</button><div id="errorResult" class="result hidden"></div></div>
 <div class="result warn"><b>핵심 개념</b><br>분모가 다른 분수는 같은 크기의 조각으로 바꿔야 더할 수 있어. ½ = 3/6, ⅓ = 2/6이므로 합은 5/6이야.</div></section>
@@ -41,9 +41,9 @@ else out=`<div class="step">곱셈식 ${a} × ${b}를 계산하기</div><div cla
 $('equation').textContent=`${a} × ${b} = ?`;$('answer').textContent=a*b;$('steps').innerHTML=out;log('계산 실험실',`${a}×${b}, 풀이 ${m}`,`결과 ${a*b}`)}
 $('solve').onclick=solve;solve();
 $('interpret').onclick=()=>{let v=$('wording').value,box=$('promptResult'),txt='';
-if(v==='share')txt='<b>AI 답변: 4개</b><br>24개를 6명에게 똑같이 나누므로 24 ÷ 6 = 4야.';
-if(v==='groups')txt='<b>AI 답변: 4명</b><br>24개를 한 사람에게 6개씩 주므로 24 ÷ 6 = 4야.';
-if(v==='ambiguous')txt='<b>AI 답변: 정보가 부족해!</b><br>24개를 6명에게 나누는지, 한 사람당 6개씩 주는지 상황을 더 알려 줘야 해.';
+if(v==='share')txt='<b>예시 AI 답변: 4개</b><br>24개를 6명에게 똑같이 나누므로 24 ÷ 6 = 4야.';
+if(v==='groups')txt='<b>예시 AI 답변: 4명</b><br>24개를 한 사람에게 6개씩 주므로 24 ÷ 6 = 4야.';
+if(v==='ambiguous')txt='<b>예시 AI 답변: 정보가 부족해!</b><br>24개를 6명에게 나누는지, 한 사람당 6개씩 주는지 상황을 더 알려 줘야 해.';
 box.innerHTML=txt;box.className='result '+(v==='ambiguous'?'warn':'good');log('질문 바꾸기',v,box.innerText)};
 $('checkError').onclick=()=>{let v=$('errorStep').value,box=$('errorResult');box.classList.remove('hidden');
 if(v==='2'){box.className='result good';box.innerHTML='<b>잘 찾았어!</b><br>분모를 더한 2단계가 잘못됐어. 분모가 다른 분수는 통분한 뒤 분자를 더해야 해. ½ = 3/6, ⅓ = 2/6이므로 합은 5/6이야.'}

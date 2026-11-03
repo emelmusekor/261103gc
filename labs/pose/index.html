@@ -105,8 +105,8 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
 @media(max-width:850px) { .hero,.lab-grid { grid-template-columns:1fr; } .hero-stat { max-width:none; } .scene, .scene svg { min-height:300px; height:300px; } }
 @media(max-width:480px) { .top-note { display:none; } main { padding:18px 12px; } .panel-head { padding:17px; } .controls,.result-panel,.experiment { padding-left:17px; padding-right:17px; } .score-ring { width:108px; height:108px; } .score-number { font-size:27px; } .metric { grid-template-columns:82px 1fr 30px; } }
 </style>
-</head>
-<body><style>.extension{box-sizing:border-box;max-width:1160px;margin:32px auto;padding:24px;border:1px solid #cbd8d0;border-radius:12px;background:#f5f8f2;color:#21392f;font:15px/1.7 "Malgun Gothic",sans-serif}.extension h2{font-size:22px;margin:0 0 10px}.extension button,.extension input{font:inherit;border:1px solid #adbcaf;border-radius:6px;padding:8px 12px;margin:4px;background:white;color:#21392f}.extension button{cursor:pointer}.extension table{width:100%;border-collapse:collapse}.extension th,.extension td{border-bottom:1px solid #cad7cc;padding:9px;text-align:left}.extension output{display:block;margin-top:12px}.lab-back{display:flex;gap:16px;align-items:center;padding:12px 20px;background:#183d32;color:#fff;font:13px/1.5 sans-serif}.lab-back a{color:#fff;text-decoration:none}.lab-back span{margin-left:auto;font-size:12px}@media(max-width:600px){.extension{margin:16px 8px;padding:16px;overflow-x:auto}}</style><nav class="lab-back"><a href="../../index.html">← 탐구 실험실</a><a href="../../lab.html?id=pose&view=feedback">개선 내용</a><span id="notebookStatus">탐구 기록</span></nav><aside class="inquiry-banner"><span>탐구 질문</span><h2>같은 자세인데 영상에서 읽는 관절 각도가 달라질 수 있을까?</h2><p>카메라를 옆으로 돌려도 같은 무릎의 영상 각도가 그대로일지 예상한 뒤 회전해 보세요.</p><details><summary>실험 뒤에 생각해 보기</summary><p>무엇을 고정했고, 무엇을 바꿨나요? 달라진 결과를 근거와 연결해 설명하고, 내 설명을 확인할 다른 실험도 생각해 보세요.</p></details></aside><style>.inquiry-banner{max-width:1160px;margin:24px auto;padding:24px 28px;background:#edf2df;color:#2a4934;border-left:3px solid #709058;border-radius:0 8px 8px 0;font:14px/1.8 sans-serif}.inquiry-banner>span{font-size:11px;color:#758766}.inquiry-banner h2{font-size:22px;margin:7px 0 10px;line-height:1.5}.inquiry-banner summary{cursor:pointer;font-size:12px;margin-top:12px}.inquiry-banner p{margin:0}@media(max-width:600px){.inquiry-banner{margin:16px 8px;padding:18px}.inquiry-banner h2{font-size:19px}}</style><section class="extension" id="inquiry-experiment"><h2>같은 무릎, 다른 영상 각도</h2><p>세 관절의 3차원 위치를 고정한 채 카메라 시점만 회전합니다. 길이·깊이는 좌표로 주어지고, 영상에서는 깊이 좌표가 사라집니다.</p><label for="projectionYaw">카메라 회전</label><input id="projectionYaw" type="range" min="-85" max="85" value="0"><output id="projectionReadout" aria-live="polite"></output><svg id="projectionFigure" viewBox="0 0 600 260" role="img" aria-label="카메라 방향에 따른 무릎 투영" style="width:100%;max-width:700px;height:auto"></svg><p>영상의 각도가 바뀌었을 때, 실제 자세가 바뀌었다고 결론 내릴 수 있을까요?</p></section>
+<link rel="stylesheet" href="../../assets/program.css?v=2"><script>if(self!==top)document.documentElement.classList.add('embedded');</script></head>
+<body data-program="pose"><nav class="program-nav"><a href="../../index.html">실험 모음</a><a href="../../lab.html?id=pose&view=feedback">피드백</a></nav>
 <div id="app" data-sites-preview-theme="custom">
   <header class="topbar">
     <div class="brand"><div class="brand-mark">⌁</div><div>POSE LAB <span style="font-weight:400;opacity:.75">/ AI 탐구실</span></div></div>
@@ -117,9 +117,9 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
       <div>
         <div class="eyebrow">INTERACTIVE EXPERIMENT 01</div>
         <h1>AI는 내 자세를<br>언제 헷갈릴까?</h1>
-        <p>자세 인식 AI는 몸의 관절 위치를 찾아 움직임을 분석해요. 하지만 카메라 각도나 어두운 조명, 가려진 관절 때문에 판단이 흔들릴 수 있어요. 조건을 바꾸며 입력 품질 점수 변화를 탐구해 봅시다.</p>
+        <p>자세 인식 AI는 몸의 관절 위치를 찾아 움직임을 분석해요. 하지만 카메라 각도나 어두운 조명, 가려진 관절 때문에 판단이 흔들릴 수 있어요. 조건을 바꾸며 신뢰도 변화를 탐구해 봅시다.</p>
       </div>
-      <div class="hero-stat"><strong>오늘의 탐구 질문</strong><span>“AI가 95% 확신한다고 말하면, 정말 내 자세가 정확하다는 뜻일까?”<br>입력 품질 점수 점수와 실제 정답은 같은 의미인지 생각해 보세요.</span></div>
+      <div class="hero-stat"><strong>오늘의 탐구 질문</strong><span>“AI가 95% 확신한다고 말하면, 정말 내 자세가 정확하다는 뜻일까?”<br>신뢰도 점수와 실제 정답은 같은 의미인지 생각해 보세요.</span></div>
     </section>
     <div class="lab-grid">
       <section class="panel">
@@ -132,7 +132,7 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
           </select>
           <div id="scene" class="scene" style="margin-top:14px">
             <div class="scene-tag" id="sceneTag">POSE / SQUAT</div>
-            <svg viewBox="0 0 440 340" role="img" aria-label="관절 점과 선으로 표현한 운동 자세 ">
+            <svg viewBox="0 0 440 340" role="img" aria-label="관절 점과 선으로 표현한 운동 자세 예시">
               <g class="person" id="person">
                 <circle class="joint" cx="220" cy="67" r="19"/>
                 <path class="body-line torso" id="torso" d="M220 91 L210 155"/>
@@ -162,7 +162,7 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
       </section>
       <section>
         <div class="panel">
-          <div class="panel-head"><div><div class="kicker">02 / MODEL OUTPUT</div><h2 style="margin-top:5px">AI의 입력 품질 점수 추정</h2></div><span class="pill" id="statusPill">● 비교적 안정</span></div>
+          <div class="panel-head"><div><div class="kicker">02 / MODEL OUTPUT</div><h2 style="margin-top:5px">AI의 신뢰도 추정</h2></div><span class="pill" id="statusPill">● 비교적 안정</span></div>
           <div class="result-panel">
             <div class="score-row">
               <div class="score-ring" id="scoreRing" style="--score:84%"><div class="score-inner"><div class="score-number" id="score">84%</div><small>CONFIDENCE</small></div></div>
@@ -174,22 +174,22 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
               <div class="metric"><label>관절 가시성</label><div class="track"><span id="visibilityBar" style="width:90%"></span></div><b id="visibilityMetric">90</b></div>
               <div class="metric"><label>몸 윤곽</label><div class="track"><span id="clothesBar" style="width:88%"></span></div><b id="clothesMetric">88</b></div>
             </div>
-            <div class="notice"><strong>⚠ 기억하세요</strong><p>입력 품질 점수는 모델이 예측을 얼마나 확신하는지 나타내는 값이지, 정답일 확률을 언제나 정확히 보장하는 숫자는 아니에요.</p></div>
+            <div class="notice"><strong>⚠ 기억하세요</strong><p>신뢰도는 모델이 예측을 얼마나 확신하는지 나타내는 값이지, 정답일 확률을 언제나 정확히 보장하는 숫자는 아니에요.</p></div>
           </div>
         </div>
         <div class="panel experiment">
           <div class="kicker">03 / TEST & REFLECT</div><h2 style="margin-top:6px">조건을 바꾸고 비교하기</h2>
           <p>먼저 기본 조건을 확인한 뒤, 한 번에 한 가지 조건만 바꿔 보세요. 어떤 조건이 점수에 가장 큰 영향을 주나요?</p>
-          <div class="button-row"><button class="primary" id="badSetup">어려운 촬영 조건</button><button class="secondary" id="goodSetup">좋은 촬영 조건</button><button class="ghost" id="reset">처음으로</button></div>
-          <div class="observation" id="observation" aria-live="polite">🔎 <strong>실험 미션:</strong> 카메라 각도를 0°에서 60°로 바꾸고 입력 품질 점수 점수의 변화를 관찰해 보세요.</div>
-          <div class="disclaimer">이 화면의 점수는 촬영 조건의 영향을 배우기 위한 <b>입력 조건 실험</b>입니다. 실제 카메라 영상이나 실제 자세 인식 AI를 분석하지 않으며, 점수는 설명을 위한 가상 모델에서 계산됩니다.</div>
+          <div class="button-row"><button class="primary" id="badSetup">어려운 촬영 조건</button><button class="secondary" id="goodSetup">좋은 촬영 조건</button><button class="ghost" id="reset">처음으로</button><button class="ghost" id="savePose">비교 기준 저장</button><button class="ghost" id="restorePose" disabled>저장한 조건 불러오기</button></div>
+          <p id="poseDelta" class="comparison-text" aria-live="polite"></p><div class="observation" id="observation" aria-live="polite">🔎 <strong>실험 미션:</strong> 카메라 각도를 0°에서 60°로 바꾸고 신뢰도 점수의 변화를 관찰해 보세요.</div>
+          
         </div>
       </section>
     </div>
     <footer class="footer"><span>POSE LAB · AI를 무조건 믿기보다, 근거와 한계를 살펴보기</span><span>체육 수업 안전 지도는 교사의 관찰과 안내를 함께 활용하세요.</span></footer>
   </main>
 </div>
-<section class="extension"><h2>한 조건씩 바꿔보기</h2><p>점수 = 각도×0.28 + 조명×0.24 + 가림×0.30 + 의복×0.18 − 자세 보정. 아래 비교는 다른 조건을 고정하고 한 요인만 바꿉니다.</p><button id="pinPose">현재 조건을 기준으로 고정</button><output id="poseBaseline">기준 조건을 고정해 보세요.</output><div id="poseSensitivity"></div></section><script>
+<script>
 const $ = id => document.getElementById(id);
 const controls = ['camera','light','clothes','occlusion'];
 const initial = {camera:0,light:85,clothes:20,occlusion:10,pose:'squat'};
@@ -211,7 +211,7 @@ function update(){
  const clothes=Math.max(20,Math.round(100-v.clothes*.62));
  const posePenalty=v.pose==='kick'?4:v.pose==='volley'?2:0;
  const score=Math.max(8,Math.min(99,Math.round(cam*.28+light*.24+visibility*.30+clothes*.18-posePenalty)));
- $('score').textContent=score+'점'; $('scoreRing').style.setProperty('--score',score+'점');
+ $('score').textContent=score+'%'; $('scoreRing').style.setProperty('--score',score+'%');
  [['camera',cam],['light',light],['visibility',visibility],['clothes',clothes]].forEach(([key,val])=>{$(key+'Bar').style.width=val+'%';$(key+'Metric').textContent=val;});
  $('scene').classList.toggle('lowlight',v.light<35);
  $('scene').classList.toggle('sideview',v.camera>=50);
@@ -227,12 +227,12 @@ function update(){
  $('scoreTitle').textContent=title;$('scoreDesc').textContent=desc;$('statusPill').textContent=pill;
  return {v,score,cam,light,visibility,clothes};
 }
-controls.forEach(id=>$(id).addEventListener('input',()=>{const r=update();$('observation').innerHTML='🧪 <strong>조건이 바뀌었어요.</strong> 현재 시뮬레이션 입력 품질 점수는 '+r.score+'%입니다. 방금 바꾼 조건 하나만 되돌려 보고 점수 변화가 어떻게 달라지는지 비교해 보세요.';}));
+controls.forEach(id=>$(id).addEventListener('input',()=>{const r=update();$('observation').innerHTML='🧪 <strong>조건이 바뀌었어요.</strong> 현재 시뮬레이션 신뢰도는 '+r.score+'%입니다. 방금 바꾼 조건 하나만 되돌려 보고 점수 변화가 어떻게 달라지는지 비교해 보세요.';}));
 $('pose').addEventListener('change',()=>{update();$('observation').innerHTML='🏃 <strong>자세를 바꿨어요.</strong> 자세마다 확인해야 하는 관절과 각도가 달라요. 어떤 부위가 중요한지 말해 보세요.';});
-$('badSetup').addEventListener('click',()=>{$('camera').value=65;$('light').value=25;$('clothes').value=80;$('occlusion').value=70;const r=update();$('observation').innerHTML='🌫️ <strong>어려운 조건 실험:</strong> 입력 품질 점수 '+r.score+'%. 카메라 각도, 어두운 조명, 헐렁한 옷, 관절 가림이 함께 바뀌었어요. 어떤 조건이 가장 큰 영향을 줬는지 알려면 하나씩 바꿔야 해요.';});
-$('goodSetup').addEventListener('click',()=>{$('camera').value=0;$('light').value=90;$('clothes').value=10;$('occlusion').value=0;const r=update();$('observation').innerHTML='☀️ <strong>좋은 조건 실험:</strong> 입력 품질 점수 '+r.score+'%. 정면에서 몸 전체가 잘 보이도록 했어요. 그렇더라도 높은 점수가 올바른 자세를 보장하는지 생각해 보세요.';});
-$('reset').addEventListener('click',()=>{controls.forEach(k=>$(k).value=initial[k]);$('pose').value=initial.pose;update();$('observation').innerHTML='🔎 <strong>실험 미션:</strong> 카메라 각도를 0°에서 60°로 바꾸고 입력 품질 점수 점수의 변화를 관찰해 보세요.';});
-let baseline=null;function showSensitivity(){let r=update(),v=r.v;const calc=w=>Math.max(8,Math.min(99,Math.round(Math.max(18,Math.round(100-w.camera*.78))*.28+Math.max(15,Math.round(100-Math.abs(w.light-82)*1.05))*.24+Math.max(10,100-w.occlusion)*.30+Math.max(20,Math.round(100-w.clothes*.62))*.18-(w.pose==='kick'?4:w.pose==='volley'?2:0))));const scenarios=[['각도만 정면으로',{camera:0}],['조명만 82로',{light:82}],['가림만 0으로',{occlusion:0}],['의복만 0으로',{clothes:0}]];$('poseSensitivity').innerHTML='<table><thead><tr><th>변경 요인</th><th>점수</th><th>현재 대비</th></tr></thead><tbody>'+scenarios.map(([label,w])=>{let n=calc({...v,...w});return '<tr><td>'+label+'</td><td>'+n+'점</td><td>'+(n-r.score>=0?'+':'')+(n-r.score)+'점</td></tr>'}).join('')+'</tbody></table>';if(baseline)$('poseBaseline').textContent='고정 점수 '+baseline.score+'점 → 현재 '+r.score+'점 / 변화 '+(r.score-baseline.score)+'점';}document.getElementById('pinPose').onclick=()=>{baseline=update();showSensitivity()};document.addEventListener('input',showSensitivity);document.addEventListener('change',showSensitivity);['goodSetup','badSetup','reset'].forEach(id=>$(id).addEventListener('click',showSensitivity));showSensitivity();
+$('badSetup').addEventListener('click',()=>{$('camera').value=65;$('light').value=25;$('clothes').value=80;$('occlusion').value=70;const r=update();$('observation').innerHTML='🌫️ <strong>어려운 조건 실험:</strong> 신뢰도 '+r.score+'%. 카메라 각도, 어두운 조명, 헐렁한 옷, 관절 가림이 함께 바뀌었어요. 어떤 조건이 가장 큰 영향을 줬는지 알려면 하나씩 바꿔야 해요.';});
+$('goodSetup').addEventListener('click',()=>{$('camera').value=0;$('light').value=90;$('clothes').value=10;$('occlusion').value=0;const r=update();$('observation').innerHTML='☀️ <strong>좋은 조건 실험:</strong> 신뢰도 '+r.score+'%. 정면에서 몸 전체가 잘 보이도록 했어요. 그렇더라도 높은 점수가 올바른 자세를 보장하는지 생각해 보세요.';});
+$('reset').addEventListener('click',()=>{controls.forEach(k=>$(k).value=initial[k]);$('pose').value=initial.pose;update();$('observation').innerHTML='🔎 <strong>실험 미션:</strong> 카메라 각도를 0°에서 60°로 바꾸고 신뢰도 점수의 변화를 관찰해 보세요.';});
+update();
 </script>
-<script src="../../assets/notebook.js"></script><script>(()=>{const A=[-.5,1,0],B=[.5,-.4,.8],dot=(a,b)=>a.reduce((s,x,i)=>s+x*b[i],0),norm=a=>Math.hypot(...a),angle=(a,b)=>Math.acos(Math.max(-1,Math.min(1,dot(a,b)/(norm(a)*norm(b)))))*180/Math.PI;const actual=angle(A,B);function render(){let yaw=+document.getElementById('projectionYaw').value,r=yaw*Math.PI/180,project=v=>[v[0]*Math.cos(r)+v[2]*Math.sin(r),v[1]],a=project(A),b=project(B),apparent=angle(a,b),point=v=>[180+v[0]*110,160-v[1]*110];let pa=point(a),pb=point(b);document.getElementById('projectionReadout').textContent='회전 '+yaw+'° / 실제 3차원 각도 '+actual.toFixed(1)+'° / 영상의 2차원 각도 '+apparent.toFixed(1)+'°';document.getElementById('projectionFigure').innerHTML='<path d="M'+pa.join(' ')+' L180 160 L'+pb.join(' ')+'" stroke="#668b5c" stroke-width="9" fill="none" stroke-linecap="round"/>'+[pa,[180,160],pb].map(v=>'<circle cx="'+v[0]+'" cy="'+v[1]+'" r="8" fill="#f9faef" stroke="#3b6542" stroke-width="3"/>').join('')+'<text x="330" y="90" fill="#334e39" font-size="18">실제 자세는 그대로</text><text x="330" y="128" fill="#788e65" font-size="15">영상 각도만 '+apparent.toFixed(1)+'°</text><text x="330" y="166" fill="#788e65" font-size="14">깊이 정보가 사라진 결과</text>';}document.getElementById('projectionYaw').oninput=render;render();})();</script></body>
+<script>(()=>{let saved=null;const q=id=>document.getElementById(id);function compare(){const r=update();q('restorePose').disabled=!saved;if(saved){const diff=r.score-saved.score;q('poseDelta').textContent='저장한 점수 '+saved.score+'% → 현재 '+r.score+'% ('+(diff>0?'+':'')+diff+'%p). 바뀐 조건: '+[...controls,'pose'].filter(k=>String(r.v[k])!==String(saved.v[k])).map(k=>({camera:'카메라',light:'조명',clothes:'옷',occlusion:'가림',pose:'자세'}[k])).join(', ');}}q('savePose').onclick=()=>{saved=update();compare()};q('restorePose').onclick=()=>{if(!saved)return;controls.forEach(k=>q(k).value=saved.v[k]);q('pose').value=saved.v.pose;update();compare()};controls.forEach(k=>q(k).addEventListener('input',compare));q('pose').addEventListener('change',compare);['badSetup','goodSetup','reset'].forEach(k=>q(k).addEventListener('click',compare));})();</script><script src="../../assets/drafts.js?v=2"></script></body>
 </html>

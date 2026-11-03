@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>서양의복 도감 정밀 실루엣 분석기 (30종 전면 수록)</title>
-  
+  <title>서양의복 도감 정밀 실루엣 분석기 (22종 전면 수록)</title>
+  <!-- Tailwind CSS CDN -->
   <link rel="stylesheet" href="../../assets/fashion.css">
-  
+  <!-- FontAwesome 6 CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <style>
@@ -22,10 +22,10 @@
         linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
     }
   </style>
-</head>
-<body class="bg-noir-950 text-slate-200 min-h-screen flex flex-col font-sans selection:bg-amber-700/40 selection:text-amber-100 paper-grid"><style>.extension{box-sizing:border-box;max-width:1160px;margin:32px auto;padding:24px;border:1px solid #cbd8d0;border-radius:12px;background:#f5f8f2;color:#21392f;font:15px/1.7 "Malgun Gothic",sans-serif}.extension h2{font-size:22px;margin:0 0 10px}.extension button,.extension input{font:inherit;border:1px solid #adbcaf;border-radius:6px;padding:8px 12px;margin:4px;background:white;color:#21392f}.extension button{cursor:pointer}.extension table{width:100%;border-collapse:collapse}.extension th,.extension td{border-bottom:1px solid #cad7cc;padding:9px;text-align:left}.extension output{display:block;margin-top:12px}.lab-back{display:flex;gap:16px;align-items:center;padding:12px 20px;background:#183d32;color:#fff;font:13px/1.5 sans-serif}.lab-back a{color:#fff;text-decoration:none}.lab-back span{margin-left:auto;font-size:12px}@media(max-width:600px){.extension{margin:16px 8px;padding:16px;overflow-x:auto}}</style><nav class="lab-back"><a href="../../index.html">← 탐구 실험실</a><a href="../../lab.html?id=fashion&view=feedback">개선 내용</a><span id="notebookStatus">탐구 기록</span></nav><aside class="inquiry-banner"><span>탐구 질문</span><h2>같은 실루엣도 어떤 특징을 중요하게 보느냐에 따라 분류가 바뀔까?</h2><p>그림은 그대로 두고 다리 분기와 너비 비율의 비중을 바꾸세요. 1순위가 유지될지 먼저 예상해 보세요.</p><details><summary>실험 뒤에 생각해 보기</summary><p>무엇을 고정했고, 무엇을 바꿨나요? 달라진 결과를 근거와 연결해 설명하고, 내 설명을 확인할 다른 실험도 생각해 보세요.</p></details></aside><style>.inquiry-banner{max-width:1160px;margin:24px auto;padding:24px 28px;background:#edf2df;color:#2a4934;border-left:3px solid #709058;border-radius:0 8px 8px 0;font:14px/1.8 sans-serif}.inquiry-banner>span{font-size:11px;color:#758766}.inquiry-banner h2{font-size:22px;margin:7px 0 10px;line-height:1.5}.inquiry-banner summary{cursor:pointer;font-size:12px;margin-top:12px}.inquiry-banner p{margin:0}@media(max-width:600px){.inquiry-banner{margin:16px 8px;padding:18px}.inquiry-banner h2{font-size:19px}}</style><section class="extension" id="inquiry-experiment"><h2>그림은 그대로, 판단 기준만 바꾸기</h2><p>분류 점수는 100점에서 특징의 차이에 따른 감점을 빼고, 특정 형태에 보너스를 더해 계산합니다.</p><label for="structureWeight">다리 분기 감점의 비중</label><input id="structureWeight" type="range" min="0" max="2" step=".1" value="1"><output id="structureWeightOut">1배</output><label for="shapeWeight">너비·길이 차이 감점의 비중</label><input id="shapeWeight" type="range" min=".1" max="2" step=".1" value="1"><output id="shapeWeightOut">1배</output><button id="pinGarment">현재 후보 고정</button><output id="garmentBaseline">후보를 고정하고 다른 가중치와 비교해 보세요.</output><output id="weightResult" aria-live="polite"></output></section>
+<link rel="stylesheet" href="../../assets/program.css?v=2"><script>if(self!==top)document.documentElement.classList.add('embedded');</script></head>
+<body class="bg-noir-950 text-slate-200 min-h-screen flex flex-col font-sans selection:bg-amber-700/40 selection:text-amber-100 paper-grid" data-program="fashion"><nav class="program-nav"><a href="../../index.html">실험 모음</a><a href="../../lab.html?id=fashion&view=feedback">피드백</a></nav>
 
-  
+  <!-- Header -->
   <header class="border-b border-white/10 bg-noir-900/95 backdrop-blur sticky top-0 z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950 flex items-center justify-center shadow-lg border border-amber-400/30">
@@ -34,15 +34,15 @@
       <div>
         <div class="flex items-center gap-2">
           <h1 class="text-sm lg:text-base font-bold tracking-tight text-white flex items-center gap-2">
-            <span>서양의복 도감 실루엣 특징 분석기</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">30종 풀스캔 수록</span>
+            <span>서양의복 도감 정밀 실루엣 판별기</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">22종 풀스캔 수록</span>
           </h1>
         </div>
         <p class="text-[11px] text-slate-400">교재 부록 181~196p (팬츠·코트·재킷·드레스·스커트·상의) 형태학적 룰베이스 판별 엔진</p>
       </div>
     </div>
 
-    
+    <!-- Navigation Tabs -->
     <div class="flex items-center gap-2">
       <div class="flex bg-noir-850 p-1 rounded-xl border border-white/10 text-xs">
         <button id="tabClassifier" class="px-3.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 bg-amber-600 text-white shadow-sm">
@@ -51,22 +51,22 @@
         </button>
         <button id="tabLexicon" class="px-3.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 text-slate-400 hover:text-white">
           <i class="fa-solid fa-book-bookmark"></i>
-          <span>서양의복 전체 도감 (30종)</span>
+          <span>서양의복 전체 도감 (22종)</span>
         </button>
       </div>
     </div>
   </header>
 
-  
+  <!-- Main Workspace -->
   <main class="flex-1 max-w-[1720px] w-full mx-auto p-4 lg:p-6 flex flex-col gap-6">
 
-    
+    <!-- TAB 1: CLASSIFIER / DRAWING & UPLOAD -->
     <div id="classifierView" class="grid grid-cols-1 xl:grid-cols-12 gap-6">
       
-      
+      <!-- LEFT CANVAS SECTION (5 cols) -->
       <div class="xl:col-span-5 flex flex-col gap-4">
         
-        
+        <!-- Canvas Card -->
         <div class="bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 shadow-xl">
           <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
             <span class="text-xs font-semibold text-amber-200 flex items-center gap-1.5">
@@ -82,7 +82,7 @@
             </div>
           </div>
 
-          
+          <!-- Category Focus Selector -->
           <div class="bg-noir-850 p-2 rounded-xl border border-white/5 flex flex-col gap-1.5">
             <div class="flex items-center justify-between text-[11px]">
               <span class="text-slate-400 flex items-center gap-1">
@@ -101,7 +101,7 @@
             </div>
           </div>
 
-          
+          <!-- Drawing Tools Toolbar -->
           <div class="flex flex-wrap items-center justify-between gap-2 bg-noir-850 p-2 rounded-xl border border-white/5 text-xs">
             <div class="flex items-center gap-1">
               <button id="toolPen" class="px-2.5 py-1 rounded bg-amber-600 text-white font-medium flex items-center gap-1">
@@ -127,25 +127,25 @@
             </div>
           </div>
 
-          
+          <!-- Canvas Stack -->
           <div class="relative w-full aspect-square rounded-xl bg-noir-950 border border-white/10 overflow-hidden select-none">
-            
+            <!-- Background Mannequin Guideline -->
             <canvas id="guideCanvas" width="400" height="400" class="absolute inset-0 w-full h-full pointer-events-none opacity-45"></canvas>
             
-            
+            <!-- User Drawing Canvas -->
             <canvas id="drawCanvas" width="400" height="400" class="absolute inset-0 w-full h-full cursor-crosshair touch-none"></canvas>
 
-            
+            <!-- Analysis Visualizer Overlay -->
             <canvas id="debugOverlay" width="400" height="400" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
             
-            
+            <!-- Live Status floating badge -->
             <div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded bg-black/80 border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1.5 shadow">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span id="canvasStatusText">입력 대기 중</span>
             </div>
           </div>
 
-          
+          <!-- Execution & Presets -->
           <div class="flex items-center justify-between gap-2">
             <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none">
               <input type="checkbox" id="chkAutoLive" checked class="accent-amber-500 rounded">
@@ -159,7 +159,7 @@
 
         </div>
 
-        
+        <!-- 1-Click Fast Category Presets -->
         <div class="bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col gap-2.5 shadow-lg">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -169,16 +169,16 @@
             <span class="text-[10px] text-amber-400 font-mono">형태학 테스트</span>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="presetButtonsGrid">
-            
+            <!-- Dynamically populated -->
           </div>
         </div>
 
       </div>
 
-      
+      <!-- RIGHT DIAGNOSIS & REASONING (7 cols) -->
       <div class="xl:col-span-7 flex flex-col gap-4">
         
-        
+        <!-- Primary Match Result Banner -->
         <div class="bg-gradient-to-r from-noir-900 via-amber-950/20 to-noir-900 border border-amber-500/30 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
           <div class="flex items-center gap-4">
             <div class="w-16 h-16 rounded-2xl bg-noir-950 border border-amber-500/40 p-2 flex items-center justify-center shrink-0 shadow-inner">
@@ -215,7 +215,7 @@
           </div>
         </div>
 
-        
+        <!-- 6 Core Measurable Silhouette Metrics -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
           <div class="bg-noir-900 border border-white/10 p-2.5 rounded-xl shadow">
             <span class="text-[9px] text-slate-400 block mb-0.5">하단 플레어 (Hem)</span>
@@ -243,10 +243,10 @@
           </div>
         </div>
 
-        
+        <!-- AI Reasoning Explanation + Top 4 Ranking -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
           
-          
+          <!-- Top 4 Ranking (5 cols) -->
           <div class="md:col-span-5 bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
             <div>
               <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-3">
@@ -257,7 +257,7 @@
                 <span class="text-[10px] text-slate-400 font-mono">Similarity</span>
               </div>
               <div class="space-y-2.5" id="topCandidatesRanking">
-                
+                <!-- Dynamically updated -->
               </div>
             </div>
 
@@ -266,7 +266,7 @@
             </div>
           </div>
 
-          
+          <!-- Explainable AI (XAI) Reason & Pattern Notes (7 cols) -->
           <div class="md:col-span-7 bg-noir-900 border border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
             <div>
               <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-2.5">
@@ -278,10 +278,10 @@
               </div>
               
               <div id="reasoningBox" class="p-3 bg-noir-950/80 rounded-xl border border-white/5 mb-3 text-xs text-slate-300 leading-relaxed space-y-1.5">
-                
+                <!-- Dynamic reasoning text -->
               </div>
 
-              
+              <!-- Pattern Characteristics -->
               <div>
                 <span class="text-[11px] font-semibold text-amber-300 block mb-1">도감 공식 정의:</span>
                 <p id="resDescription" class="text-xs text-slate-300 leading-relaxed mb-2"></p>
@@ -297,7 +297,7 @@
 
         </div>
 
-        
+        <!-- Silhouette Profile Visualizer Bar -->
         <div class="bg-noir-900 border border-white/10 rounded-2xl p-4 shadow-lg">
           <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/5">
             <span class="text-xs font-bold text-white flex items-center gap-1.5">
@@ -307,7 +307,7 @@
             <span class="text-[10px] font-mono text-slate-400">Normalized Width Profile</span>
           </div>
           <div class="h-14 flex items-end justify-between gap-1 bg-noir-950 p-2 rounded-xl border border-white/5" id="profileSliceBars">
-            
+            <!-- 20 bars rendered by JS -->
           </div>
         </div>
 
@@ -315,26 +315,26 @@
 
     </div>
 
-    
+    <!-- TAB 2: LEXICON BROWSER (22종 도감 사전) -->
     <div id="lexiconView" class="hidden flex flex-col gap-5">
       
-      
+      <!-- Category Filter Buttons -->
       <div class="bg-noir-900 border border-white/10 p-3 rounded-2xl flex flex-wrap items-center gap-2" id="lexiconCategoryFilters">
-        
+        <!-- Buttons added by JS -->
       </div>
 
-      
+      <!-- Lexicon Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" id="lexiconGridContainer">
-        
+        <!-- Cards generated by JS -->
       </div>
 
     </div>
 
   </main>
 
-  
+  <!-- SCRIPT LOGIC -->
   <script>
-    // FULL WESTERN GARMENT LEXICON (30 ITEMS FROM SCAN)
+    // FULL WESTERN GARMENT LEXICON (22 ITEMS FROM SCAN)
     const GARMENT_LEXICON = [
       // 1. 팬츠 (Pants - 부록 186, 187)
       {
@@ -354,7 +354,7 @@
         patternTip: '무릎선(Knee Line) 둘레를 타이트하게 잡고 밑단(Hem Line)의 인심과 아웃심을 대칭으로 확장.',
         tags: ['나팔바지', '무릎 조임', '플레어 헴', '부록 187'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Waist
           ctx.moveTo(w*0.38, h*0.22); ctx.lineTo(w*0.62, h*0.22);
@@ -391,7 +391,7 @@
         patternTip: '앞판 허리 다트 2개와 앞뒤 레그 크리스 라인을 수직 직선으로 제도.',
         tags: ['스트레이트', '정장 슬랙스', '클래식', '부록 187'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.36, h*0.22); ctx.lineTo(w*0.64, h*0.22);
           // Straight down
@@ -421,7 +421,7 @@
         patternTip: '허리선에서 밑단까지 각 레그의 아웃심과 인심 각도를 대폭 확장하여 드레이프성 극대화.',
         tags: ['극단적 와이드', '치마형 바지', '플레어 레그', '부록 187'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.40, h*0.22); ctx.lineTo(w*0.60, h*0.22);
           ctx.moveTo(w*0.40, h*0.22); ctx.lineTo(w*0.14, h*0.92); ctx.lineTo(w*0.46, h*0.92);
@@ -447,7 +447,7 @@
         patternTip: '가랑이선(Crotch)을 무릎 가까이 대폭 내리고 발목 셔링 밴드 수축 계산.',
         tags: ['배기 핏', '낮은 밑위', '발목 조임', '부록 187'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.22); ctx.lineTo(w*0.62, h*0.22);
           // Ballooning sides
@@ -477,7 +477,7 @@
         patternTip: '허벅지 외곽선에 라운드 플레어 여유분을 대폭 주고 무릎 아래는 인체 치수와 동일하게 피트.',
         tags: ['승마바지', '허벅지 볼륨', '종아리 피트', '부록 187'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.22); ctx.lineTo(w*0.62, h*0.22);
           // Pegged ear flare at thighs
@@ -506,7 +506,7 @@
         patternTip: 'A라인 스커트 원형에서 밑위 둘레(Crotch Extension)를 추가 제도.',
         tags: ['치마바지', 'A-라인 쇼트', '활동성', '부록 186'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.36, h*0.28); ctx.lineTo(w*0.64, h*0.28);
           ctx.moveTo(w*0.36, h*0.28); ctx.lineTo(w*0.22, h*0.72); ctx.lineTo(w*0.47, h*0.72);
@@ -533,7 +533,7 @@
         patternTip: '허리선 벨트 루프 위치와 뒤판 중심 맞주름(Vent), 어깨 케이프 요크 여유분 제도.',
         tags: ['더블 브레스트', '허리 벨트', '어깨 견장', '부록 191'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Collar/Lapel
           ctx.moveTo(w*0.42, h*0.14); ctx.lineTo(w*0.35, h*0.24); ctx.lineTo(w*0.5, h*0.34);
@@ -566,7 +566,7 @@
         patternTip: '어깨 절개선 없이 목선에서 소매끝까지 흐르는 래글런 패턴과 히든 플래킷.',
         tags: ['래글런 소매', '발 칼라', '히든 단추', '부록 191'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Turn-down collar
           ctx.moveTo(w*0.4, h*0.15); ctx.lineTo(w*0.34, h*0.22); ctx.lineTo(w*0.66, h*0.22); ctx.lineTo(w*0.6, h*0.15); ctx.closePath();
@@ -595,7 +595,7 @@
         patternTip: '몸에 단정히 맞는 3면 바디스 분할과 셋인 슬리브, 웰트 포켓 제도.',
         tags: ['테일러드 라펠', '벨벳 칼라', 'H-라인', '부록 189'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Velvet collar & lapel
           ctx.moveTo(w*0.42, h*0.14); ctx.lineTo(w*0.35, h*0.26); ctx.lineTo(w*0.5, h*0.38);
@@ -624,7 +624,7 @@
         patternTip: '어깨선부터 밑단까지 하나로 이어지는 프린세스 솔기(Princess Seam) 분할.',
         tags: ['프린세스 심', '극세 허리', '플레어 스커트 코트', '부록 189'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Lapels
           ctx.moveTo(w*0.42, h*0.14); ctx.lineTo(w*0.35, h*0.26); ctx.lineTo(w*0.5, h*0.36);
@@ -657,7 +657,7 @@
         patternTip: '일체형 후드 패턴과 어깨 앞뒤 2중 보강 요크 세팅.',
         tags: ['후드', '토글 단추', '어깨 요크', '부록 191'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Hood
           ctx.moveTo(w*0.38, h*0.18); ctx.quadraticCurveTo(w*0.5, h*0.06, w*0.62, h*0.18);
@@ -690,7 +690,7 @@
         patternTip: '어깨 끝선 패드 여유 1cm 및 라펠 꺾임선(Roll line) 입체 형성.',
         tags: ['노치드 라펠', '테일러드 어깨', '단추열', '부록 190'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.42, h*0.16); ctx.lineTo(w*0.34, h*0.28); ctx.lineTo(w*0.45, h*0.36);
           ctx.moveTo(w*0.58, h*0.16); ctx.lineTo(w*0.66, h*0.28); ctx.lineTo(w*0.55, h*0.36);
@@ -717,7 +717,7 @@
         patternTip: '앞 중심선의 곡선 바이어스 테이프 마무리와 가슴 볼륨 다트 처리.',
         tags: ['울트라 크롭', '오픈 프런트', '라운드 밑단', '부록 188'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.18); ctx.lineTo(w*0.24, h*0.24); ctx.lineTo(w*0.18, h*0.52);
           ctx.moveTo(w*0.62, h*0.18); ctx.lineTo(w*0.76, h*0.24); ctx.lineTo(w*0.82, h*0.52);
@@ -744,7 +744,7 @@
         patternTip: '앞판 좌우 비대칭(Asymmetric) 제도와 금속 지퍼 테이프 여유분 설계.',
         tags: ['사선 지퍼', '바이커 라펠', '허리 벨트', '부록 190'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Asymmetric collar
           ctx.moveTo(w*0.40, h*0.16); ctx.lineTo(w*0.28, h*0.32); ctx.lineTo(w*0.45, h*0.34);
@@ -777,7 +777,7 @@
         patternTip: '어깨 다트에서 밑단까지 방사형으로 벌려주는 슬래시 앤 스프레드 기법 적용.',
         tags: ['사다리꼴', '극단적 A-라인', '볼륨감', '부록 183'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.42, h*0.16); ctx.lineTo(w*0.58, h*0.16);
           ctx.moveTo(w*0.42, h*0.16); ctx.lineTo(w*0.36, h*0.28);
@@ -805,7 +805,7 @@
         patternTip: '바스트 포인트(BP) 다트와 허리 다트를 정밀 입체 배치.',
         tags: ['바디 컨셔스', '허리 다트', '모래시계 실루엣', '부록 183'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.4, h*0.16); ctx.quadraticCurveTo(w*0.5, h*0.22, w*0.6, h*0.16);
           ctx.moveTo(w*0.4, h*0.16); ctx.lineTo(w*0.35, h*0.26);
@@ -831,7 +831,7 @@
         patternTip: '하이 웨이스트 절개선에 개더를 넣고 스커트 길이를 길게 배분.',
         tags: ['하이 웨이스트', '가슴밑 절개', '롱 드레이프', '부록 183'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.18); ctx.lineTo(w*0.62, h*0.18);
           // High bust seam
@@ -859,7 +859,7 @@
         patternTip: '무릎선 피팅과 함께 밑단 고데(Godet) 무 조각의 부채꼴 각도 설계.',
         tags: ['머메이드', '무릎 조임', '인어 스커트', '부록 185'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.24); ctx.lineTo(w*0.62, h*0.24);
           ctx.moveTo(w*0.38, h*0.24);
@@ -887,7 +887,7 @@
         patternTip: '주름 배율(원단폭 3배수 소요)을 계산하여 주름 안쪽 겹침분 제도.',
         tags: ['수직 주름', '아코디언 플리츠', 'A-라인', '부록 185'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.28); ctx.lineTo(w*0.62, h*0.28);
           ctx.moveTo(w*0.38, h*0.28); ctx.lineTo(w*0.24, h*0.86); ctx.lineTo(w*0.76, h*0.86); ctx.lineTo(w*0.62, h*0.28);
@@ -916,7 +916,7 @@
         patternTip: '각 단의 높이 비율과 아래 단으로 갈수록 1.5~2배씩 늘어나는 주름량 계산.',
         tags: ['층층 프릴', '캉캉 스커트', '개더 티어', '부록 185'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.26); ctx.lineTo(w*0.62, h*0.26);
           // Tier 1
@@ -946,7 +946,7 @@
         patternTip: '신축성 다이마루 니트 원단에 맞춘 마이너스 여유분(Ease)과 넥 립 밴드 제도.',
         tags: ['라운드 넥', '반소매', 'T자 형태', '부록 182'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           // Neckline
           ctx.moveTo(w*0.42, h*0.20); ctx.quadraticCurveTo(w*0.5, h*0.27, w*0.58, h*0.20);
@@ -974,7 +974,7 @@
         patternTip: '암홀 라인과 네크라인 파임에 따른 속옷 노출 방지 다트 처리.',
         tags: ['민소매', '슬리브리스', 'U자 넥', '부록 182'],
         drawPreset: (ctx, w, h) => {
-          ctx.strokeStyle = '#f4ede4'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.strokeStyle = '#263442'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.beginPath();
           ctx.moveTo(w*0.38, h*0.20); ctx.quadraticCurveTo(w*0.5, h*0.35, w*0.62, h*0.20);
           // Straps
@@ -1123,7 +1123,7 @@
           drawCtx.lineWidth = size * 2.2;
         } else {
           drawCtx.globalCompositeOperation = 'source-over';
-          drawCtx.strokeStyle = '#f4ede4';
+          drawCtx.strokeStyle = '#263442';
           drawCtx.lineWidth = size;
         }
 
@@ -1308,7 +1308,7 @@
       const feat = extractMultiPointMorphology();
 
       if (!feat) {
-        canvasStatusText.textContent = '스케치 대기 중';
+        canvasStatusText.textContent = '스케치 대기 중';resPrimaryName.textContent='분석 대기';resSubEngName.textContent='';resConfidence.textContent='—';resConfidenceBar.style.height='0%';topCandidatesRanking.innerHTML='';reasoningBox.textContent='새 실루엣을 그리거나 이미지를 올려 주세요.';resDescription.textContent='';resPatternTip.textContent='';resTagBadges.innerHTML='';profileSliceBars.innerHTML='';[metricFlare,metricPinch,metricKnee,metricAnkle,metricCrotch,metricAspect].forEach(x=>x.textContent='—');
         debugCtx.clearRect(0, 0, 400, 400);
         return;
       }
@@ -1337,38 +1337,38 @@
 
       // Score each item based on Multi-Vector Alignment
       const scoredItems = targetPool.map(item => {
-        let score = 100; const structureWeight=+(document.getElementById("structureWeight")?.value||1),shapeWeight=+(document.getElementById("shapeWeight")?.value||1);
+        let score = 100;
 
         // 1. Structure check: Leg split vs One-piece
         if (item.requiresLegSplit !== feat.hasLegSplit) {
-          score -= 42*structureWeight; // Strong structural barrier
+          score -= 42; // Strong structural barrier
         }
 
         // 2. Aspect Ratio Check
         if (feat.aspectRatio < item.aspectRange[0]) {
-          score -= shapeWeight*Math.min(25, (item.aspectRange[0] - feat.aspectRatio) * 22);
+          score -= Math.min(25, (item.aspectRange[0] - feat.aspectRatio) * 22);
         } else if (feat.aspectRatio > item.aspectRange[1]) {
-          score -= shapeWeight*Math.min(25, (feat.aspectRatio - item.aspectRange[1]) * 20);
+          score -= Math.min(25, (feat.aspectRatio - item.aspectRange[1]) * 20);
         }
 
         // 3. Waist / Pinch Matching
         if (item.waistRatioTarget !== undefined) {
-          score -= shapeWeight*Math.min(20, Math.abs(item.waistRatioTarget - feat.waistRatio) * 25);
+          score -= Math.min(20, Math.abs(item.waistRatioTarget - feat.waistRatio) * 25);
         }
 
         // 4. Flare / Hem Matching
         if (item.ankleFlareTarget !== undefined) {
-          score -= shapeWeight*Math.min(25, Math.abs(item.ankleFlareTarget - (item.requiresLegSplit ? feat.ankleFlareRatio : feat.flareRatio)) * 22);
+          score -= Math.min(25, Math.abs(item.ankleFlareTarget - (item.requiresLegSplit ? feat.ankleFlareRatio : feat.flareRatio)) * 22);
         }
 
         // 5. Knee Pinch Matching (Essential to separate Bell Bottom from Trouser / Harem)
         if (item.requiresLegSplit && item.kneeTaperTarget !== undefined) {
-          score -= shapeWeight*Math.min(25, Math.abs(item.kneeTaperTarget - feat.kneeTaperRatio) * 25);
+          score -= Math.min(25, Math.abs(item.kneeTaperTarget - feat.kneeTaperRatio) * 25);
         }
 
         // 6. Crotch Depth Matching (Harem has extremely low crotch)
         if (item.requiresLegSplit && item.crotchDepthTarget !== undefined) {
-          score -= shapeWeight*Math.min(20, Math.abs(item.crotchDepthTarget - feat.crotchYRatio) * 35);
+          score -= Math.min(20, Math.abs(item.crotchDepthTarget - feat.crotchYRatio) * 35);
         }
 
         // Distinct feature bonus boosts
@@ -1392,14 +1392,14 @@
       scoredItems.sort((a, b) => b.score - a.score);
 
       const topMatch = scoredItems[0];
-      const secondMatch = scoredItems[1] || scoredItems[0];if(document.getElementById('weightResult')){const margin=topMatch.score-secondMatch.score;document.getElementById('weightResult').textContent='같은 그림의 현재 1순위: '+topMatch.item.korean+' / 2순위와 차이 '+margin.toFixed(1)+'점. '+(margin<5?'두 후보가 비슷합니다. 어떤 특징을 더 관찰해야 할까요?':'지표의 비중을 바꾸어도 이 차이가 유지될까요?');}
+      const secondMatch = scoredItems[1] || scoredItems[0];
 
       // Update Header
       resPrimaryName.textContent = topMatch.item.korean;
       resSubEngName.textContent = topMatch.item.english;
       resBadgeCategory.textContent = topMatch.item.category;
       resBadgePage.textContent = topMatch.item.page;
-      resConfidence.textContent = `${topMatch.score.toFixed(1)}점`;
+      resConfidence.textContent = `${topMatch.score.toFixed(1)}%`;
       resConfidenceBar.style.height = `${topMatch.score.toFixed(0)}%`;
       matchedIconPreview.innerHTML = `<i class="${topMatch.item.icon}"></i>`;
 
@@ -1415,10 +1415,10 @@
       let reasoningHtml = `
         <div class="flex items-center gap-1.5 text-amber-300 font-bold">
           <i class="fa-solid fa-circle-check text-amber-400"></i>
-          1순위 판정: ${topMatch.item.korean} (${topMatch.score.toFixed(1)}점)
+          1순위 판정: ${topMatch.item.korean} (${topMatch.score.toFixed(1)}%)
         </div>
         <p class="text-slate-300 leading-relaxed">
-          • <strong>구조 판별:</strong> ${feat.hasLegSplit ? '다리 사이 분기선(Inseam)이 검출되어 <strong>팬츠(바지) 계열</strong> 후보로 판단.' : '다리 분기 없이 통일된 면을 이루어 <strong>원피스/외투/스커트 계열</strong>로 판별.'}<br>
+          • <strong>구조 판별:</strong> ${feat.hasLegSplit ? '다리 사이 분기선(Inseam)이 검출되어 <strong>팬츠(바지) 계열</strong>로 확정.' : '다리 분기 없이 통일된 면을 이루어 <strong>원피스/외투/스커트 계열</strong>로 판별.'}<br>
           • <strong>무릎 대비 밑단 확장률 (${feat.ankleFlareRatio.toFixed(2)}):</strong> ${
             feat.ankleFlareRatio > 1.3 ? '무릎 아래부터 종처럼 넓게 퍼지는 <strong>나팔형(Bell Bottom) 곡선</strong> 확인.' :
             feat.ankleFlareRatio < 0.7 ? '발목선에서 급격히 좁아지는 <strong>테이퍼드/조임</strong> 특성 일치.' :
@@ -1442,7 +1442,7 @@
             <span class="${idx === 0 ? 'text-amber-300 font-bold' : 'text-slate-400'}">
               ${idx + 1}. ${cand.item.korean} <span class="text-[10px] text-slate-500">(${cand.item.english.split('/')[0]})</span>
             </span>
-            <span class="font-mono ${idx === 0 ? 'text-amber-400 font-bold' : 'text-slate-400'}">${cand.score.toFixed(1)}점</span>
+            <span class="font-mono ${idx === 0 ? 'text-amber-400 font-bold' : 'text-slate-400'}">${cand.score.toFixed(1)}%</span>
           </div>
           <div class="w-full bg-noir-950 rounded-full h-1.5 overflow-hidden border border-white/5">
             <div class="h-full rounded-full ${idx === 0 ? 'bg-gradient-to-r from-amber-600 to-amber-400' : 'bg-slate-700'}" style="width: ${cand.score}%"></div>
@@ -1500,7 +1500,7 @@
     // IMAGE FILE UPLOAD
     fileUpload.addEventListener('change', (e) => {
       const file = e.target.files[0];
-      if (!file) return; if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>10*1024*1024){canvasStatusText.textContent="PNG·JPG·WebP 이미지 10MB 이하를 선택하세요.";e.target.value="";return}
+      if (!file) return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>10*1024*1024){canvasStatusText.textContent='PNG·JPG·WebP 이미지 10MB 이하를 선택하세요.';e.target.value='';return}
 
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -1510,27 +1510,27 @@
           drawCtx.clearRect(0, 0, 400, 400);
 
           const scale = Math.min(320 / img.width, 320 / img.height);
-          const nw = Math.max(1, Math.round(img.width * scale));
-          const nh = Math.max(1, Math.round(img.height * scale));
+          const nw = Math.max(1,Math.round(img.width * scale));
+          const nh = Math.max(1,Math.round(img.height * scale));
           const nx = (400 - nw) / 2;
           const ny = (400 - nh) / 2;
 
           const tmpCanvas = document.createElement('canvas');
-          tmpCanvas.width = Math.max(1, Math.round(nw));
-          tmpCanvas.height = Math.max(1, Math.round(nh));
+          tmpCanvas.width = nw;
+          tmpCanvas.height = nh;
           const tmpCtx = tmpCanvas.getContext('2d');
           tmpCtx.drawImage(img, 0, 0, nw, nh);
 
           const imgData = tmpCtx.getImageData(0, 0, nw, nh);
-          const d = imgData.data; const corners=[0,(nw-1)*4,(nh-1)*nw*4,((nh-1)*nw+nw-1)*4]; const bg=[0,1,2].map(c=>corners.reduce((sum,i)=>sum+d[i+c],0)/4);
+          const d = imgData.data; const corners=[0,(nw-1)*4,(nh-1)*nw*4,((nh-1)*nw+nw-1)*4],bg=[0,1,2].map(c=>corners.reduce((sum,i)=>sum+d[i+c],0)/4),transparentBackground=corners.some(i=>d[i+3]<80);
 
-          drawCtx.fillStyle = '#f4ede4';
+          drawCtx.fillStyle = '#263442';
           for (let y = 0; y < nh; y += 2) {
             for (let x = 0; x < nw; x += 2) {
               const idx = (y * nw + x) * 4;
               const brightness = (d[idx] + d[idx+1] + d[idx+2]) / 3;
               const alpha = d[idx+3];
-              if (alpha > 80 && Math.hypot(d[idx]-bg[0],d[idx+1]-bg[1],d[idx+2]-bg[2]) > 85) {
+              if (alpha > 80 && (transparentBackground || Math.hypot(d[idx]-bg[0],d[idx+1]-bg[1],d[idx+2]-bg[2]) > 85)) {
                 drawCtx.fillRect(nx + x, ny + y, 3, 3);
               }
             }
@@ -1539,9 +1539,9 @@
           canvasStatusText.textContent = `사진 업로드 분석 완료`;
           executeFeatureExtraction();
         };
-        img.onerror=()=>canvasStatusText.textContent="이미지를 읽을 수 없습니다."; img.src = event.target.result;
+        img.onerror=()=>canvasStatusText.textContent='이미지를 읽을 수 없습니다.';img.src = event.target.result;
       };
-      reader.onerror=()=>canvasStatusText.textContent="파일을 읽을 수 없습니다."; reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
     });
 
     // LEXICON BROWSER
@@ -1650,7 +1650,7 @@
       drawCtx.clearRect(0, 0, 400, 400);
       debugCtx.clearRect(0, 0, 400, 400);
       canvasStatusText.textContent = '캔버스 초기화됨';
-      profileSliceBars.innerHTML = '';resPrimaryName.textContent='분석 대기';document.getElementById('weightResult').textContent='새 실루엣을 그려 주세요.';resSubEngName.textContent='';resConfidence.textContent='—';resConfidenceBar.style.height='0%';topCandidatesRanking.innerHTML='';reasoningBox.textContent='새 실루엣을 그리거나 이미지를 올려 주세요.';resDescription.textContent='';resPatternTip.textContent='';
+      profileSliceBars.innerHTML = '';
     });
 
     chkGuide.addEventListener('change', renderGuideline);
@@ -1696,5 +1696,5 @@
       executeFeatureExtraction();
     };
   </script>
-<script src="../../assets/notebook.js"></script><script>['structureWeight','shapeWeight'].forEach(id=>document.getElementById(id).oninput=()=>{document.getElementById(id+'Out').textContent=document.getElementById(id).value+'배';executeFeatureExtraction()});document.getElementById('pinGarment').onclick=()=>document.getElementById('garmentBaseline').textContent='고정한 후보: '+resPrimaryName.textContent+' / 구조 '+document.getElementById('structureWeight').value+'배, 형태 '+document.getElementById('shapeWeight').value+'배';</script></body>
+<script>toolClear.addEventListener('click',executeFeatureExtraction);</script><script src="../../assets/drafts.js?v=2"></script></body>
 </html>
