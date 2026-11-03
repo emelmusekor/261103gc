@@ -105,8 +105,8 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
 @media(max-width:850px) { .hero,.lab-grid { grid-template-columns:1fr; } .hero-stat { max-width:none; } .scene, .scene svg { min-height:300px; height:300px; } }
 @media(max-width:480px) { .top-note { display:none; } main { padding:18px 12px; } .panel-head { padding:17px; } .controls,.result-panel,.experiment { padding-left:17px; padding-right:17px; } .score-ring { width:108px; height:108px; } .score-number { font-size:27px; } .metric { grid-template-columns:82px 1fr 30px; } }
 </style>
-<link rel="stylesheet" href="../../assets/program.css?v=2"><script>if(self!==top)document.documentElement.classList.add('embedded');</script></head>
-<body data-program="pose"><nav class="program-nav"><a href="../../index.html">실험 모음</a><a href="../../lab.html?id=pose&view=feedback">피드백</a></nav>
+<link rel="stylesheet" href="../../assets/program.css?v=2"><script>if(self!==top)document.documentElement.classList.add('embedded');</script><link rel="stylesheet" href="../../assets/ai-tools.css?v=3"></head>
+<body data-program="pose"><nav class="program-nav"><a href="../../index.html">실험 모음</a></nav>
 <div id="app" data-sites-preview-theme="custom">
   <header class="topbar">
     <div class="brand"><div class="brand-mark">⌁</div><div>POSE LAB <span style="font-weight:400;opacity:.75">/ AI 탐구실</span></div></div>
@@ -130,7 +130,7 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
             <option value="volley">배구 언더핸드 패스 — 팔과 무릎</option>
             <option value="kick">풋살 킥 — 지지 다리와 몸통</option>
           </select>
-          <div id="scene" class="scene" style="margin-top:14px">
+          <div class="ai-actions"><button type="button" id="poseSimulation">촬영 조건 실험</button><button type="button" id="posePhotograph">사진 분석</button></div><section id="posePhotoArea" hidden><div class="ai-workspace" id="poseAI"><label class="ai-upload">운동 사진 <input id="poseImage" type="file" accept="image/png,image/jpeg,image/webp"></label><label class="ai-label" for="poseQuestion">사진에서 확인할 점</label><input id="poseQuestion" type="text" value="사진에서 무릎 주변 관절을 찾아 촬영 조건과 함께 설명해 줘."><button type="button" data-ai-action="pose">관절 찾고 분석하기</button><p class="ai-status" role="status"></p><svg id="posePhoto" role="img" aria-label="관절 위치를 조절하는 운동 사진" hidden></svg><div id="posePointControls" hidden><label for="posePoint">조절할 관절</label><select id="posePoint"><option value="hip">엉덩이</option><option value="knee" selected>무릎</option><option value="ankle">발목</option></select><p>관절 점을 끌거나 사진을 눌러 위치를 확인하세요.</p><output id="poseMeasuredAngle"></output></div><div class="ai-output" aria-live="polite"></div></div></section><div id="scene" class="scene" style="margin-top:14px">
             <div class="scene-tag" id="sceneTag">POSE / SQUAT</div>
             <svg viewBox="0 0 440 340" role="img" aria-label="관절 점과 선으로 표현한 운동 자세 예시">
               <g class="person" id="person">
@@ -186,7 +186,7 @@ button.ghost { background:light-dark(#f1f6f5,#26383e); color:inherit; border:1px
         </div>
       </section>
     </div>
-    <footer class="footer"><span>POSE LAB · AI를 무조건 믿기보다, 근거와 한계를 살펴보기</span><span>체육 수업 안전 지도는 교사의 관찰과 안내를 함께 활용하세요.</span></footer>
+    
   </main>
 </div>
 <script>
@@ -234,5 +234,5 @@ $('goodSetup').addEventListener('click',()=>{$('camera').value=0;$('light').valu
 $('reset').addEventListener('click',()=>{controls.forEach(k=>$(k).value=initial[k]);$('pose').value=initial.pose;update();$('observation').innerHTML='🔎 <strong>실험 미션:</strong> 카메라 각도를 0°에서 60°로 바꾸고 신뢰도 점수의 변화를 관찰해 보세요.';});
 update();
 </script>
-<script>(()=>{let saved=null;const q=id=>document.getElementById(id);function compare(){const r=update();q('restorePose').disabled=!saved;if(saved){const diff=r.score-saved.score;q('poseDelta').textContent='저장한 점수 '+saved.score+'% → 현재 '+r.score+'% ('+(diff>0?'+':'')+diff+'%p). 바뀐 조건: '+[...controls,'pose'].filter(k=>String(r.v[k])!==String(saved.v[k])).map(k=>({camera:'카메라',light:'조명',clothes:'옷',occlusion:'가림',pose:'자세'}[k])).join(', ');}}q('savePose').onclick=()=>{saved=update();compare()};q('restorePose').onclick=()=>{if(!saved)return;controls.forEach(k=>q(k).value=saved.v[k]);q('pose').value=saved.v.pose;update();compare()};controls.forEach(k=>q(k).addEventListener('input',compare));q('pose').addEventListener('change',compare);['badSetup','goodSetup','reset'].forEach(k=>q(k).addEventListener('click',compare));})();</script><script src="../../assets/drafts.js?v=2"></script></body>
+<script>(()=>{let saved=null;const q=id=>document.getElementById(id);function compare(){const r=update();q('restorePose').disabled=!saved;if(saved){const diff=r.score-saved.score;q('poseDelta').textContent='저장한 점수 '+saved.score+'% → 현재 '+r.score+'% ('+(diff>0?'+':'')+diff+'%p). 바뀐 조건: '+[...controls,'pose'].filter(k=>String(r.v[k])!==String(saved.v[k])).map(k=>({camera:'카메라',light:'조명',clothes:'옷',occlusion:'가림',pose:'자세'}[k])).join(', ');}}q('savePose').onclick=()=>{saved=update();compare()};q('restorePose').onclick=()=>{if(!saved)return;controls.forEach(k=>q(k).value=saved.v[k]);q('pose').value=saved.v.pose;update();compare()};controls.forEach(k=>q(k).addEventListener('input',compare));q('pose').addEventListener('change',compare);['badSetup','goodSetup','reset'].forEach(k=>q(k).addEventListener('click',compare));})();</script><script src="../../assets/drafts.js?v=2"></script><script src="../../assets/ai-tools.js?v=3"></script><script>window.LabBridge={context:()=>({pose:$('pose').selectedOptions[0].text,conditions:values()}),photoMode:enabled=>{document.querySelector('.lab-grid').classList.toggle('photo-mode',enabled);document.getElementById('pose').hidden=enabled;document.querySelector('.lab-grid>.panel h2').textContent=enabled?'운동 사진 분석':'자세와 촬영 환경 설정';document.getElementById('posePhotoArea').hidden=!enabled;document.getElementById('scene').hidden=enabled;document.querySelector('.controls').hidden=enabled;document.querySelector('.scene-caption').hidden=enabled;document.querySelector('.result-panel').hidden=enabled;}};</script></body>
 </html>

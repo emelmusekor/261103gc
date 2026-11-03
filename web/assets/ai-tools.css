@@ -1,0 +1,18 @@
+
+.ai-workspace{margin:18px 0;padding:16px 0;border-top:1px solid #ddd;background:#fff;color:#222;font:14px/1.8 system-ui,-apple-system,"Malgun Gothic",sans-serif;min-width:0}
+.ai-workspace h3{font-size:18px;line-height:1.5;margin:0 0 14px;font-weight:650}.ai-label{display:block;font-size:13px;margin:12px 0 6px;font-weight:500}
+.ai-workspace textarea,.ai-workspace input[type=text]{display:block;width:100%;max-width:100%;border:1px solid #bbb;background:#fff;color:#222;padding:10px;font:14px/1.7 inherit;border-radius:2px;box-sizing:border-box}
+.ai-workspace textarea{min-height:68px;resize:vertical}.ai-workspace button,.ai-actions button{background:#222;color:#fff;border:1px solid #222;padding:8px 13px;border-radius:2px;font:13px/1.5 system-ui,sans-serif;cursor:pointer;margin:10px 6px 6px 0}.ai-workspace button:disabled{opacity:.45;cursor:wait}.ai-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.ai-actions input[type=number]{width:78px;padding:6px;margin-left:5px;border:1px solid #aaa;background:white;color:#222}
+.ai-status{font-size:12px;line-height:1.7;color:#666;margin:7px 0;min-height:0}.ai-status:empty{display:none}.ai-status.is-error{color:#9b382d}
+.ai-output{font-size:14px;line-height:1.9;color:#333}.ai-output:empty{display:none}.ai-output h3{font-size:19px;margin:20px 0 12px}.ai-output h4{font-size:14px;margin:21px 0 7px}.ai-output p{margin:8px 0;white-space:pre-wrap}.ai-output ul,.ai-output ol{padding-left:21px;margin:8px 0}.ai-output li{margin-bottom:9px}.ai-output strong{font-weight:650}.math-final{font-size:19px!important;font-weight:650}
+.ai-upload{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:14px 0;font-size:13px}.ai-upload input[type=file]{max-width:100%;font:12px system-ui,sans-serif}.ai-preview{display:block;max-width:100%;max-height:340px;object-fit:contain;margin:14px 0}
+.ai-citations{display:inline-flex;gap:5px;margin-left:8px;vertical-align:middle}.ai-citations button{padding:1px 6px;font:11px/1.5 system-ui,sans-serif;border:1px solid #aaa;background:#fff;color:#444;cursor:pointer}
+.experiment-values{display:grid;grid-template-columns:max-content 1fr;gap:4px 20px;margin:12px 0;font-size:13px}.experiment-values dt{color:#666}.experiment-values dd{margin:0;font-variant-numeric:tabular-nums}
+.observed-result{font-size:13px;border-top:1px solid #ddd;padding-top:12px;white-space:pre-wrap;line-height:1.9}
+#posePhoto{display:block;width:100%;height:auto;max-height:650px;background:#fff;touch-action:none;cursor:crosshair;margin-top:15px}#posePhoto image{pointer-events:none}#posePointControls{padding:12px 0;font-size:12px;line-height:1.8}#posePointControls select{width:auto;padding:6px;margin-left:10px}#posePointControls p{margin:10px 0;color:#666}#poseMeasuredAngle{display:block;font-size:15px;font-weight:600}
+body[data-program=fashion] .ai-workspace input{font-size:12px}.ai-output button:hover,.ai-workspace>button:hover{background:#444}#history input{width:100%}
+@media(max-width:600px){.ai-workspace{font-size:13px}.ai-workspace h3{font-size:17px}.ai-output{font-size:13px}.ai-workspace textarea,.ai-workspace input[type=text]{font-size:16px}.ai-workspace button{font-size:12px}.experiment-values{gap:4px 14px}#posePhoto{max-height:480px}.ai-upload{gap:8px}}
+
+[hidden]{display:none!important}
+
+.lab-grid.photo-mode{grid-template-columns:1fr}.lab-grid.photo-mode>section:nth-child(2){display:none}.lab-grid.photo-mode>.panel{width:100%;max-width:850px;margin:auto}
