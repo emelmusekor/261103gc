@@ -1,18 +1,20 @@
 [실험 모음](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site)
 
-## 2026년 11월 17일 수업
+## 2026년 11월 17일 자료
 
-[수업 자료](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117/index.html)에는 공통 데이터, 알고리즘별 코랩 실습 5개, 결과 비교, 생산성, 교육학, 개인 기록 페이지가 있습니다. 공지문과 시간표는 포함하지 않습니다.
+[ML 실험실](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117/index.html)
 
-- `web/class/20261117/downloads/lesson-kit.zip`: CSV·노트북·출처 설명 묶음.
-- `students-v1.csv`: UCI Student Performance의 포르투갈어 과목 자료를 가공한 공통 파일. 원자료 출처와 CC BY 4.0 표기는 데이터 페이지와 DATA-README.txt에 있습니다.
-- 학습 389명 / 검증 130명 / 보관 130명으로 고정했습니다. 노트북 기본 실행은 보관 자료를 평가하지 않습니다.
-- 각 노트북 안에 SHA256이 일치하는 CSV를 압축해 포함하므로, 코랩에서 데이터 호스팅 주소에 접속할 필요가 없습니다.
-- 기록은 브라우저에만 저장하며, 결과 JSON도 브라우저에서만 읽습니다. 이름·학번·API 키를 수집하지 않습니다.
+- 알고리즘 5개: 실제 계산 기반 SVG 시각화, 4단계 재생, 설정·입력 위치 조절
+- 실행 방식: 공통 CSV 다운로드 → 페이지의 전체 코드 복사 → Colab 코드 셀 실행 → CSV 선택
+- 공개 자료 형식: CSV, 복사용 Python 코드, 결과 JSON. ipynb 파일 제외
+- 공통 데이터: UCI Student Performance의 student-por.csv에서 입력 5개와 정답 생성, 고정 분할 추가
+- 분할: 학습 389 / 검증 130 / 최종 보관 130. 기본 실행의 최종 보관 자료 평가 제외
+- 원자료: Cortez (2008), https://doi.org/10.24432/C5TG7T · CC BY 4.0
+- 기록과 결과 JSON의 브라우저 내 처리. 이름·학번·API 키 수집 없음
 
-### 자료를 다시 만들고 확인하기
+### 재생성 및 검증
 
-Python에 numpy, pandas, scikit-learn이 필요합니다. 노트북의 초기 뼈대는 설치된 jupyter-notebook 도구를 사용합니다.
+Python 의존성: numpy, pandas, scikit-learn
 
 ```text
 python scripts/build-colab-materials.py
@@ -22,6 +24,10 @@ node --test test/*.test.mjs
 node scripts/build-worker.cjs
 ```
 
-첫 단계는 원자료를 내려받아 버전과 고정 분할을 만들고, 노트북 5개의 모든 코드 셀을 순서대로 실행합니다. 이미 받은 원자료가 있으면 재사용합니다. 배포 파일에 실행 출력은 넣지 않으며 실제 실행으로 확인한 값은 reference-*.json과 verification.json에 둡니다. 코랩 자체에서 로그인하여 실행한 검증과 로컬 Python 검증은 구분합니다.
+첫 명령은 알고리즘별 전체 코드를 실행하고, 모의 Colab 파일 선택·다운로드 동작과 결과 수치를 확인합니다. 실제 코랩 계정 안에서의 실행과는 별도 검증입니다. 코드 복사 버튼의 내용은 .py 파일 및 단계별 코드와 동일합니다.
 
-검증 지표와 입력 조건을 바꾸면 기존 결과와 바로 비교할 수 없습니다. CSV 바이트를 변경했다면 manifest와 노트북의 SHA256도 함께 갱신해야 합니다. CSV에 대한 Git 줄바꿈 변환은 .gitattributes에서 차단합니다.
+시각화는 원리 설명용 2차원 가상 자료를 사용하며 실제 CSV의 5개 입력과 구분합니다. SVM 시연은 RBF gamma=2, 코랩은 gamma=scale입니다. 랜덤포레스트 시연은 나무 5개, 코랩은 100개입니다. 설정 차이는 페이지에 표시합니다.
+
+수치 테스트 범위: 로지스틱 회귀 로그손실, K-NN 이웃과 투표, CART 분기, 랜덤포레스트 복원추출과 투표, RBF SVM의 쌍대 제약 및 비선형 분류. UI 검증 범위: 단계 이동, 자동 재생, 감소 동작 설정, 입력 조절, 코드 복사, 모바일 레이아웃.
+
+CSV 변경 시 manifest, 복사 코드의 SHA256, 참고 결과의 동시 갱신 필요. CSV 바이트 보존 및 Python LF 줄바꿈은 .gitattributes로 지정합니다.

@@ -1,15 +1,16 @@
-"""Prepare a versioned, reproducible teaching dataset and five Colab tutorials."""
+"""Prepare a common dataset and five copyable Colab Python scripts."""
 from __future__ import annotations
 
 import contextlib
-import base64
-import gzip
 import hashlib
 import io
 import json
-from pathlib import Path
-import subprocess
+import os
 import sys
+import tempfile
+import types
+from unittest.mock import patch
+from pathlib import Path
 import urllib.request
 import zipfile
 
@@ -23,19 +24,18 @@ DATA = LESSON / "downloads"
 DATA.mkdir(parents=True, exist_ok=True)
 SITE = "https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117"
 SOURCE_URL = "https://archive.ics.uci.edu/static/public/320/student%2Bperformance.zip"
-SKILL = Path.home() / ".codex/skills/jupyter-notebook/scripts/new_notebook.py"
 FEATURES = ["studytime", "failures", "absences", "schoolsup", "internet"]
 ALGORITHMS = [
-    dict(id="logistic", name="로지스틱 회귀", filename="01-logistic-regression.ipynb", parameter="C", values=[0.1, 1.0, 10.0], default=1.0,
-         concept="여러 항목의 정보를 합쳐 두 범주를 구분합니다.", question="규제를 약하게 하면 검증 결과도 좋아질까?", parameter_note="C가 작을수록 계수를 크게 만드는 데 더 강한 제약을 둡니다."),
-    dict(id="tree", name="결정트리", filename="02-decision-tree.ipynb", parameter="max_depth", values=[2, 4, None], default=4,
-         concept="조건에 따라 가지를 나누며 분류합니다.", question="질문을 끝없이 세분하면 처음 보는 학생도 더 잘 맞힐까?", parameter_note="깊이가 깊을수록 더 복잡한 분류 규칙을 만들 수 있습니다. None은 깊이 제한이 없다는 뜻입니다."),
-    dict(id="forest", name="랜덤포레스트", filename="03-random-forest.ipynb", parameter="max_depth", values=[2, 4, None], default=4,
-         concept="서로 다르게 학습한 여러 나무의 판단을 모읍니다.", question="나무를 여러 개 모으면 깊이를 늘렸을 때의 결과도 달라질까?", parameter_note="나무 수는 100개로 고정하고 각 나무의 깊이만 바꿉니다."),
-    dict(id="knn", name="K-NN", filename="04-knn.ipynb", parameter="n_neighbors", values=[1, 5, 15], default=5,
-         concept="입력 항목의 값이 가까운 사례들의 정답을 참고합니다.", question="한 명의 이웃과 여러 명의 이웃 중 어느 쪽을 더 믿을까?", parameter_note="K가 작으면 가까운 개별 사례에 민감하고, K가 크면 더 많은 이웃의 판단을 모읍니다."),
-    dict(id="svm", name="SVM", filename="05-svm.ipynb", parameter="C", values=[0.1, 1.0, 10.0], default=1.0,
-         concept="두 범주를 구분하는 경계를 학습합니다. 이번에는 RBF 커널을 사용합니다.", question="학습 오류를 더 강하게 벌주면 새 자료의 오류도 줄어들까?", parameter_note="C가 클수록 학습 자료의 분류 오류에 더 큰 벌점을 줍니다. 커널과 gamma는 고정합니다."),
+    dict(id="logistic", name="로지스틱 회귀", filename="01-logistic-regression.py", parameter="C", values=[0.1, 1.0, 10.0], default=1.0,
+         concept="가중합과 시그모이드 함수를 통한 이진 분류", question="규제 강도와 분류 경계의 관계", parameter_note="작은 C: 규제 강화 · 큰 C: 규제 완화"),
+    dict(id="tree", name="결정트리", filename="02-decision-tree.py", parameter="max_depth", values=[2, 4, None], default=4,
+         concept="불순도 감소에 따른 조건 분기와 말단 노드의 분류", question="트리 깊이와 과적합의 관계", parameter_note="깊이 증가: 세부 분기 증가 · None: 깊이 제한 해제"),
+    dict(id="forest", name="랜덤포레스트", filename="03-random-forest.py", parameter="max_depth", values=[2, 4, None], default=4,
+         concept="복원추출과 무작위 특성 선택으로 만든 여러 트리의 투표", question="개별 트리와 다수결 예측의 차이", parameter_note="트리 수 100개 고정 · 개별 트리의 깊이 변경"),
+    dict(id="knn", name="K-NN", filename="04-knn.py", parameter="n_neighbors", values=[1, 5, 15], default=5,
+         concept="가까운 K개 사례의 정답을 이용한 다수결 분류", question="이웃 수와 예측의 민감도", parameter_note="작은 K: 개별 사례에 민감 · 큰 K: 넓은 범위의 이웃 반영"),
+    dict(id="svm", name="SVM", filename="05-svm.py", parameter="C", values=[0.1, 1.0, 10.0], default=1.0,
+         concept="RBF 커널과 서포트 벡터를 이용한 분류 경계 학습", question="오류 벌점과 분류 경계의 관계", parameter_note="큰 C: 학습 오류의 벌점 증가 · RBF 커널과 gamma 고정"),
 ]
 
 
@@ -87,7 +87,7 @@ manifest = dict(version="gc-20261117-v1", sha256=digest, source_sha256=hashlib.s
 write_json(DATA / "manifest.json", manifest)
 
 core_imports = '''from pathlib import Path
-import base64, gzip, hashlib, io, json, platform
+import hashlib, io, json, platform
 import numpy as np
 import pandas as pd
 import sklearn
@@ -113,8 +113,7 @@ TARGET = "below_10"
 print("Python", platform.python_version(), "| scikit-learn", sklearn.__version__)
 '''
 
-load_data = f'''# 공통 CSV가 노트북에 포함되어 있어 외부 접속 없이 실행할 수 있습니다.
-EMBEDDED_CSV_GZIP_BASE64 = "{base64.b64encode(gzip.compress(csv_file.read_bytes(), mtime=0)).decode('ascii')}"
+load_data = f'''# students-v1.csv 업로드 및 공통 버전 확인
 EXPECTED_SHA256 = "{digest}"
 DATA_VERSION = "gc-20261117-v1"
 SPLIT_ID = "gc-20261117-stratified-60-20-20-v1"
@@ -122,10 +121,18 @@ csv_path = Path("students-v1.csv")
 if csv_path.exists():
     data_bytes = csv_path.read_bytes()
 else:
-    data_bytes = gzip.decompress(base64.b64decode(EMBEDDED_CSV_GZIP_BASE64))
+    try:
+        from google.colab import files
+    except ImportError as error:
+        raise FileNotFoundError("현재 폴더에 students-v1.csv 배치 필요") from error
+    uploaded = files.upload()
+    csv_files = [content for name, content in uploaded.items() if name.lower().endswith(".csv")]
+    if len(csv_files) != 1:
+        raise ValueError("공통 CSV 파일 1개 선택 필요")
+    data_bytes = csv_files[0]
 actual_hash = hashlib.sha256(data_bytes).hexdigest()
 if actual_hash != EXPECTED_SHA256:
-    raise ValueError("수업용 CSV 버전이 다릅니다. 원본 students-v1.csv를 다시 받아 사용하세요.")
+    raise ValueError("CSV 버전 불일치: 원본 students-v1.csv 사용 필요")
 df = pd.read_csv(io.BytesIO(data_bytes), encoding="utf-8-sig")
 assert len(df) == 649 and df.row_id.is_unique
 assert set(df[TARGET]) == {{0, 1}} and set(df.split) == {{"train", "validation", "test"}}
@@ -270,89 +277,86 @@ else:
 '''
 
 
-def md(text):
-    return dict(cell_type="markdown", metadata={}, source=text.strip().splitlines(keepends=True))
 
-
-def code(text, tag):
-    return dict(cell_type="code", metadata={"lesson_step": tag}, source=text.strip().splitlines(keepends=True), execution_count=None, outputs=[])
-
+def formal_code(source):
+    changes = {
+        "아직 test 자료로 모델을 평가하지 않습니다.": "최종 보관 자료 평가 제외",
+        "정확도만 보고 성공이라고 말할 수 있을까요? 10점 미만을 놓친 수를 함께 보세요.": "정확도와 10점 미만 누락 인원 수의 동시 확인",
+        "값을 고르는 기준은 정확도인가요, 10점 미만 사례를 놓치지 않는 것인가요?": "설정 선택 기준: 전체 정확도 또는 10점 미만 재현율",
+        "틀린 사례가 없더라도 다른 자료에서도 완벽하다는 뜻은 아닙니다.": "오분류 0건의 다른 자료에 대한 일반화 불가",
+        "이 중요도는 이 모델과 자료에서의 의존도를 뜻합니다. 학생 성적의 원인이나 지원의 효과를 증명하지 않습니다.": "중요도: 해당 모델과 자료에서의 의존도. 인과관계의 근거 아님",
+        "20명 실험은 학습량과 범주 비율이 함께 바뀝니다. 차이를 자료 수만의 효과라고 단정하지 마세요.": "20명 실험: 학습량과 범주 비율의 동시 변경. 자료 수 단독 효과로 해석 불가",
+        "오류나 항목 제거가 이번 분할에서 반드시 점수를 낮추는 것은 아닙니다.": "오류 추가와 항목 제거에 따른 점수 하락의 보장 없음",
+        "로컬 실행: 현재 폴더의 파일을 사용하세요.": "로컬 실행 결과: 현재 폴더에 파일 저장",
+        "이 결과를 보고 다시 설정을 바꾸면 test도 다음 선택을 위한 검증 자료가 됩니다.": "최종 점수에 따른 설정 재선택 시 독립된 보관 자료 추가 필요",
+        "test 자료는 아직 평가하지 않았습니다. 먼저 결과에 대한 판단을 기록하세요.": "최종 보관 자료 평가 제외. 설정 확정 후 RUN_FINAL_TEST=True 변경",
+    }
+    for before, after in changes.items():
+        source = source.replace(before, after)
+    return source.strip() + "\n"
 
 verification = []
+code_blocks = {}
 for item in ALGORITHMS:
-    notebook_file = DATA / item["filename"]
-    if not notebook_file.exists():
-        subprocess.run([sys.executable, str(SKILL), "--kind", "tutorial", "--title", item["name"] + " 비교 실습", "--out", str(notebook_file)], check=True, capture_output=True)
-    notebook = json.loads(notebook_file.read_text(encoding="utf-8"))
     settings = f'ALGORITHM = {item["id"]!r}\nALGORITHM_NAME = {item["name"]!r}\nPARAMETER_NAME = {item["parameter"]!r}\nPARAMETER_VALUES = {item["values"]!r}\nDEFAULT_VALUE = {item["default"]!r}\n'
-    notebook["metadata"].update(kernelspec=dict(display_name="Python 3", language="python", name="python3"), colab=dict(name=item["filename"], provenance=[]), language_info=dict(name="python", version="3.12"))
-    notebook["cells"] = [
-        md(f'# {item["name"]}: {item["question"]}\n\n{item["concept"]}\n\n**실행 방법:** Google Colab에서 이 노트북을 업로드한 뒤 위에서 아래로 실행합니다. GPU와 API 키는 필요하지 않습니다. 공통 CSV가 노트북 안에 포함되어 있으므로 별도 다운로드나 외부 접속 없이 실행할 수 있습니다.\n\n[알고리즘 페이지]({SITE}/algorithms/{item["id"]}.html) · [데이터 출처](https://archive.ics.uci.edu/dataset/320/student+performance)'),
-        md('## 1. 실행 전에 예상하기\n\n아래 값을 바꾸기 전에 어느 설정이 학습 자료와 검증 자료에서 유리할지 자기 말로 적어 보세요.\n\n학습 자료에서 잘 맞히는 것과 처음 보는 자료에서 잘 맞히는 것은 같은가요?'),
-        code(core_imports, "imports"),
-        code(load_data, "load"),
-        md('## 2. 비교 조건 맞추기\n\n파일의 train / validation / test 표시를 그대로 사용합니다. row_id, split, below_10은 입력 항목이 아닙니다. 전처리도 학습 자료에만 fit합니다. studytime과 failures는 범주로 변환하고 absences만 표준화합니다.'),
-        code(helpers, "helpers"),
-        md(f'## 3. {item["parameter"]} 하나만 바꾸기\n\n{item["parameter_note"]}\n\n각 실행의 검증 대상은 같습니다. 먼저 학습 점수와 검증 점수가 함께 움직이는지 살펴보세요.'),
-        code(settings, "settings"),
-        code(experiment_code, "experiments"),
-        md('## 4. 틀린 사례와 항목의 중요도 보기\n\n실제 10점 미만인데 놓친 사례를 찾아보세요. 그 학생의 성격이나 노력 부족을 데이터에 없는 정보로 추측하지 않습니다. 중요도는 이 모델의 의존도이며 인과관계가 아닙니다.'),
-        code(inspect_code, "inspect"),
-        md('## 5. 지난 실습과 연결하기\n\n학습 자료 20명 / 학습 정답 20% 오류 / 결석 항목 제외를 비교합니다. 변경 조건은 서로 누적하지 않습니다. 결과가 반드시 나빠진다고 가정하지 않습니다.'),
-        code(stress_code, "stress"),
-        md('## 6. 결과 파일 내려받기\n\nresult-알고리즘.json을 수업 사이트의 결과 비교 페이지에 올리세요. 업로드한 파일은 현재 브라우저에서만 읽습니다. 검증 대상과 데이터 버전이 다르면 비교에서 제외합니다.'),
-        code(export_code, "export"),
-        md('## 7. 내 판단을 먼저 기록하기\n\n- 조건을 바꾸기 전의 예상은 무엇이었나요?\n- 실제 결과와 어느 부분이 달랐나요?\n- 단순 기준 모델과 비교하면 어떤 오류를 더 줄였나요?\n- AI 없이 내 알고리즘을 두 문장으로 설명할 수 있나요?\n\n**작은 확인 문제:** 검증 자료 20명 중 18명이 10점 이상이라면, 모든 학생을 10점 이상으로 답하는 모델의 정확도와 10점 미만 재현율은 각각 얼마인가요?\n\n<details><summary>답 확인</summary>정확도는 90%, 10점 미만 재현율은 0%입니다. 정확도만으로 필요한 사례를 찾았다고 말할 수 없습니다.</details>'),
-        md('## 8. 선택 확정 후에만 최종 확인\n\n검증 자료에서 설정을 고른 후 따로 보관한 test에서 한 번 확인합니다. test 결과를 보고 계속 설정을 고르면 새로운 보관 자료가 필요합니다. 이 소규모 자료에서의 결과를 실제 학습지원 도구의 성능으로 일반화하지 않습니다.'),
-        code(final_code, "final"),
+    blocks = [
+        dict(title="01 · CSV 업로드", code=formal_code(core_imports + "\n" + load_data)),
+        dict(title="02 · 모델 정의와 세 설정 비교", code=formal_code(settings + "\n" + helpers + "\n" + experiment_code)),
+        dict(title="03 · 오분류와 항목 중요도", code=formal_code(inspect_code)),
+        dict(title="04 · 자료 변경과 결과 파일 저장", code=formal_code(stress_code + "\n" + export_code)),
+        dict(title="05 · 설정 확정 후 최종 확인", code=formal_code(final_code)),
     ]
-    for index, cell in enumerate(notebook["cells"]):
-        cell["id"] = f'{item["id"]}-{index:02d}'
-    write_json(notebook_file, notebook)
+    code_blocks[item["id"]] = blocks
+    source = f'# {item["name"]} · {item["question"]}\n# 실행 환경: Google Colab / 기본 CPU\n# 데이터: students-v1.csv 선택\n# 출처: {manifest["attribution"]}\n\n' + "\n\n".join("# " + part["title"] + "\n" + part["code"] for part in blocks)
+    (DATA / item["filename"]).write_text(source, encoding="utf-8", newline="\n")
+    uploads, downloads = [], []
+    fake_files = types.SimpleNamespace(upload=lambda: uploads.append(True) or {"students-v1.csv": csv_file.read_bytes()}, download=lambda filename: downloads.append(filename))
+    fake_colab = types.ModuleType("google.colab")
+    fake_colab.files = fake_files
     namespace = {"__name__": "__lesson_validation__"}
-    with contextlib.redirect_stdout(io.StringIO()):
-        for cell in notebook["cells"]:
-            if cell["cell_type"] == "code":
-                source = "".join(cell["source"])
-                if cell["metadata"]["lesson_step"] == "load":
-                    source = source.replace('if csv_path.exists():', 'if False:  # 포함된 데이터로 실행되는 경로를 검증합니다.')
-                exec(compile(source, str(notebook_file), "exec"), namespace)
+    previous_cwd = Path.cwd()
+    with tempfile.TemporaryDirectory(prefix="gc-colab-check-") as temporary:
+        try:
+            os.chdir(temporary)
+            with contextlib.redirect_stdout(io.StringIO()), patch.dict(sys.modules, {"google.colab": fake_colab}):
+                exec(compile(source, item["filename"], "exec"), namespace)
+            assert uploads == [True] and downloads == [f'result-{item["id"]}.json']
+            assert Path(downloads[0]).exists()
+        finally:
+            os.chdir(previous_cwd)
     assert namespace["RUN_FINAL_TEST"] is False
     report = namespace["report"]
     assert report["dataset_sha256"] == digest and all(r["n"] == 130 for r in report["runs"])
     assert len(report["validation_row_ids"]) == len(set(report["validation_row_ids"])) == 130
     assert all(0 <= r["accuracy"] <= 1 for r in report["runs"] + report["stress"])
     write_json(DATA / f'reference-{item["id"]}.json', report)
-    verification.append(dict(algorithm=item["id"], cells_executed=sum(c["cell_type"] == "code" for c in notebook["cells"]), selected_metrics=report["selected_metrics"], baseline=report["baseline"]))
-    for file in [ROOT / f'result-{item["id"]}.json', ROOT / f'cases-{item["id"]}.csv']:
-        if file.exists():
-            # These files are generated only by this execution; the published copies are separate.
-            file.unlink()
-
-write_json(DATA / "verification.json", dict(date="2026-11-16", sklearn=__import__("sklearn").__version__, dataset_sha256=digest, notebooks=verification, final_test_executed=False))
-(DATA / "DATA-README.txt").write_text(f'''가천대학교 머신러닝 수업 · 2026-11-17
-
-students-v1.csv: UCI Student Performance의 student-por.csv를 수업용으로 가공한 파일입니다.
-출처: {manifest["attribution"]}
-라이선스: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
-가공: 입력 5개 선택, G3<10인 below_10 정답 생성, 행 식별자 부여, 고정된 층화 분할 60/20/20.
-G1·G2·G3 및 그 밖의 개인 배경 항목은 실습용 CSV의 입력에서 제외했습니다.
-studytime: 주당 시간 구간 1=<2h / 2=2~5h / 3=5~10h / 4=>10h.
-failures: 원자료의 과거 과목 실패 코드. 이번 실습에서는 범주로 처리합니다.
-absences: 결석 횟수. 출석률이 아닙니다. schoolsup/internet: 원자료 yes/no 응답입니다.
-row_id는 원자료의 행 번호에 기반한 수업용 식별자이며 실제 이름이 아닙니다.
-split: train={len(train_index)}, validation={len(validation_index)}, test={len(test_index)}. seed=42.
-파일 SHA256: {digest}
-
-성적 10점 미만은 이번 분류의 정답 정의이며 실제 지원 필요성의 정답이 아닙니다.
-자료의 관측 시점만으로 조기 예측이나 인과관계를 입증할 수 없습니다.
-각 ipynb는 Colab에 업로드하고 위에서부터 실행합니다. GPU/API 키가 필요하지 않습니다.
-공통 CSV가 노트북 안에 포함되어 있어 외부 주소에 접속하지 않고 실행됩니다.
-같은 이름의 CSV를 직접 업로드하면 해당 파일을 먼저 읽고 SHA256으로 버전을 확인합니다.
-노트북은 검증 자료를 비교에 사용하고, test는 기본 실행에서 평가하지 않습니다.
-''', encoding="utf-8")
+    verification.append(dict(algorithm=item["id"], blocks_executed=len(blocks), upload_path_verified=True, selected_metrics=report["selected_metrics"], baseline=report["baseline"]))
+write_json(DATA / "code-blocks.json", code_blocks)
+write_json(DATA / "verification.json", dict(date="2026-11-16", sklearn=__import__("sklearn").__version__, dataset_sha256=digest, scripts=verification, final_test_executed=False))
+readme = [
+    "ML 실험 데이터와 실행 코드 · 2026-11-17", "",
+    "students-v1.csv: UCI student-por.csv의 열 선택, 정답 생성, 식별자 및 고정 분할 추가",
+    manifest["attribution"], "라이선스: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/",
+    "입력: studytime, failures, absences, schoolsup, internet",
+    "정답: G3<10이면 below_10=1, 그 외 0",
+    "분할: train 389 / validation 130 / test 130. 초기값 42",
+    "studytime: 주당 시간 구간 1=<2h / 2=2~5h / 3=5~10h / 4=>10h",
+    "failures: 과거 과목 실패 코드. 범주 처리", "absences: 결석 횟수",
+    "schoolsup/internet: yes/no 응답", "row_id와 split: 모델 입력 제외",
+    "SHA256: " + digest, "",
+    "실행: 알고리즘 페이지의 전체 코드 복사 > Colab 코드 셀에 붙여넣기 > 실행 > students-v1.csv 선택",
+    "실행 환경: 기본 CPU. GPU 및 API 키 불필요", "CSV 버전 검증 후 동일한 학습·검증 분할 적용",
+    "최종 보관 자료: 기본 실행에서 평가 제외. 조건 확정 후 별도 확인",
+    "성적 구간 분류와 실제 지원 필요성의 구분. 관측 자료만으로 인과 효과 추론 불가",
+]
+(DATA / "DATA-README.txt").write_text("\n".join(readme) + "\n", encoding="utf-8")
+# Retire only the five generated notebook artifacts previously published by this project.
+for name in ['01-logistic-regression.ipynb','02-decision-tree.ipynb','03-random-forest.ipynb','04-knn.ipynb','05-svm.ipynb']:
+    old_file = DATA / name
+    if old_file.exists():
+        old_file.unlink()
 with zipfile.ZipFile(DATA / "lesson-kit.zip", "w", compression=zipfile.ZIP_DEFLATED) as bundle:
     for file in sorted(DATA.iterdir()):
-        if file.suffix == ".ipynb" or file.name in {"students-v1.csv", "manifest.json", "DATA-README.txt", "student-por-original.csv"}:
+        if file.suffix == ".py" or file.name in {"students-v1.csv", "manifest.json", "DATA-README.txt", "student-por-original.csv"}:
             bundle.write(file, file.name)
-print(json.dumps(dict(rows=len(table), splits=manifest["splits"], notebooks=len(verification), sha256=digest, validation=[dict(algorithm=v["algorithm"], accuracy=v["selected_metrics"]["accuracy"], recall=v["selected_metrics"]["recall_below_10"]) for v in verification]), ensure_ascii=False))
+print(json.dumps(dict(rows=len(table), splits=manifest["splits"], scripts=len(verification), sha256=digest, upload_verified=all(x['upload_path_verified'] for x in verification)), ensure_ascii=False))

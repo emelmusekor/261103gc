@@ -1,25 +1,403 @@
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="공통 데이터와 알고리즘별 코랩 실습, 생산성과 교육학을 연결하는 머신러닝 수업 자료."><title>결정트리 실습 · 11월 17일 탐구 실험실</title><link rel="stylesheet" href="../lesson.css?v=1"></head>
-<body><a class="skip" href="#main">본문으로 바로 가기</a><header class="mast"><a class="brand" href="../index.html">탐구 실험실 <span class="fine">/ ML × AI</span></a><span class="course">가천대학교 머신러닝<br>2026.11.17</span></header><div class="nav-wrap"><nav aria-label="탐구 메뉴"><a href="../index.html">시작</a><a href="../data.html">데이터</a><a href="../practice.html" aria-current="page">알고리즘 실습</a><a href="../results.html">결과 비교</a><a href="../productivity.html">생산성</a><a href="../education.html">교육학</a><a href="../notes.html">나의 기록</a><span class="sticky-status" id="save-status">기록은 이 브라우저에만 저장</span></nav></div><main id="main"><div class="algo-head"><div><div class="intro"><p class="eyebrow">FIELD NOTES / 02 / TREE</p><h1>결정트리</h1><p class="lede">질문을 끝없이 세분하면 처음 보는 학생도 더 잘 맞힐까?</p></div></div><svg class="algo-mark" viewBox="0 0 180 120" role="img" aria-label="결정트리의 개념 그림"><path d="M90 15V35M90 35 45 60M90 35 135 60M45 60 25 95M45 60 65 95M135 60 115 95M135 60 155 95"/><circle class="dot" cx="90" cy="15" r="5"/><circle cx="45" cy="60" r="5"/><circle cx="135" cy="60" r="5"/></svg></div><p>조건에 따라 가지를 나누며 분류합니다.</p><div class="download-note"><h2>노트북을 열고 실행하기</h2><div class="actions"><a class="button primary" href="../downloads/02-decision-tree.ipynb" download>내 노트북 내려받기 ↓</a><a class="button" href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab 열기 ↗</a></div><ol><li>코랩의 <strong>파일 → 노트북 업로드</strong>에서 내려받은 .ipynb를 엽니다.</li><li>런타임은 기본 CPU로 충분합니다. GPU·API 키가 필요하지 않습니다.</li><li>공통 CSV가 노트북에 포함되어 있습니다. 별도 데이터 업로드나 외부 접속이 필요하지 않습니다.</li><li>실행 전에 아래에 예상을 적은 뒤, 셀을 위에서부터 실행합니다.</li></ol></div>
-<section class="section"><h2>이번에 바꾸는 것은 하나입니다</h2><div class="table-wrap"><table><thead><tr><th>바꿀 항목</th><th>값</th><th>읽는 법</th></tr></thead><tbody><tr><td><code>max_depth</code></td><td>[2, 4, None]</td><td>깊이가 깊을수록 더 복잡한 분류 규칙을 만들 수 있습니다. None은 깊이 제한이 없다는 뜻입니다.</td></tr></tbody></table></div><p class="caption">고정 조건: 입력 5개, 학습 389명, 검증 130명, 학습 자료에서만 학습하는 전처리. 기본 설정은 4입니다.</p><label class="field">실행 전 내 예상<small>어느 설정에서 학습 점수와 검증 점수가 각각 높아질까요? 이유를 한 문장으로 적으세요.</small><textarea data-note="tree_forecast" rows="3" aria-label="실행 전 내 예상"></textarea></label></section>
-<section class="section"><h2>실행 후 꼭 확인할 세 가지</h2><ol><li>단순 기준 모델의 정확도 84.6%보다 나아졌나요? 10점 미만 사례도 더 찾았나요?</li><li>학습 점수와 검증 점수의 차이가 설정에 따라 어떻게 바뀌었나요?</li><li>틀린 사례 한 명의 row_id와 오류 유형은 무엇인가요?</li></ol><label class="field">내 예상과 실제 결과<small>예상 / 관찰한 수치 / 가능한 설명을 구분하세요.</small><textarea data-note="tree_observation" rows="4" aria-label="내 예상과 실제 결과"></textarea></label><label class="field">틀린 사례 하나<small>row_id, 실제 정답, 예측, 확인한 입력 항목을 적으세요. 데이터에 없는 성격이나 노력은 추측하지 않습니다.</small><textarea data-note="tree_errorcase" rows="3" aria-label="틀린 사례 하나"></textarea></label></section>
-<section class="section"><h2>AI에게 물어볼 때</h2><div class="prompt"><div class="prompt-top"><h3>실행 전 · 알고리즘과 예상</h3><button type="button" class="copy" data-copy="tree-plan">프롬프트 복사</button></div><pre id="tree-plan">나는 결정트리으로 제공된 학생 데이터를 실험하고 있어.
-내 질문은 “질문을 끝없이 세분하면 처음 보는 학생도 더 잘 맞힐까?”야.
-max_depth를 [2, 4, None]로 바꾸되, CSV·입력 5개·train/validation 구분·전처리는 그대로 유지해.
-먼저 이 알고리즘의 판단 방식을 쉬운 비유 하나와 실제 처리 방식으로 설명해줘.
-그다음 내 예상이 맞는지 질문해줘. 실행 결과를 아직 주지 않았으니 정확도나 실험 결론은 만들지 마.
-내가 확인할 코랩 셀과 비교할 지표를 짚어줘.</pre></div><details><summary>실행이 막힐 때 · 오류 수정 프롬프트</summary><div><div class="prompt"><div class="prompt-top"><h3>최소 수정으로 원인 찾기</h3><button type="button" class="copy" data-copy="tree-debug">프롬프트 복사</button></div><pre id="tree-debug">아래는 제공된 결정트리 코랩 노트북에서 난 오류야.
-[실패한 셀의 코드와 오류 메시지를 붙여넣기]
-원인을 먼저 설명하고 필요한 최소 수정만 제안해줘.
-students-v1.csv의 입력 항목과 고정 split을 바꾸거나, 검증 자료를 fit에 넣거나, 전체 노트북을 새로 만들지 마.
-수정 후 어떤 셀부터 다시 실행하고 무엇으로 해결 여부를 확인할지 알려줘.</pre></div></div></details><details><summary>실행 후 · 실제 결과 해석 프롬프트</summary><div><div class="prompt"><div class="prompt-top"><h3>내 결과에서만 설명하기</h3><button type="button" class="copy" data-copy="tree-analysis">프롬프트 복사</button></div><pre id="tree-analysis">아래는 내가 실제로 실행한 결정트리의 결과야.
-[조건별 표, 기준 모델 결과, 틀린 사례를 붙여넣기]
-1. 예상과 관찰을 구분해 설명해줘.
-2. 정확도, 10점 미만 재현율, 놓친 인원 수로 서로 다른 결론이 나오는지 확인해줘.
-3. 내 해석에서 근거가 없는 부분은 질문으로 돌려줘.
-4. 항목의 중요도를 성적의 원인이나 지원의 효과로 설명하지 마.
-5. 내가 제공하지 않은 수치를 추가하지 마.
-마지막에는 이 알고리즘을 내가 이해했는지 확인하는 질문 하나만 해줘. 내가 답하기 전에는 정답을 주지 마.</pre></div></div></details></section>
-<section class="section"><h2>자료와 항목 바꾸기</h2><p>노트북의 추가 실험 셀에는 학습 20명, 학습 정답 20% 뒤집기, 결석 항목 제외가 들어 있습니다. 각각 원본 학습 자료에서 따로 시작합니다. 검증 자료를 새로 뽑지 않습니다.</p><div class="note warning">20명 실험은 범주별 10명씩 뽑으므로 자료 수와 범주 비율이 함께 바뀝니다. 차이를 자료 수만의 효과라고 단정하지 마세요. 오류를 섞거나 항목을 빼도 한 번의 검증 점수가 반드시 낮아지는 것은 아닙니다.</div></section>
-<details><summary>실행이 막혔을 때만 · 실제 실행으로 확인한 참고 결과</summary><div><p>기본 설정 4에서 검증 정확도 <strong>83.8%</strong>, 10점 미만 재현율 <strong>15.0%</strong>, 놓친 사례 <strong>17/20명</strong>이었습니다.</p><p class="caption">2026-11-16, Python 로컬 환경·scikit-learn 1.9.0에서 제공한 노트북의 코드 셀을 순서대로 실행한 값입니다. 라이브러리 버전에 따라 결과가 달라질 수 있습니다. 예상값이 아닙니다.</p><a class="source-link" href="../downloads/reference-tree.json" download>참고 결과 JSON ↓</a></div></details>
-<div class="next"><a href="../practice.html">← 다른 알고리즘</a><a href="../results.html">result-tree.json으로 비교하기 →</a></div></main><footer class="footer"><span>ML 실험실 · 2026.11.17</span><a href="../../../index.html">기존 실험 모음 ↗</a></footer><script src="../lesson.js?v=1" defer></script></body></html>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="머신러닝 알고리즘 시각화, 공통 데이터, Google Colab 복사 코드"><title>결정트리 · ML 실험실</title><link rel="stylesheet" href="../lesson.css?v=3"></head><body><a class="skip" href="#main">본문 바로가기</a><header class="mast"><a class="brand" href="../index.html">ML 실험실<span> / 2026.11.17</span></a><span class="course">가천대학교 머신러닝</span></header><div class="nav-wrap"><nav aria-label="탐구 메뉴"><a href="../index.html">시작</a><a href="../data.html">데이터</a><a href="../practice.html" aria-current="page">알고리즘</a><a href="../results.html">결과 비교</a><a href="../productivity.html">생산성</a><a href="../education.html">교육학</a><a href="../notes.html">기록</a><span class="sticky-status" id="save-status">브라우저 내 기록 저장</span></nav></div><main id="main"><div class="intro"><p class="eyebrow">ALGORITHM / TREE</p><h1>결정트리</h1><p class="lede">불순도 감소에 따른 조건 분기와 말단 노드의 분류</p></div><section class="motion-lab" data-algorithm="tree"></section><p class="caption">시각화와 코랩의 깊이 조건: 2 / 4 / 제한 없음</p><section class="section"><h2>매개변수와 관찰 항목</h2><div class="table-wrap"><table><thead><tr><th>변경 항목</th><th>값</th><th>의미</th></tr></thead><tbody><tr><td><code>max_depth</code></td><td>[2, 4, None]</td><td>깊이 증가: 세부 분기 증가 · None: 깊이 제한 해제</td></tr></tbody></table></div><div class="observation-grid"><div><h3>01 · 학습과 검증</h3><p>설정별 두 점수의 차이</p></div><div><h3>02 · 기준 모델</h3><p>정확도 84.6%와 재현율 0%의 비교</p></div><div><h3>03 · 오분류</h3><p>누락 사례와 잘못 표시한 사례의 구분</p></div></div><label class="field">실행 전 예상<small>설정별 학습 점수와 검증 점수의 예상 차이</small><textarea data-note="tree_forecast" rows="3" aria-label="실행 전 예상"></textarea></label></section><section class="section" id="colab-code"><h2>코랩 실행 코드</h2><div class="run-strip"><span>① CSV 저장</span><span>② 전체 코드 복사</span><span>③ 코랩 셀에 붙여넣기</span><span>④ 실행 후 CSV 선택</span></div><div class="actions"><a class="button" href="../downloads/students-v1.csv" download>CSV 다운로드 ↓</a><button class="primary" type="button" data-copy="full-code" data-copy-label="전체 코드 복사">전체 코드 복사</button><a class="button" href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab ↗</a></div><p class="caption">기본 CPU · GPU 및 API 키 불필요 · 파일 선택 창에서 students-v1.csv 지정</p><details><summary>전체 코드 보기</summary><pre id="full-code"># 결정트리 · 트리 깊이와 과적합의 관계
+# 실행 환경: Google Colab / 기본 CPU
+# 데이터: students-v1.csv 선택
+# 출처: Cortez, P. (2008). Student Performance. UCI Machine Learning Repository. https://doi.org/10.24432/C5TG7T
+
+# 01 · CSV 업로드
+from pathlib import Path
+import hashlib, io, json, platform
+import numpy as np
+import pandas as pd
+import sklearn
+try:
+    from IPython.display import display
+except ImportError:
+    display = print
+from sklearn.base import clone
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.dummy import DummyClassifier
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix
+from sklearn.inspection import permutation_importance
+
+FEATURES = [&quot;studytime&quot;, &quot;failures&quot;, &quot;absences&quot;, &quot;schoolsup&quot;, &quot;internet&quot;]
+TARGET = &quot;below_10&quot;
+print(&quot;Python&quot;, platform.python_version(), &quot;| scikit-learn&quot;, sklearn.__version__)
+
+# students-v1.csv 업로드 및 공통 버전 확인
+EXPECTED_SHA256 = &quot;5e01746d0128a964c31cb02597fc1176c182bd502c31a2f669aa8ab0f16de387&quot;
+DATA_VERSION = &quot;gc-20261117-v1&quot;
+SPLIT_ID = &quot;gc-20261117-stratified-60-20-20-v1&quot;
+csv_path = Path(&quot;students-v1.csv&quot;)
+if csv_path.exists():
+    data_bytes = csv_path.read_bytes()
+else:
+    try:
+        from google.colab import files
+    except ImportError as error:
+        raise FileNotFoundError(&quot;현재 폴더에 students-v1.csv 배치 필요&quot;) from error
+    uploaded = files.upload()
+    csv_files = [content for name, content in uploaded.items() if name.lower().endswith(&quot;.csv&quot;)]
+    if len(csv_files) != 1:
+        raise ValueError(&quot;공통 CSV 파일 1개 선택 필요&quot;)
+    data_bytes = csv_files[0]
+actual_hash = hashlib.sha256(data_bytes).hexdigest()
+if actual_hash != EXPECTED_SHA256:
+    raise ValueError(&quot;CSV 버전 불일치: 원본 students-v1.csv 사용 필요&quot;)
+df = pd.read_csv(io.BytesIO(data_bytes), encoding=&quot;utf-8-sig&quot;)
+assert len(df) == 649 and df.row_id.is_unique
+assert set(df[TARGET]) == {0, 1} and set(df.split) == {&quot;train&quot;, &quot;validation&quot;, &quot;test&quot;}
+display(df.head())
+display(df.groupby(&quot;split&quot;)[TARGET].agg(자료수=&quot;size&quot;, 성적10점미만=&quot;sum&quot;))
+print(&quot;studytime: 1=&lt;2시간, 2=2~5시간, 3=5~10시간, 4=&gt;10시간 (주당)&quot;)
+print(&quot;최종 보관 자료 평가 제외&quot;)
+
+
+# 02 · 모델 정의와 세 설정 비교
+ALGORITHM = &#x27;tree&#x27;
+ALGORITHM_NAME = &#x27;결정트리&#x27;
+PARAMETER_NAME = &#x27;max_depth&#x27;
+PARAMETER_VALUES = [2, 4, None]
+DEFAULT_VALUE = 4
+
+train = df.loc[df.split == &quot;train&quot;].copy()
+validation = df.loc[df.split == &quot;validation&quot;].copy()
+test = df.loc[df.split == &quot;test&quot;].copy()
+assert not (set(train.row_id) &amp; set(validation.row_id) or set(train.row_id) &amp; set(test.row_id) or set(validation.row_id) &amp; set(test.row_id))
+
+def build_model(algorithm, value, columns=FEATURES):
+    # studytime과 failures의 구간 코드를 연속 시간/횟수라고 가정하지 않습니다.
+    numeric = [c for c in [&quot;absences&quot;] if c in columns]
+    categories = [c for c in columns if c not in numeric]
+    transforms = []
+    if numeric:
+        transforms.append((&quot;numeric&quot;, StandardScaler(), numeric))
+    if categories:
+        transforms.append((&quot;category&quot;, OneHotEncoder(handle_unknown=&quot;ignore&quot;, sparse_output=False), categories))
+    preprocessor = ColumnTransformer(transforms, remainder=&quot;drop&quot;)
+    estimators = {
+        &quot;logistic&quot;: lambda: LogisticRegression(C=value, max_iter=3000, random_state=42),
+        &quot;tree&quot;: lambda: DecisionTreeClassifier(max_depth=value, random_state=42),
+        &quot;forest&quot;: lambda: RandomForestClassifier(n_estimators=100, max_depth=value, random_state=42, n_jobs=1),
+        &quot;knn&quot;: lambda: KNeighborsClassifier(n_neighbors=value),
+        &quot;svm&quot;: lambda: SVC(C=value, kernel=&quot;rbf&quot;, gamma=&quot;scale&quot;),
+    }
+    return Pipeline([(&quot;prepare&quot;, preprocessor), (&quot;model&quot;, estimators[algorithm]())])
+
+def metrics(y_true, prediction):
+    tn, fp, fn, tp = confusion_matrix(y_true, prediction, labels=[0, 1]).ravel()
+    return dict(n=int(tn+fp+fn+tp), accuracy=float(accuracy_score(y_true, prediction)),
+                balanced_accuracy=float(balanced_accuracy_score(y_true, prediction)),
+                recall_below_10=float(tp/(tp+fn)) if tp+fn else None,
+                recall_at_least_10=float(tn/(tn+fp)) if tn+fp else None,
+                missed_below_10=int(fn), false_flags=int(fp),
+                tn=int(tn), fp=int(fp), fn=int(fn), tp=int(tp))
+
+def evaluate(model, data=validation, columns=FEATURES):
+    return metrics(data[TARGET], model.predict(data[columns]))
+
+baseline = DummyClassifier(strategy=&quot;most_frequent&quot;)
+baseline.fit(train[FEATURES], train[TARGET])
+baseline_metrics = evaluate(baseline)
+display(pd.DataFrame([baseline_metrics], index=[&quot;다수 범주만 답하는 기준 모델&quot;]))
+print(&quot;정확도와 10점 미만 누락 인원 수의 동시 확인&quot;)
+
+runs = []
+models = {}
+for value in PARAMETER_VALUES:
+    model = build_model(ALGORITHM, value)
+    model.fit(train[FEATURES], train[TARGET])
+    result = {&quot;parameter&quot;: PARAMETER_NAME, &quot;value&quot;: value,
+              &quot;train_accuracy&quot;: float(accuracy_score(train[TARGET], model.predict(train[FEATURES]))),
+              **evaluate(model)}
+    runs.append(result)
+    models[str(value)] = model
+display(pd.DataFrame(runs).round(4))
+print(&quot;기준 모델 검증 정확도:&quot;, round(baseline_metrics[&quot;accuracy&quot;], 4))
+print(&quot;설정 선택 기준: 전체 정확도 또는 10점 미만 재현율&quot;)
+
+
+# 03 · 오분류와 항목 중요도
+# 자동으로 1등을 고르지 않습니다. 우선 페이지에 지정된 기본 설정을 살펴봅니다.
+SELECTED_VALUE = DEFAULT_VALUE
+selected_model = models[str(SELECTED_VALUE)]
+pred = selected_model.predict(validation[FEATURES])
+cases = validation[[&quot;row_id&quot;] + FEATURES + [TARGET]].copy()
+cases[&quot;prediction&quot;] = pred
+cases[&quot;wrong&quot;] = cases[TARGET] != cases.prediction
+cases[&quot;error_type&quot;] = np.where((cases[TARGET] == 1) &amp; (cases.prediction == 0), &quot;10점 미만 놓침&quot;,
+                              np.where((cases[TARGET] == 0) &amp; (cases.prediction == 1), &quot;10점 이상 잘못 표시&quot;, &quot;일치&quot;))
+display(cases.loc[cases.wrong].head(10))
+print(&quot;오분류 0건의 다른 자료에 대한 일반화 불가&quot;)
+importance = permutation_importance(selected_model, validation[FEATURES], validation[TARGET],
+                                    scoring=&quot;balanced_accuracy&quot;, n_repeats=10, random_state=42)
+display(pd.DataFrame({&quot;항목&quot;: FEATURES, &quot;검증점수_감소_평균&quot;: importance.importances_mean,
+                      &quot;흔들림_표준편차&quot;: importance.importances_std}).sort_values(&quot;검증점수_감소_평균&quot;, ascending=False))
+print(&quot;중요도: 해당 모델과 자료에서의 의존도. 인과관계의 근거 아님&quot;)
+
+
+# 04 · 자료 변경과 결과 파일 저장
+# 세 조건은 매번 원본 학습 자료에서 따로 시작합니다. 검증 대상과 정답은 그대로 둡니다.
+stress_rows = []
+small = train.groupby(TARGET, group_keys=False).sample(n=10, random_state=42)
+small_model = build_model(ALGORITHM, DEFAULT_VALUE)
+small_model.fit(small[FEATURES], small[TARGET])
+stress_rows.append({&quot;condition&quot;: &quot;학습 20명(범주별 10명)&quot;, **evaluate(small_model)})
+
+noisy = train.copy()
+flip_ids = noisy.sample(frac=0.2, random_state=42).index
+noisy.loc[flip_ids, TARGET] = 1 - noisy.loc[flip_ids, TARGET]
+noisy_model = build_model(ALGORITHM, DEFAULT_VALUE)
+noisy_model.fit(noisy[FEATURES], noisy[TARGET])
+stress_rows.append({&quot;condition&quot;: f&quot;학습 정답 {len(flip_ids)}개 뒤집기&quot;, **evaluate(noisy_model)})
+
+reduced_features = [c for c in FEATURES if c != &quot;absences&quot;]
+reduced_model = build_model(ALGORITHM, DEFAULT_VALUE, reduced_features)
+reduced_model.fit(train[reduced_features], train[TARGET])
+stress_rows.append({&quot;condition&quot;: &quot;결석 항목 제외&quot;, **evaluate(reduced_model, columns=reduced_features)})
+display(pd.DataFrame([{&quot;condition&quot;: &quot;기본 설정&quot;, **evaluate(models[str(DEFAULT_VALUE)])}] + stress_rows).round(4))
+print(&quot;20명 실험: 학습량과 범주 비율의 동시 변경. 자료 수 단독 효과로 해석 불가&quot;)
+print(&quot;오류 추가와 항목 제거에 따른 점수 하락의 보장 없음&quot;)
+
+report = {
+    &quot;schema_version&quot;: 1, &quot;data_version&quot;: DATA_VERSION, &quot;dataset_sha256&quot;: actual_hash,
+    &quot;split_id&quot;: SPLIT_ID, &quot;scope&quot;: &quot;validation&quot;, &quot;features&quot;: FEATURES,
+    &quot;algorithm&quot;: ALGORITHM, &quot;algorithm_name&quot;: ALGORITHM_NAME,
+    &quot;baseline&quot;: baseline_metrics, &quot;runs&quot;: runs, &quot;stress&quot;: stress_rows,
+    &quot;selected_value&quot;: SELECTED_VALUE, &quot;selected_metrics&quot;: evaluate(selected_model),
+    &quot;validation_row_ids&quot;: validation.row_id.tolist(),
+    &quot;environment&quot;: {&quot;python&quot;: platform.python_version(), &quot;sklearn&quot;: sklearn.__version__},
+}
+output = Path(f&quot;result-{ALGORITHM}.json&quot;)
+output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
+cases.to_csv(f&quot;cases-{ALGORITHM}.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+print(&quot;생성 파일:&quot;, output.name, f&quot;cases-{ALGORITHM}.csv&quot;)
+try:
+    from google.colab import files
+except ImportError:
+    print(&quot;로컬 실행 결과: 현재 폴더에 파일 저장&quot;)
+else:
+    files.download(str(output))
+
+
+# 05 · 설정 확정 후 최종 확인
+# 조건을 확정한 뒤에만 True로 바꾸세요. 기본 &#x27;모두 실행&#x27;에서는 test를 열지 않습니다.
+RUN_FINAL_TEST = False
+FINAL_VALUE = SELECTED_VALUE  # 검증 결과로 고른 값을 적습니다.
+if RUN_FINAL_TEST:
+    assert FINAL_VALUE in PARAMETER_VALUES
+    final_model = build_model(ALGORITHM, FINAL_VALUE)
+    final_model.fit(train[FEATURES], train[TARGET])
+    print(&quot;선택한 설정:&quot;, PARAMETER_NAME, FINAL_VALUE)
+    display(pd.DataFrame([evaluate(final_model, data=test)], index=[&quot;최종 보관 자료&quot;]))
+    print(&quot;최종 점수에 따른 설정 재선택 시 독립된 보관 자료 추가 필요&quot;)
+else:
+    print(&quot;최종 보관 자료 평가 제외. 설정 확정 후 RUN_FINAL_TEST=True 변경&quot;)
+</pre></details><details><summary>단계별 코드</summary><div><div class="prompt"><div class="prompt-top"><h3>01 · CSV 업로드</h3><button type="button" class="copy" data-copy="code-0" data-copy-label="코드 복사">코드 복사</button></div><pre id="code-0">from pathlib import Path
+import hashlib, io, json, platform
+import numpy as np
+import pandas as pd
+import sklearn
+try:
+    from IPython.display import display
+except ImportError:
+    display = print
+from sklearn.base import clone
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.dummy import DummyClassifier
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix
+from sklearn.inspection import permutation_importance
+
+FEATURES = [&quot;studytime&quot;, &quot;failures&quot;, &quot;absences&quot;, &quot;schoolsup&quot;, &quot;internet&quot;]
+TARGET = &quot;below_10&quot;
+print(&quot;Python&quot;, platform.python_version(), &quot;| scikit-learn&quot;, sklearn.__version__)
+
+# students-v1.csv 업로드 및 공통 버전 확인
+EXPECTED_SHA256 = &quot;5e01746d0128a964c31cb02597fc1176c182bd502c31a2f669aa8ab0f16de387&quot;
+DATA_VERSION = &quot;gc-20261117-v1&quot;
+SPLIT_ID = &quot;gc-20261117-stratified-60-20-20-v1&quot;
+csv_path = Path(&quot;students-v1.csv&quot;)
+if csv_path.exists():
+    data_bytes = csv_path.read_bytes()
+else:
+    try:
+        from google.colab import files
+    except ImportError as error:
+        raise FileNotFoundError(&quot;현재 폴더에 students-v1.csv 배치 필요&quot;) from error
+    uploaded = files.upload()
+    csv_files = [content for name, content in uploaded.items() if name.lower().endswith(&quot;.csv&quot;)]
+    if len(csv_files) != 1:
+        raise ValueError(&quot;공통 CSV 파일 1개 선택 필요&quot;)
+    data_bytes = csv_files[0]
+actual_hash = hashlib.sha256(data_bytes).hexdigest()
+if actual_hash != EXPECTED_SHA256:
+    raise ValueError(&quot;CSV 버전 불일치: 원본 students-v1.csv 사용 필요&quot;)
+df = pd.read_csv(io.BytesIO(data_bytes), encoding=&quot;utf-8-sig&quot;)
+assert len(df) == 649 and df.row_id.is_unique
+assert set(df[TARGET]) == {0, 1} and set(df.split) == {&quot;train&quot;, &quot;validation&quot;, &quot;test&quot;}
+display(df.head())
+display(df.groupby(&quot;split&quot;)[TARGET].agg(자료수=&quot;size&quot;, 성적10점미만=&quot;sum&quot;))
+print(&quot;studytime: 1=&lt;2시간, 2=2~5시간, 3=5~10시간, 4=&gt;10시간 (주당)&quot;)
+print(&quot;최종 보관 자료 평가 제외&quot;)</pre></div><div class="prompt"><div class="prompt-top"><h3>02 · 모델 정의와 세 설정 비교</h3><button type="button" class="copy" data-copy="code-1" data-copy-label="코드 복사">코드 복사</button></div><pre id="code-1">ALGORITHM = &#x27;tree&#x27;
+ALGORITHM_NAME = &#x27;결정트리&#x27;
+PARAMETER_NAME = &#x27;max_depth&#x27;
+PARAMETER_VALUES = [2, 4, None]
+DEFAULT_VALUE = 4
+
+train = df.loc[df.split == &quot;train&quot;].copy()
+validation = df.loc[df.split == &quot;validation&quot;].copy()
+test = df.loc[df.split == &quot;test&quot;].copy()
+assert not (set(train.row_id) &amp; set(validation.row_id) or set(train.row_id) &amp; set(test.row_id) or set(validation.row_id) &amp; set(test.row_id))
+
+def build_model(algorithm, value, columns=FEATURES):
+    # studytime과 failures의 구간 코드를 연속 시간/횟수라고 가정하지 않습니다.
+    numeric = [c for c in [&quot;absences&quot;] if c in columns]
+    categories = [c for c in columns if c not in numeric]
+    transforms = []
+    if numeric:
+        transforms.append((&quot;numeric&quot;, StandardScaler(), numeric))
+    if categories:
+        transforms.append((&quot;category&quot;, OneHotEncoder(handle_unknown=&quot;ignore&quot;, sparse_output=False), categories))
+    preprocessor = ColumnTransformer(transforms, remainder=&quot;drop&quot;)
+    estimators = {
+        &quot;logistic&quot;: lambda: LogisticRegression(C=value, max_iter=3000, random_state=42),
+        &quot;tree&quot;: lambda: DecisionTreeClassifier(max_depth=value, random_state=42),
+        &quot;forest&quot;: lambda: RandomForestClassifier(n_estimators=100, max_depth=value, random_state=42, n_jobs=1),
+        &quot;knn&quot;: lambda: KNeighborsClassifier(n_neighbors=value),
+        &quot;svm&quot;: lambda: SVC(C=value, kernel=&quot;rbf&quot;, gamma=&quot;scale&quot;),
+    }
+    return Pipeline([(&quot;prepare&quot;, preprocessor), (&quot;model&quot;, estimators[algorithm]())])
+
+def metrics(y_true, prediction):
+    tn, fp, fn, tp = confusion_matrix(y_true, prediction, labels=[0, 1]).ravel()
+    return dict(n=int(tn+fp+fn+tp), accuracy=float(accuracy_score(y_true, prediction)),
+                balanced_accuracy=float(balanced_accuracy_score(y_true, prediction)),
+                recall_below_10=float(tp/(tp+fn)) if tp+fn else None,
+                recall_at_least_10=float(tn/(tn+fp)) if tn+fp else None,
+                missed_below_10=int(fn), false_flags=int(fp),
+                tn=int(tn), fp=int(fp), fn=int(fn), tp=int(tp))
+
+def evaluate(model, data=validation, columns=FEATURES):
+    return metrics(data[TARGET], model.predict(data[columns]))
+
+baseline = DummyClassifier(strategy=&quot;most_frequent&quot;)
+baseline.fit(train[FEATURES], train[TARGET])
+baseline_metrics = evaluate(baseline)
+display(pd.DataFrame([baseline_metrics], index=[&quot;다수 범주만 답하는 기준 모델&quot;]))
+print(&quot;정확도와 10점 미만 누락 인원 수의 동시 확인&quot;)
+
+runs = []
+models = {}
+for value in PARAMETER_VALUES:
+    model = build_model(ALGORITHM, value)
+    model.fit(train[FEATURES], train[TARGET])
+    result = {&quot;parameter&quot;: PARAMETER_NAME, &quot;value&quot;: value,
+              &quot;train_accuracy&quot;: float(accuracy_score(train[TARGET], model.predict(train[FEATURES]))),
+              **evaluate(model)}
+    runs.append(result)
+    models[str(value)] = model
+display(pd.DataFrame(runs).round(4))
+print(&quot;기준 모델 검증 정확도:&quot;, round(baseline_metrics[&quot;accuracy&quot;], 4))
+print(&quot;설정 선택 기준: 전체 정확도 또는 10점 미만 재현율&quot;)</pre></div><div class="prompt"><div class="prompt-top"><h3>03 · 오분류와 항목 중요도</h3><button type="button" class="copy" data-copy="code-2" data-copy-label="코드 복사">코드 복사</button></div><pre id="code-2"># 자동으로 1등을 고르지 않습니다. 우선 페이지에 지정된 기본 설정을 살펴봅니다.
+SELECTED_VALUE = DEFAULT_VALUE
+selected_model = models[str(SELECTED_VALUE)]
+pred = selected_model.predict(validation[FEATURES])
+cases = validation[[&quot;row_id&quot;] + FEATURES + [TARGET]].copy()
+cases[&quot;prediction&quot;] = pred
+cases[&quot;wrong&quot;] = cases[TARGET] != cases.prediction
+cases[&quot;error_type&quot;] = np.where((cases[TARGET] == 1) &amp; (cases.prediction == 0), &quot;10점 미만 놓침&quot;,
+                              np.where((cases[TARGET] == 0) &amp; (cases.prediction == 1), &quot;10점 이상 잘못 표시&quot;, &quot;일치&quot;))
+display(cases.loc[cases.wrong].head(10))
+print(&quot;오분류 0건의 다른 자료에 대한 일반화 불가&quot;)
+importance = permutation_importance(selected_model, validation[FEATURES], validation[TARGET],
+                                    scoring=&quot;balanced_accuracy&quot;, n_repeats=10, random_state=42)
+display(pd.DataFrame({&quot;항목&quot;: FEATURES, &quot;검증점수_감소_평균&quot;: importance.importances_mean,
+                      &quot;흔들림_표준편차&quot;: importance.importances_std}).sort_values(&quot;검증점수_감소_평균&quot;, ascending=False))
+print(&quot;중요도: 해당 모델과 자료에서의 의존도. 인과관계의 근거 아님&quot;)</pre></div><div class="prompt"><div class="prompt-top"><h3>04 · 자료 변경과 결과 파일 저장</h3><button type="button" class="copy" data-copy="code-3" data-copy-label="코드 복사">코드 복사</button></div><pre id="code-3"># 세 조건은 매번 원본 학습 자료에서 따로 시작합니다. 검증 대상과 정답은 그대로 둡니다.
+stress_rows = []
+small = train.groupby(TARGET, group_keys=False).sample(n=10, random_state=42)
+small_model = build_model(ALGORITHM, DEFAULT_VALUE)
+small_model.fit(small[FEATURES], small[TARGET])
+stress_rows.append({&quot;condition&quot;: &quot;학습 20명(범주별 10명)&quot;, **evaluate(small_model)})
+
+noisy = train.copy()
+flip_ids = noisy.sample(frac=0.2, random_state=42).index
+noisy.loc[flip_ids, TARGET] = 1 - noisy.loc[flip_ids, TARGET]
+noisy_model = build_model(ALGORITHM, DEFAULT_VALUE)
+noisy_model.fit(noisy[FEATURES], noisy[TARGET])
+stress_rows.append({&quot;condition&quot;: f&quot;학습 정답 {len(flip_ids)}개 뒤집기&quot;, **evaluate(noisy_model)})
+
+reduced_features = [c for c in FEATURES if c != &quot;absences&quot;]
+reduced_model = build_model(ALGORITHM, DEFAULT_VALUE, reduced_features)
+reduced_model.fit(train[reduced_features], train[TARGET])
+stress_rows.append({&quot;condition&quot;: &quot;결석 항목 제외&quot;, **evaluate(reduced_model, columns=reduced_features)})
+display(pd.DataFrame([{&quot;condition&quot;: &quot;기본 설정&quot;, **evaluate(models[str(DEFAULT_VALUE)])}] + stress_rows).round(4))
+print(&quot;20명 실험: 학습량과 범주 비율의 동시 변경. 자료 수 단독 효과로 해석 불가&quot;)
+print(&quot;오류 추가와 항목 제거에 따른 점수 하락의 보장 없음&quot;)
+
+report = {
+    &quot;schema_version&quot;: 1, &quot;data_version&quot;: DATA_VERSION, &quot;dataset_sha256&quot;: actual_hash,
+    &quot;split_id&quot;: SPLIT_ID, &quot;scope&quot;: &quot;validation&quot;, &quot;features&quot;: FEATURES,
+    &quot;algorithm&quot;: ALGORITHM, &quot;algorithm_name&quot;: ALGORITHM_NAME,
+    &quot;baseline&quot;: baseline_metrics, &quot;runs&quot;: runs, &quot;stress&quot;: stress_rows,
+    &quot;selected_value&quot;: SELECTED_VALUE, &quot;selected_metrics&quot;: evaluate(selected_model),
+    &quot;validation_row_ids&quot;: validation.row_id.tolist(),
+    &quot;environment&quot;: {&quot;python&quot;: platform.python_version(), &quot;sklearn&quot;: sklearn.__version__},
+}
+output = Path(f&quot;result-{ALGORITHM}.json&quot;)
+output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
+cases.to_csv(f&quot;cases-{ALGORITHM}.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+print(&quot;생성 파일:&quot;, output.name, f&quot;cases-{ALGORITHM}.csv&quot;)
+try:
+    from google.colab import files
+except ImportError:
+    print(&quot;로컬 실행 결과: 현재 폴더에 파일 저장&quot;)
+else:
+    files.download(str(output))</pre></div><div class="prompt"><div class="prompt-top"><h3>05 · 설정 확정 후 최종 확인</h3><button type="button" class="copy" data-copy="code-4" data-copy-label="코드 복사">코드 복사</button></div><pre id="code-4"># 조건을 확정한 뒤에만 True로 바꾸세요. 기본 &#x27;모두 실행&#x27;에서는 test를 열지 않습니다.
+RUN_FINAL_TEST = False
+FINAL_VALUE = SELECTED_VALUE  # 검증 결과로 고른 값을 적습니다.
+if RUN_FINAL_TEST:
+    assert FINAL_VALUE in PARAMETER_VALUES
+    final_model = build_model(ALGORITHM, FINAL_VALUE)
+    final_model.fit(train[FEATURES], train[TARGET])
+    print(&quot;선택한 설정:&quot;, PARAMETER_NAME, FINAL_VALUE)
+    display(pd.DataFrame([evaluate(final_model, data=test)], index=[&quot;최종 보관 자료&quot;]))
+    print(&quot;최종 점수에 따른 설정 재선택 시 독립된 보관 자료 추가 필요&quot;)
+else:
+    print(&quot;최종 보관 자료 평가 제외. 설정 확정 후 RUN_FINAL_TEST=True 변경&quot;)</pre></div></div></details></section><section class="section"><h2>프롬프트</h2><div class="prompt"><div class="prompt-top"><h3>원리와 실행 전 예상</h3><button type="button" class="copy" data-copy="plan" data-copy-label="프롬프트 복사">프롬프트 복사</button></div><pre id="plan">대상 알고리즘: 결정트리
+입력: studytime, failures, absences, schoolsup, internet
+정답: below_10
+고정 조건: 제공 CSV의 train/validation/test 분할 유지
+변경 조건: max_depth = [2, 4, None]
+요청 사항:
+- 계산 순서와 각 단계의 의미 제시
+- 학습 정확도와 검증 정확도의 변화 가능성 구분
+- 실행 전 예상값과 실제 측정값의 구분
+- 미실행 성능 수치의 생성 금지</pre></div><details><summary>오류 수정</summary><div><div class="prompt"><div class="prompt-top"><h3>최소 수정과 재실행</h3><button type="button" class="copy" data-copy="debug" data-copy-label="프롬프트 복사">프롬프트 복사</button></div><pre id="debug">대상: 결정트리 코랩 실행 코드
+오류 메시지와 실패한 코드:
+[붙여넣기]
+요청 사항:
+- 원인 설명과 최소 수정 코드 제시
+- 입력 항목과 고정 자료 분할 유지
+- validation 및 test 자료의 fit 포함 금지
+- 수정 후 재실행 범위와 확인 기준 제시</pre></div></div></details><details><summary>결과 해석</summary><div><div class="prompt"><div class="prompt-top"><h3>실제 측정값에 근거한 해석</h3><button type="button" class="copy" data-copy="analysis" data-copy-label="프롬프트 복사">프롬프트 복사</button></div><pre id="analysis">실제 실행 결과:
+[설정별 표, 기준 모델 결과, 오분류 사례 붙여넣기]
+요청 사항:
+- 전체 정확도, 10점 미만 재현율, 오류 인원 수의 비교
+- 예상과 관찰, 근거와 추정의 구분
+- 누락된 정보의 확인 요청
+- 미제공 수치 및 인과관계의 추가 금지
+- 알고리즘 이해를 확인하는 질문 1개 제시, 정답의 선제 제공 금지</pre></div></div></details></section><section class="section"><h2>결과 기록</h2><label class="field">예상과 실제 결과의 차이<small>설정, 학습·검증 점수, 오류 인원 수</small><textarea data-note="tree_observation" rows="3" aria-label="예상과 실제 결과의 차이"></textarea></label><label class="field">오분류 사례<small>row_id, 실제 정답, 예측, 오류 유형</small><textarea data-note="tree_errorcase" rows="3" aria-label="오분류 사례"></textarea></label></section><details><summary>기본 설정의 검증 결과</summary><p>설정 4 · 정확도 83.8% · 10점 미만 재현율 15.0% · 누락 17/20명</p><p class="caption">2026-11-16 · Python / scikit-learn 1.9.0 · 제공 코드의 실제 실행값</p></details><div class="next"><a href="../practice.html">← 알고리즘 목록</a><a href="../results.html">결과 비교 →</a></div></main><footer class="footer"><span>ML · DATA · HUMAN DECISIONS</span><a href="../../../index.html">기존 실험 모음 ↗</a></footer><script src="../lesson.js?v=3" defer></script><script src="../algorithm-motion.js?v=3" defer></script></body></html>
