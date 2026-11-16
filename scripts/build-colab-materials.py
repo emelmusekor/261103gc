@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import contextlib
+import base64
+import gzip
 import hashlib
 import io
 import json
@@ -85,7 +87,7 @@ manifest = dict(version="gc-20261117-v1", sha256=digest, source_sha256=hashlib.s
 write_json(DATA / "manifest.json", manifest)
 
 core_imports = '''from pathlib import Path
-import hashlib, io, json, platform, urllib.request
+import base64, gzip, hashlib, io, json, platform
 import numpy as np
 import pandas as pd
 import sklearn
@@ -111,8 +113,8 @@ TARGET = "below_10"
 print("Python", platform.python_version(), "| scikit-learn", sklearn.__version__)
 '''
 
-load_data = f'''# 同じ授業用ファイルを自動で読みます。手元のファイルを優先します。
-DATA_URL = "{SITE}/downloads/students-v1.csv"
+load_data = f'''# 공통 CSV가 노트북에 포함되어 있어 외부 접속 없이 실행할 수 있습니다.
+EMBEDDED_CSV_GZIP_BASE64 = "{base64.b64encode(gzip.compress(csv_file.read_bytes(), mtime=0)).decode('ascii')}"
 EXPECTED_SHA256 = "{digest}"
 DATA_VERSION = "gc-20261117-v1"
 SPLIT_ID = "gc-20261117-stratified-60-20-20-v1"
@@ -120,11 +122,7 @@ csv_path = Path("students-v1.csv")
 if csv_path.exists():
     data_bytes = csv_path.read_bytes()
 else:
-    try:
-        with urllib.request.urlopen(DATA_URL, timeout=30) as response:
-            data_bytes = response.read()
-    except Exception as error:
-        raise RuntimeError("자동 다운로드에 실패했습니다. 수업 페이지에서 students-v1.csv를 내려받아 코랩 왼쪽 파일 영역에 올린 뒤 이 셀을 다시 실행하세요.") from error
+    data_bytes = gzip.decompress(base64.b64decode(EMBEDDED_CSV_GZIP_BASE64))
 actual_hash = hashlib.sha256(data_bytes).hexdigest()
 if actual_hash != EXPECTED_SHA256:
     raise ValueError("수업용 CSV 버전이 다릅니다. 원본 students-v1.csv를 다시 받아 사용하세요.")
@@ -135,7 +133,7 @@ display(df.head())
 display(df.groupby("split")[TARGET].agg(자료수="size", 성적10점미만="sum"))
 print("studytime: 1=<2시간, 2=2~5시간, 3=5~10시간, 4=>10시간 (주당)")
 print("아직 test 자료로 모델을 평가하지 않습니다.")
-'''.replace('# 同じ授業用ファイルを自動で読みます。手元のファイルを優先します。', '# 공통 CSV를 자동으로 읽습니다. 같은 이름의 로컬 파일이 있으면 먼저 사용합니다.')
+'''
 
 helpers = '''train = df.loc[df.split == "train"].copy()
 validation = df.loc[df.split == "validation"].copy()
@@ -289,7 +287,7 @@ for item in ALGORITHMS:
     settings = f'ALGORITHM = {item["id"]!r}\nALGORITHM_NAME = {item["name"]!r}\nPARAMETER_NAME = {item["parameter"]!r}\nPARAMETER_VALUES = {item["values"]!r}\nDEFAULT_VALUE = {item["default"]!r}\n'
     notebook["metadata"].update(kernelspec=dict(display_name="Python 3", language="python", name="python3"), colab=dict(name=item["filename"], provenance=[]), language_info=dict(name="python", version="3.12"))
     notebook["cells"] = [
-        md(f'# {item["name"]}: {item["question"]}\n\n{item["concept"]}\n\n**실행 방법:** Google Colab에서 이 노트북을 업로드한 뒤 위에서 아래로 실행합니다. GPU와 API 키는 필요하지 않습니다. CSV는 자동으로 읽습니다. 실패하면 수업 페이지의 students-v1.csv를 코랩 왼쪽 파일 영역에 올리세요.\n\n**남길 증거:** 예상 한 문장 → 조건별 실제 결과 → 틀린 사례 하나 → 내 판단.\n\n[수업 페이지]({SITE}/algorithms/{item["id"]}.html) · [데이터 출처](https://archive.ics.uci.edu/dataset/320/student+performance)'),
+        md(f'# {item["name"]}: {item["question"]}\n\n{item["concept"]}\n\n**실행 방법:** Google Colab에서 이 노트북을 업로드한 뒤 위에서 아래로 실행합니다. GPU와 API 키는 필요하지 않습니다. 공통 CSV가 노트북 안에 포함되어 있으므로 별도 다운로드나 외부 접속 없이 실행할 수 있습니다.\n\n[알고리즘 페이지]({SITE}/algorithms/{item["id"]}.html) · [데이터 출처](https://archive.ics.uci.edu/dataset/320/student+performance)'),
         md('## 1. 실행 전에 예상하기\n\n아래 값을 바꾸기 전에 어느 설정이 학습 자료와 검증 자료에서 유리할지 자기 말로 적어 보세요.\n\n학습 자료에서 잘 맞히는 것과 처음 보는 자료에서 잘 맞히는 것은 같은가요?'),
         code(core_imports, "imports"),
         code(load_data, "load"),
@@ -317,7 +315,7 @@ for item in ALGORITHMS:
             if cell["cell_type"] == "code":
                 source = "".join(cell["source"])
                 if cell["metadata"]["lesson_step"] == "load":
-                    source = source.replace('csv_path = Path("students-v1.csv")', f'csv_path = Path({str(csv_file)!r})')
+                    source = source.replace('if csv_path.exists():', 'if False:  # 포함된 데이터로 실행되는 경로를 검증합니다.')
                 exec(compile(source, str(notebook_file), "exec"), namespace)
     assert namespace["RUN_FINAL_TEST"] is False
     report = namespace["report"]
@@ -349,7 +347,8 @@ split: train={len(train_index)}, validation={len(validation_index)}, test={len(t
 성적 10점 미만은 이번 분류의 정답 정의이며 실제 지원 필요성의 정답이 아닙니다.
 자료의 관측 시점만으로 조기 예측이나 인과관계를 입증할 수 없습니다.
 각 ipynb는 Colab에 업로드하고 위에서부터 실행합니다. GPU/API 키가 필요하지 않습니다.
-자동 데이터 읽기가 실패하면 students-v1.csv를 Colab 왼쪽 파일 영역에 업로드하세요.
+공통 CSV가 노트북 안에 포함되어 있어 외부 주소에 접속하지 않고 실행됩니다.
+같은 이름의 CSV를 직접 업로드하면 해당 파일을 먼저 읽고 SHA256으로 버전을 확인합니다.
 노트북은 검증 자료를 비교에 사용하고, test는 기본 실행에서 평가하지 않습니다.
 ''', encoding="utf-8")
 with zipfile.ZipFile(DATA / "lesson-kit.zip", "w", compression=zipfile.ZIP_DEFLATED) as bundle:

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
 import {createWorker} from '../server/worker.mjs';
 
 const directory=path.resolve('web/class/20261117/downloads');
@@ -12,7 +13,7 @@ const bytes=fs.readFileSync(path.join(directory,'students-v1.csv'));
 assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),manifest.sha256);
 assert.equal(manifest.splits.train.rows,389);assert.equal(manifest.splits.validation.rows,130);assert.equal(manifest.splits.test.rows,130);
 assert.equal(new Set(manifest.validation_row_ids).size,130);
-for(const spec of manifest.algorithms){const notebook=JSON.parse(fs.readFileSync(path.join(directory,spec.filename),'utf8'));assert.equal(notebook.nbformat,4);const code=notebook.cells.filter(c=>c.cell_type==='code').map(c=>c.source.join('')).join('\n');assert(code.includes(manifest.sha256));assert(code.includes('RUN_FINAL_TEST = False'));assert(code.includes(`ALGORITHM = '${spec.id}'`));assert(notebook.cells.filter(c=>c.cell_type==='code').every(c=>c.outputs.length===0&&c.execution_count===null));}
+for(const spec of manifest.algorithms){const notebook=JSON.parse(fs.readFileSync(path.join(directory,spec.filename),'utf8'));assert.equal(notebook.nbformat,4);const code=notebook.cells.filter(c=>c.cell_type==='code').map(c=>c.source.join('')).join('\n');assert(code.includes(manifest.sha256));assert(code.includes('RUN_FINAL_TEST = False'));assert(code.includes(`ALGORITHM = '${spec.id}'`));assert(!code.includes('urlopen'));const embedded=code.match(/EMBEDDED_CSV_GZIP_BASE64 = "([A-Za-z0-9+/=]+)"/);assert(embedded);assert.deepEqual(gunzipSync(Buffer.from(embedded[1],'base64')),bytes);assert(notebook.cells.filter(c=>c.cell_type==='code').every(c=>c.outputs.length===0&&c.execution_count===null));}
 });
 test('worker preserves binary ZIP bytes and supplies real download MIME types',async()=>{
 const zip=fs.readFileSync(path.join(directory,'lesson-kit.zip'));
