@@ -6,6 +6,10 @@
 @media print{body{font-size:11pt}.mast,.nav-wrap,.actions,.copy,.footer,.next,.skip,.motion-controls,.motion-position{display:none}main{max-width:none;padding:0}h1{font-size:28pt}.motion-lab,.panel,.note{break-inside:avoid}.motion-svg{max-width:330px}.motion-query-ring,.motion-split,.motion-support{animation:none}.table-wrap{overflow:visible}pre{white-space:pre-wrap;max-height:none}}
 /* Black and white only: no gray fills, opacity fading or muted text. */
 ::selection{background:#000000;color:#ffffff}
+html,pre,textarea,.table-wrap{scrollbar-color:#000000 #ffffff}
+::-webkit-scrollbar{width:12px;height:12px;background:#ffffff}
+::-webkit-scrollbar-thumb{background:#000000;border:3px solid #ffffff}
+::-webkit-scrollbar-corner{background:#ffffff}
 .motion-steps button.is-current span{color:#ffffff}
 button:disabled{opacity:1;border-style:dashed;text-decoration:line-through}
 .motion-split,.motion-support{animation:none}
@@ -14,6 +18,21 @@ button:disabled{opacity:1;border-style:dashed;text-decoration:line-through}
 .config-options .field{margin-top:14px}.config-options select{width:100%;max-width:100%;font-size:13px}
 .code-config pre{background:#ffffff;border:1px solid #000000;font-size:13px;white-space:pre-wrap}
 .code-config>button{margin-top:15px}
+.experiment{margin-top:32px;border:1px solid #000000;scroll-margin-top:24px}
+.experiment-heading{display:flex;align-items:center;gap:16px;padding:22px 26px;border-bottom:1px solid #000000}
+.experiment-heading h2{font-size:23px}.lab-grid{display:grid;grid-template-columns:1fr 1fr}
+.lab-grid>section{padding:24px 26px;min-width:0}.lab-grid>section:nth-child(even){border-left:1px solid #000000}
+.lab-grid>section:nth-child(n+3){border-top:1px solid #000000}.lab-grid h3{font-size:15px;margin-bottom:12px}
+.lab-grid p{font-size:14px}.lab-grid .caption{font-size:12px}.lab-grid pre{margin-top:14px;font-size:12px;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.lab-grid textarea{min-height:82px}.lab-checks{list-style:none;padding:0;margin:12px 0 0}
+.lab-checks li{padding:12px 0;border-bottom:1px solid #000000}.lab-checks li:last-child{border:0}
+.lab-checks code{display:block;padding:0;margin-bottom:5px;overflow-wrap:anywhere}.lab-checks span{font-size:13px}
+.lab-caution{border-top:1px solid #000000;padding:15px 26px;font-size:12px}
+.metric-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid #000000;border-bottom:1px solid #000000;padding:16px 0;margin-top:20px}
+.metric-guide p{font-size:13px;margin:0}.metric-guide strong{display:block;font:13px var(--mono);margin-bottom:6px}
+.optional-lab>.experiment{margin-top:16px}.pair-selectors{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pair-selectors select{display:block;width:100%;font-size:13px;margin-top:8px}.pair-summary{margin-top:20px;font-size:14px}
+@media(max-width:750px){.lab-grid,.pair-selectors,.metric-guide{grid-template-columns:1fr}.lab-grid>section:nth-child(even){border-left:0}.lab-grid>section+section{border-top:1px solid #000000}.experiment-heading{align-items:flex-start;padding:18px}.experiment-heading h2{font-size:20px}.lab-grid>section{padding:20px 18px}.lab-caution{padding:16px 18px}}
 input[type=range]{appearance:none;-webkit-appearance:none;height:20px;background:#ffffff;border:0}
 input[type=range]::-webkit-slider-runnable-track{height:2px;background:#000000}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border:1px solid #000000;border-radius:0;background:#000000;margin-top:-5.5px}

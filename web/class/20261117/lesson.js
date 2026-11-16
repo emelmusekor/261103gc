@@ -23,6 +23,7 @@ const labels={algorithm:'알고리즘',forecast:'실행 전 예상',observation:
 const algorithms={logistic:'로지스틱 회귀',tree:'결정트리',forest:'랜덤포레스트',knn:'K-NN',svm:'SVM'};
 const fields={forecast:'실행 전 예상',observation:'예상과 실제의 차이',errorcase:'오분류 사례',transfer:'다른 조건의 판단과 근거'};
 for(const [id,name]of Object.entries(algorithms))for(const [key,title]of Object.entries(fields))labels[id+'_'+key]=name+' · '+title;
+for(const [id,name]of Object.entries(algorithms))for(const n of [2,3])for(const [key,title]of Object.entries({forecast:'예상과 이유',observation:'실측값과 판단'}))labels[id+'_lab'+n+'_'+key]=name+' · '+(n===2?'핵심 02':'선택 03')+' · '+title;
 const lines=['# 11월 17일 · 실험 기록','','실측값과 작성자의 관찰·판단 기록',''];
 for(const [key,value]of Object.entries(notes)){if(!Object.hasOwn(labels,key)||value===''||value===false)continue;lines.push('## '+labels[key],String(value),'');}
 download('my-ml-learning-notes.md',lines.join('\n'));message(document.getElementById('export-status'),'기록 파일 다운로드 완료');
@@ -46,18 +47,47 @@ if(!manifest.algorithms.some(a=>a.id===r.algorithm)||!Array.isArray(r.runs)||!r.
 const spec=manifest.algorithms.find(a=>a.id===r.algorithm);
 function validValue(value){if(['tree','forest'].includes(r.algorithm)&&value===null)return true;return Number.isFinite(value)&&value>0&&(['tree','forest','knn'].includes(r.algorithm)?Number.isInteger(value):true);}
 if(!r.runs.every(m=>m.parameter===spec.parameter&&validValue(m.value)&&Number.isFinite(m.train_accuracy)&&m.train_accuracy>=0&&m.train_accuracy<=1))throw Error('실험 설정 형식 오류');
+if(new Set(r.runs.map(m=>m.value)).size!==r.runs.length)throw Error('중복 비교값');
 if(r.configuration!==undefined){const c=r.configuration;if(!c||typeof c.model_options!=='object'||!c.model_options||Array.isArray(c.model_options)||JSON.stringify(c).length>2000)throw Error('추가 설정 형식 오류');if(r.algorithm==='logistic'&&!(typeof c.prediction_threshold==='number'&&c.prediction_threshold>0&&c.prediction_threshold<1))throw Error('분류 기준값 범위 오류');}
 for(const metrics of [r.baseline,r.selected_metrics,...r.runs,...r.stress])checkMetrics(metrics);
 if(r.baseline.tn!==110||r.baseline.fp!==0||r.baseline.fn!==20||r.baseline.tp!==0)throw Error('공통 기준 모델 결과 불일치');
 if(!r.runs.some(m=>m.value===r.selected_value&&close(m.accuracy,r.selected_metrics.accuracy)&&m.fn===r.selected_metrics.fn&&m.fp===r.selected_metrics.fp))throw Error('선택 설정과 표시 점수 불일치');
+if(r.predictions_by_value!==undefined){
+if(!Array.isArray(r.predictions_by_value)||r.predictions_by_value.length!==r.runs.length)throw Error('사례별 예측 형식 오류');
+const values=new Set();
+for(const group of r.predictions_by_value){
+const run=r.runs.find(m=>m.value===group.value);
+if(!run||values.has(group.value)||!Array.isArray(group.rows)||group.rows.length!==130||new Set(group.rows.map(row=>row.row_id)).size!==130)throw Error('사례별 비교값 또는 인원 불일치');
+values.add(group.value);const counts={tn:0,fp:0,fn:0,tp:0};
+for(const row of group.rows){if(!Object.hasOwn(manifest.validation_targets,row.row_id)||row.actual!==manifest.validation_targets[row.row_id]||![0,1].includes(row.predicted))throw Error('사례별 정답 또는 예측 불일치');counts[row.actual===1?(row.predicted===1?'tp':'fn'):(row.predicted===1?'fp':'tn')]++;}
+if(!Object.keys(counts).every(key=>counts[key]===run[key]))throw Error('사례별 예측과 집계 점수 불일치');
+}
+}
 return r;
 }
 function cell(row,text){const td=document.createElement('td');td.textContent=String(text);row.append(td);}
 function configText(r){if(!r.configuration)return '추가 설정 미기록';const options=Object.entries(r.configuration.model_options).map(([key,value])=>key+'='+JSON.stringify(value));if(r.algorithm==='logistic')options.push('threshold='+r.configuration.prediction_threshold);return options.join(' / ');}
 function experimentKey(r){const options=r.configuration?Object.entries(r.configuration.model_options).sort(([a],[b])=>a.localeCompare(b)):null;return JSON.stringify([r.algorithm,r.runs.map(m=>m.value),options,r.configuration?.prediction_threshold??null]);}
+let choices=[];
+const selectA=document.getElementById('pair-a'),selectB=document.getElementById('pair-b');
+function renderPair(){
+const body=document.getElementById('pair-body'),summary=document.getElementById('pair-summary');body.replaceChildren();
+const a=choices[Number(selectA.value)],b=choices[Number(selectB.value)];
+if(!a||!b){summary.textContent='결과 등록 후 A·B 설정 선택';return;}
+const rowsA=a.report.predictions_by_value?.find(group=>group.value===a.run.value)?.rows;
+const rowsB=b.report.predictions_by_value?.find(group=>group.value===b.run.value)?.rows;
+if(!rowsA||!rowsB){summary.textContent='사례별 예측 미포함 파일. 현재 전체 코드 재실행 후 JSON 추가 필요';return;}
+const mapB=new Map(rowsB.map(row=>[row.row_id,row]));let changed=0,improved=0,worsened=0;
+for(const rowA of rowsA){const rowB=mapB.get(rowA.row_id);if(rowA.predicted===rowB.predicted)continue;changed++;const better=rowB.predicted===rowB.actual;if(better)improved++;else worsened++;const tr=document.createElement('tr');for(const value of [rowA.row_id,rowA.actual,rowA.predicted,rowB.predicted,better?'오답 → 정답':'정답 → 오답'])cell(tr,value);body.append(tr);}
+summary.textContent='A → B · 예측 변경 '+changed+'/130명 · 오답 → 정답 '+improved+'명 · 정답 → 오답 '+worsened+'명'+(changed?'':' · 동일한 분류 결과');
+}
+selectA.addEventListener('change',renderPair);selectB.addEventListener('change',renderPair);
 function render(){
 table.replaceChildren();document.getElementById('result-empty').hidden=reports.length>0;document.getElementById('result-table').hidden=!reports.length;
-for(const r of reports){const spec=manifest.algorithms.find(a=>a.id===r.algorithm);for(const run of r.runs){const tr=document.createElement('tr');cell(tr,spec.name);cell(tr,run.parameter+'='+String(run.value));cell(tr,configText(r));cell(tr,pct(run.train_accuracy));cell(tr,pct(run.accuracy));cell(tr,pct(run.recall_below_10));cell(tr,run.fn+' / 20명');cell(tr,run.fp+' / 110명');table.append(tr);}}
+choices=[];selectA.replaceChildren();selectB.replaceChildren();
+for(const r of reports){const spec=manifest.algorithms.find(a=>a.id===r.algorithm);for(const run of r.runs){const tr=document.createElement('tr');cell(tr,spec.name);cell(tr,run.parameter+'='+String(run.value));cell(tr,configText(r));cell(tr,pct(run.train_accuracy));cell(tr,pct(run.accuracy));cell(tr,run.tp+' / 20명');cell(tr,(run.tp+run.fp)+'명');cell(tr,run.fn+' / 20명');cell(tr,run.fp+' / 110명');table.append(tr);const index=choices.length;choices.push({report:r,run});for(const select of [selectA,selectB]){const option=document.createElement('option');option.value=String(index);option.textContent=spec.name+' | '+run.parameter+'='+String(run.value)+' | '+configText(r);select.append(option);}}}
+selectA.disabled=selectB.disabled=!choices.length;selectB.selectedIndex=choices.length>1?1:0;
+document.getElementById('case-comparison').hidden=!reports.length;renderPair();
 document.getElementById('result-count').textContent=reports.length+'개 실험 · '+new Set(reports.map(r=>r.algorithm)).size+'개 알고리즘 · '+reports.reduce((sum,r)=>sum+r.runs.length,0)+'개 설정';
 }
 fetch('downloads/manifest.json').then(response=>{if(!response.ok)throw Error('공통 자료 정보 로드 실패');return response.json();}).then(value=>{manifest=value;fileInput.disabled=false;message(out,'result-*.json 선택 · 복수 파일 추가 가능');}).catch(error=>message(out,error.message,true));

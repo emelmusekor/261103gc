@@ -38,6 +38,9 @@
       "parameter": "max_depth",
       "value": 2,
       "train_accuracy": 0.8586118251928021,
+      "fit_seconds": 0.007619000003614929,
+      "tree_depth": 2,
+      "leaf_count": 4,
       "n": 130,
       "accuracy": 0.8307692307692308,
       "balanced_accuracy": 0.4909090909090909,
@@ -48,12 +51,17 @@
       "tn": 108,
       "fp": 2,
       "fn": 20,
-      "tp": 0
+      "tp": 0,
+      "generalization_gap": 0.027842594423571287,
+      "flagged": 2
     },
     {
       "parameter": "max_depth",
       "value": 4,
       "train_accuracy": 0.8663239074550129,
+      "fit_seconds": 0.007164499998907559,
+      "tree_depth": 4,
+      "leaf_count": 11,
       "n": 130,
       "accuracy": 0.8384615384615385,
       "balanced_accuracy": 0.5568181818181818,
@@ -64,12 +72,17 @@
       "tn": 106,
       "fp": 4,
       "fn": 17,
-      "tp": 3
+      "tp": 3,
+      "generalization_gap": 0.027862368993474385,
+      "flagged": 7
     },
     {
       "parameter": "max_depth",
       "value": null,
       "train_accuracy": 0.9177377892030848,
+      "fit_seconds": 0.008477199997287244,
+      "tree_depth": 11,
+      "leaf_count": 81,
       "n": 130,
       "accuracy": 0.8153846153846154,
       "balanced_accuracy": 0.5840909090909091,
@@ -80,7 +93,9 @@
       "tn": 101,
       "fp": 9,
       "fn": 15,
-      "tp": 5
+      "tp": 5,
+      "generalization_gap": 0.10235317381846942,
+      "flagged": 14
     }
   ],
   "stress": [
@@ -141,6 +156,1973 @@
     "fn": 17,
     "tp": 3
   },
+  "predictions_by_value": [
+    {
+      "value": 2,
+      "rows": [
+        {
+          "row_id": "POR-002",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-005",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-009",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-014",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-015",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-029",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-036",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-037",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-042",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-045",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-051",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-054",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-055",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-056",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-061",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-064",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-065",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-084",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-089",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-092",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-099",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-103",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-112",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-117",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-120",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-127",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-134",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-140",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-142",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-143",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-150",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-168",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-172",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-174",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-177",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-178",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-179",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-181",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-183",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-185",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-188",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-189",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-197",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-198",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-205",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-208",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-209",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-210",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-216",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-220",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-221",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-225",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-227",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-232",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-233",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-234",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-245",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-252",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-254",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-261",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-263",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-267",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-279",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-288",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-290",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-294",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-299",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-303",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-306",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-310",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-314",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-316",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-326",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-334",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-339",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-344",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-349",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-363",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-369",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-376",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-378",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-380",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-383",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-384",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-389",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-391",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-405",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-420",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-421",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-431",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-435",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-436",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-449",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-457",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-462",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-463",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-471",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-473",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-475",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-477",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-482",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-498",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-500",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-501",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-508",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-517",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-520",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-523",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-524",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-529",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-541",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-542",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-543",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-558",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-564",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-577",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-578",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-579",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-582",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-586",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-588",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-595",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-597",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-604",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-620",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-627",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-630",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-640",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-646",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-647",
+          "actual": 1,
+          "predicted": 0
+        }
+      ]
+    },
+    {
+      "value": 4,
+      "rows": [
+        {
+          "row_id": "POR-002",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-005",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-009",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-014",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-015",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-029",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-036",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-037",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-042",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-045",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-051",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-054",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-055",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-056",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-061",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-064",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-065",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-084",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-089",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-092",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-099",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-103",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-112",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-117",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-120",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-127",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-134",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-140",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-142",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-143",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-150",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-168",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-172",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-174",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-177",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-178",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-179",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-181",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-183",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-185",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-188",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-189",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-197",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-198",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-205",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-208",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-209",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-210",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-216",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-220",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-221",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-225",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-227",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-232",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-233",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-234",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-245",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-252",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-254",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-261",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-263",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-267",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-279",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-288",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-290",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-294",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-299",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-303",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-306",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-310",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-314",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-316",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-326",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-334",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-339",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-344",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-349",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-363",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-369",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-376",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-378",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-380",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-383",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-384",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-389",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-391",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-405",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-420",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-421",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-431",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-435",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-436",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-449",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-457",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-462",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-463",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-471",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-473",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-475",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-477",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-482",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-498",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-500",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-501",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-508",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-517",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-520",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-523",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-524",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-529",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-541",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-542",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-543",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-558",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-564",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-577",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-578",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-579",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-582",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-586",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-588",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-595",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-597",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-604",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-620",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-627",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-630",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-640",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-646",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-647",
+          "actual": 1,
+          "predicted": 0
+        }
+      ]
+    },
+    {
+      "value": null,
+      "rows": [
+        {
+          "row_id": "POR-002",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-005",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-009",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-014",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-015",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-029",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-036",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-037",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-042",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-045",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-051",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-054",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-055",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-056",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-061",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-064",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-065",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-084",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-089",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-092",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-099",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-103",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-112",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-117",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-120",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-127",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-134",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-140",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-142",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-143",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-150",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-168",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-172",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-174",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-177",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-178",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-179",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-181",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-183",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-185",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-188",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-189",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-197",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-198",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-205",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-208",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-209",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-210",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-216",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-220",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-221",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-225",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-227",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-232",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-233",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-234",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-245",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-252",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-254",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-261",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-263",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-267",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-279",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-288",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-290",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-294",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-299",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-303",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-306",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-310",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-314",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-316",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-326",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-334",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-339",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-344",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-349",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-363",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-369",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-376",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-378",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-380",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-383",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-384",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-389",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-391",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-405",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-420",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-421",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-431",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-435",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-436",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-449",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-457",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-462",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-463",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-471",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-473",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-475",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-477",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-482",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-498",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-500",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-501",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-508",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-517",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-520",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-523",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-524",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-529",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-541",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-542",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-543",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-558",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-564",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-577",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-578",
+          "actual": 0,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-579",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-582",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-586",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-588",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-595",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-597",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-604",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-620",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-627",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-630",
+          "actual": 1,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-640",
+          "actual": 1,
+          "predicted": 1
+        },
+        {
+          "row_id": "POR-646",
+          "actual": 0,
+          "predicted": 0
+        },
+        {
+          "row_id": "POR-647",
+          "actual": 1,
+          "predicted": 0
+        }
+      ]
+    }
+  ],
   "validation_row_ids": [
     "POR-002",
     "POR-005",

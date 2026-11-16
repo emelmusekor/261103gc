@@ -30,6 +30,22 @@ test('reference reports preserve the comparison population and confusion matrix 
 for(const spec of manifest.algorithms){const report=JSON.parse(fs.readFileSync(path.join(directory,`reference-${spec.id}.json`),'utf8'));assert.equal(report.scope,'validation');assert.equal(report.dataset_sha256,manifest.sha256);assert.deepEqual(report.validation_row_ids,manifest.validation_row_ids);assert.equal(report.runs.length,3);assert.equal(report.stress.length,3);for(const metric of [report.baseline,...report.runs,...report.stress]){assert.equal(metric.n,130);assert.equal(metric.tn+metric.fp,110);assert.equal(metric.tp+metric.fn,20);assert.equal(metric.accuracy,(metric.tn+metric.tp)/130);assert.equal(metric.recall_below_10,metric.tp/20);}}
 });
 
+test('case comparisons agree with every reported confusion matrix',()=>{
+assert.equal(Object.keys(manifest.validation_targets).length,130);
+for(const spec of manifest.algorithms){
+const report=JSON.parse(fs.readFileSync(path.join(directory,`reference-${spec.id}.json`),'utf8'));
+assert.equal(report.predictions_by_value.length,report.runs.length);
+for(const run of report.runs){
+const group=report.predictions_by_value.find(g=>g.value===run.value);assert(group);assert.equal(group.rows.length,130);
+assert.equal(new Set(group.rows.map(row=>row.row_id)).size,130);
+const counts={tn:0,fp:0,fn:0,tp:0};
+for(const row of group.rows){assert.equal(row.actual,manifest.validation_targets[row.row_id]);assert([0,1].includes(row.predicted));counts[row.actual?(row.predicted?'tp':'fn'):(row.predicted?'fp':'tn')]++;}
+for(const key of Object.keys(counts))assert.equal(counts[key],run[key]);
+assert(run.fit_seconds>=0);assert.equal(run.flagged,run.tp+run.fp);assert.equal(run.generalization_gap,run.train_accuracy-run.accuracy);
+}
+}
+});
+
 test('lesson styles use only pure black or white and pages omit unwanted labels',()=>{
 const css=fs.readFileSync(path.resolve('web/class/20261117/lesson.css'),'utf8');
 const colors=css.match(/#[0-9a-fA-F]{3,8}\b/g)||[];
@@ -45,4 +61,13 @@ const root=path.resolve('web/class/20261117');
 assert(!fs.existsSync(path.join(root,'productivity.html')));assert(!fs.existsSync(path.join(root,'education.html')));
 for(const file of ['index.html','practice.html',...manifest.algorithms.map(a=>'algorithms/'+a.id+'.html')]){const html=fs.readFileSync(path.join(root,file),'utf8');assert(!html.includes('productivity.html'));assert(!html.includes('education.html'));assert(!html.includes('>생산성<'));assert(!html.includes('>교육학<'));}
 for(const a of manifest.algorithms){const html=fs.readFileSync(path.join(root,'algorithms',a.id+'.html'),'utf8');assert(html.includes('data-note="'+a.id+'_forecast"'));assert(html.includes('data-note="'+a.id+'_errorcase"'));assert(html.includes('data-note="'+a.id+'_transfer"'));assert(html.includes('AI 도움 없는 2문장 설명'));}
+});
+
+test('each algorithm includes two concrete core experiments and an optional experiment',()=>{
+for(const spec of manifest.algorithms){
+const html=fs.readFileSync(path.resolve('web/class/20261117/algorithms',spec.id+'.html'),'utf8');
+for(const number of [1,2,3])assert(html.includes(`data-experiment="${spec.id}-lab-${number}"`));
+for(const label of ['01 · 실행 전 예상','02 · 코랩 변경','03 · 결과에서 확인','04 · 같은 사례의 비교','INSPECT_ROW_ID','DEFAULT_VALUE'])assert(html.includes(label));
+assert(html.includes(`data-note="${spec.id}_lab2_forecast"`));assert(html.includes(`data-note="${spec.id}_lab2_observation"`));
+}
 });

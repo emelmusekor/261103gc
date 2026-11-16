@@ -20,6 +20,7 @@ Python 의존성: numpy, pandas, scikit-learn
 python scripts/build-colab-materials.py
 python scripts/build-colab-pages.py
 python scripts/check-colab-variants.py
+python scripts/check-colab-experiments.py
 node scripts/check.cjs
 node --test test/*.test.mjs
 node scripts/build-worker.cjs
@@ -38,3 +39,7 @@ CSV 변경 시 manifest, 복사 코드의 SHA256, 참고 결과의 동시 갱신
 설계 기준
 
 환경 설정·반복 실행·표 생성·결과 전달의 부담을 줄이되, 실행 전 예상·조건 선택·오류 추적·독립 설명은 학생이 수행하도록 구성합니다. 생산성·교육학의 독립 페이지나 별도 토론 과제는 두지 않습니다. 각 알고리즘에 새로운 조건을 판단하는 짧은 적용 문항을 배치하고, 활동의 근거를 공통 기록 파일에 보존합니다.
+
+알고리즘별 실험은 `scripts/algorithm_experiments.py`에서 관리합니다. 핵심 2개와 선택 1개로 구성하며, 실험마다 실행 전 예상·완전한 기준 설정·수동 변경값·실제 출력 열·동일 학생의 예측 비교·판단 근거를 제시합니다. `check-colab-experiments.py`는 페이지에 쓰는 설정을 그대로 읽어 15개 실험을 29회 실행합니다. 각 실행의 사례별 예측과 혼동행렬 일치, 선택 사례 출력, K-NN 투표 비중, 최소 잎 크기를 검사하고 최종 보관 자료를 평가하지 않았는지 확인합니다.
+
+설정 비교 출력에는 학습 시간·학습/검증 정확도 차이와 알고리즘별 구조 정보를 포함합니다. 로지스틱 회귀는 점수와 기준값, 트리는 실제 깊이·잎 크기·상단 분기, K-NN은 실제 이웃·거리·투표 비중, SVM은 서포트 벡터 수·결정 점수를 출력합니다. 결과 JSON의 `predictions_by_value`로 같은 실행 또는 서로 다른 실행의 A/B 예측을 비교합니다. 비교 페이지는 개별 정답을 manifest와 대조하고 사례별 예측 집계가 보고 점수와 일치하는지 검사합니다. 이전 JSON은 점수 비교를 유지하되 사례 데이터가 없으면 재실행 안내를 표시합니다.

@@ -13,9 +13,11 @@ DEFAULT_VALUE = 1.0
 CLASS_WEIGHT = None
 PREDICTION_THRESHOLD = 0.5
 MODEL_OPTIONS = {"class_weight": CLASS_WEIGHT}
+# 상세 확인 사례: None은 자동 선택, 특정 사례는 'POR-002' 형식으로 지정
+INSPECT_ROW_ID = None
 
 from pathlib import Path
-import hashlib, io, json, platform
+import hashlib, io, json, platform, time
 import numpy as np
 import pandas as pd
 import sklearn
@@ -28,7 +30,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -122,15 +124,43 @@ print("정확도와 10점 미만 누락 인원 수의 동시 확인")
 
 runs = []
 models = {}
+predictions_by_value = []
+comparison = validation[["row_id", TARGET]].copy()
 for value in PARAMETER_VALUES:
     model = build_model(ALGORITHM, value)
+    started = time.perf_counter()
     model.fit(train[FEATURES], train[TARGET])
+    fit_seconds = time.perf_counter() - started
+    estimator = model.named_steps["model"]
+    diagnostic = {}
+    if ALGORITHM == "logistic":
+        diagnostic["coefficient_norm"] = float(np.linalg.norm(estimator.coef_))
+    elif ALGORITHM == "tree":
+        diagnostic = {"tree_depth": int(estimator.get_depth()), "leaf_count": int(estimator.get_n_leaves())}
+    elif ALGORITHM == "forest":
+        diagnostic = {"n_trees": len(estimator.estimators_), "mean_tree_depth": float(np.mean([t.get_depth() for t in estimator.estimators_]))}
+    elif ALGORITHM == "svm":
+        diagnostic["support_vectors"] = int(estimator.n_support_.sum())
     result = {"parameter": PARAMETER_NAME, "value": value,
               "train_accuracy": float(accuracy_score(train[TARGET], predict_labels(model, train[FEATURES]))),
-              **evaluate(model)}
+              "fit_seconds": fit_seconds, **diagnostic, **evaluate(model)}
+    result["generalization_gap"] = result["train_accuracy"] - result["accuracy"]
+    result["flagged"] = result["tp"] + result["fp"]
     runs.append(result)
     models[str(value)] = model
-display(pd.DataFrame(runs).round(4))
+    labels = predict_labels(model, validation[FEATURES])
+    comparison[f"prediction_{value}"] = labels
+    predictions_by_value.append({"value": value, "rows": [
+        {"row_id": str(row_id), "actual": int(actual), "predicted": int(predicted)}
+        for row_id, actual, predicted in zip(validation.row_id, validation[TARGET], labels)
+    ]})
+print("설정 비교 / 1=10점 미만, 0=10점 이상")
+display(pd.DataFrame(runs).round(4).T)
+prediction_columns = [c for c in comparison if c.startswith("prediction_")]
+comparison["prediction_changed"] = comparison[prediction_columns].nunique(axis=1) > 1
+print("설정 간 예측 변경 사례:", int(comparison.prediction_changed.sum()), "명")
+display(comparison.loc[comparison.prediction_changed].head(10))
+print("예측 변경 0명도 유효한 관찰. 서로 다른 실행 간 비교: 결과 JSON을 비교 페이지에 함께 등록")
 print("기준 모델 검증 정확도:", round(baseline_metrics["accuracy"], 4))
 print("설정 선택 기준: 전체 정확도 또는 10점 미만 재현율")
 
@@ -145,6 +175,48 @@ cases["prediction"] = pred
 cases["wrong"] = cases[TARGET] != cases.prediction
 cases["error_type"] = np.where((cases[TARGET] == 1) & (cases.prediction == 0), "10점 미만 놓침",
                               np.where((cases[TARGET] == 0) & (cases.prediction == 1), "10점 이상 잘못 표시", "일치"))
+estimator = selected_model.named_steps["model"]
+prepared = selected_model.named_steps["prepare"].transform(validation[FEATURES])
+default_ids = comparison.loc[comparison.prediction_changed, "row_id"].tolist() or cases.loc[cases.wrong, "row_id"].tolist() or validation.row_id.tolist()
+inspection_id = INSPECT_ROW_ID or default_ids[0]
+focus = validation.loc[validation.row_id == inspection_id]
+if len(focus) != 1:
+    raise ValueError("검증 자료에 포함된 row_id 1개 지정 필요")
+if ALGORITHM == "logistic":
+    cases["score"] = selected_model.predict_proba(validation[FEATURES])[:, 1]
+    for threshold in [0.3, 0.5, 0.7]:
+        cases[f"threshold_{threshold}"] = (cases.score >= threshold).astype(int)
+    print("동일한 모델 점수에 서로 다른 분류 기준값 적용")
+    display(cases.sort_values("score", ascending=False)[["row_id", TARGET, "score", "threshold_0.3", "threshold_0.5", "threshold_0.7"]].head(20))
+elif ALGORITHM == "tree":
+    cases["leaf_id"] = estimator.apply(prepared)
+    cases["train_leaf_n"] = estimator.tree_.n_node_samples[cases.leaf_id]
+    names = selected_model.named_steps["prepare"].get_feature_names_out()
+    print("선택한 트리의 상단 분기 / 결석 기준값은 표준화된 값")
+    print(export_text(estimator, feature_names=list(names), max_depth=3))
+elif ALGORITHM == "forest":
+    cases["score"] = selected_model.predict_proba(validation[FEATURES])[:, 1]
+    print("score: 나무별 10점 미만 확률 추정값의 평균. 단순한 정답 투표 비율과 구분")
+elif ALGORITHM == "knn":
+    distances, indices = estimator.kneighbors(selected_model.named_steps["prepare"].transform(focus[FEATURES]))
+    neighbors = train.iloc[indices[0]][["row_id", TARGET]].copy()
+    neighbors["distance"] = distances[0]
+    if NEIGHBOR_WEIGHTS == "uniform":
+        weights = np.ones(len(neighbors))
+    elif (distances[0] == 0).any():
+        weights = (distances[0] == 0).astype(float)
+    else:
+        weights = 1 / distances[0]
+    neighbors["vote_weight"] = weights / weights.sum()
+    print("이웃 확인 대상:", focus.row_id.iloc[0], "정답:", int(focus[TARGET].iloc[0]), "예측:", int(predict_labels(selected_model, focus[FEATURES])[0]))
+    display(neighbors)
+    print("거리: 표준화·범주 변환 후 공간의 거리. 거리 0인 이웃 존재 시 해당 이웃만 가중 투표 반영")
+elif ALGORITHM == "svm":
+    cases["decision_score"] = selected_model.decision_function(validation[FEATURES])
+    print("decision_score: 분류 경계의 어느 쪽인지 나타내는 값. 확률 아님")
+print("상세 확인 사례:", inspection_id)
+display(cases.loc[cases.row_id == inspection_id])
+print("선택 설정:", SELECTED_VALUE, "오분류 사례")
 display(cases.loc[cases.wrong].head(10))
 print("오분류 0건의 다른 자료에 대한 일반화 불가")
 importance = permutation_importance(selected_model, validation[FEATURES], validation[TARGET],
@@ -184,13 +256,15 @@ report = {
     "configuration": {"model_options": MODEL_OPTIONS, "prediction_threshold": PREDICTION_THRESHOLD if ALGORITHM == "logistic" else None},
     "baseline": baseline_metrics, "runs": runs, "stress": stress_rows,
     "selected_value": SELECTED_VALUE, "selected_metrics": evaluate(selected_model),
+    "predictions_by_value": predictions_by_value,
     "validation_row_ids": validation.row_id.tolist(),
     "environment": {"python": platform.python_version(), "sklearn": sklearn.__version__},
 }
 output = Path(f"result-{ALGORITHM}.json")
 output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 cases.to_csv(f"cases-{ALGORITHM}.csv", index=False, encoding="utf-8-sig")
-print("생성 파일:", output.name, f"cases-{ALGORITHM}.csv")
+comparison.to_csv(f"prediction-comparison-{ALGORITHM}.csv", index=False, encoding="utf-8-sig")
+print("생성 파일:", output.name, f"cases-{ALGORITHM}.csv", f"prediction-comparison-{ALGORITHM}.csv")
 try:
     from google.colab import files
 except ImportError:
