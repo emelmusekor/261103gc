@@ -178,7 +178,61 @@
       "default": 1.0,
       "concept": "가중합과 시그모이드 함수를 통한 이진 분류",
       "question": "규제 강도와 분류 경계의 관계",
-      "parameter_note": "작은 C: 규제 강화 · 큰 C: 규제 완화"
+      "parameter_note": "작은 C: 규제 강화 · 큰 C: 규제 완화",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "C 비교값",
+          "default": "[0.1, 1.0, 10.0]",
+          "choices": [
+            {
+              "python": "[0.1, 1.0, 10.0]",
+              "label": "[0.1, 1.0, 10.0]"
+            },
+            {
+              "python": "[0.01, 0.1, 1.0, 10.0]",
+              "label": "[0.01, 0.1, 1.0, 10.0]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "CLASS_WEIGHT",
+          "label": "범주 가중치",
+          "default": "None",
+          "choices": [
+            {
+              "python": "None",
+              "label": "None"
+            },
+            {
+              "python": "'balanced'",
+              "label": "balanced"
+            }
+          ],
+          "observation": "소수 범주 재현율과 전체 정확도의 변화"
+        },
+        {
+          "variable": "PREDICTION_THRESHOLD",
+          "label": "분류 기준값",
+          "default": "0.5",
+          "choices": [
+            {
+              "python": "0.3",
+              "label": "0.3"
+            },
+            {
+              "python": "0.5",
+              "label": "0.5"
+            },
+            {
+              "python": "0.7",
+              "label": "0.7"
+            }
+          ],
+          "observation": "낮은 기준값에서 누락과 오표시 인원 수의 변화"
+        }
+      ]
     },
     {
       "id": "tree",
@@ -193,7 +247,61 @@
       "default": 4,
       "concept": "불순도 감소에 따른 조건 분기와 말단 노드의 분류",
       "question": "트리 깊이와 과적합의 관계",
-      "parameter_note": "깊이 증가: 세부 분기 증가 · None: 깊이 제한 해제"
+      "parameter_note": "깊이 증가: 세부 분기 증가 · None: 깊이 제한 해제",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "max_depth 비교값",
+          "default": "[2, 4, None]",
+          "choices": [
+            {
+              "python": "[2, 4, None]",
+              "label": "[2, 4, None]"
+            },
+            {
+              "python": "[1, 2, 4, 8, None]",
+              "label": "[1, 2, 4, 8, None]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "MIN_SAMPLES_LEAF",
+          "label": "말단 노드의 최소 사례 수",
+          "default": "1",
+          "choices": [
+            {
+              "python": "1",
+              "label": "1"
+            },
+            {
+              "python": "5",
+              "label": "5"
+            },
+            {
+              "python": "10",
+              "label": "10"
+            }
+          ],
+          "observation": "작은 잎과 큰 잎의 학습·검증 점수 차이"
+        },
+        {
+          "variable": "SPLIT_CRITERION",
+          "label": "분할 기준",
+          "default": "'gini'",
+          "choices": [
+            {
+              "python": "'gini'",
+              "label": "gini"
+            },
+            {
+              "python": "'entropy'",
+              "label": "entropy"
+            }
+          ],
+          "observation": "같은 깊이에서의 분할과 오류 사례 차이"
+        }
+      ]
     },
     {
       "id": "forest",
@@ -208,7 +316,61 @@
       "default": 4,
       "concept": "복원추출과 무작위 특성 선택으로 만든 여러 트리의 투표",
       "question": "개별 트리와 다수결 예측의 차이",
-      "parameter_note": "트리 수 100개 고정 · 개별 트리의 깊이 변경"
+      "parameter_note": "트리 수 100개 고정 · 개별 트리의 깊이 변경",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "max_depth 비교값",
+          "default": "[2, 4, None]",
+          "choices": [
+            {
+              "python": "[2, 4, None]",
+              "label": "[2, 4, None]"
+            },
+            {
+              "python": "[1, 2, 4, 8, None]",
+              "label": "[1, 2, 4, 8, None]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "N_ESTIMATORS",
+          "label": "나무 수",
+          "default": "100",
+          "choices": [
+            {
+              "python": "10",
+              "label": "10"
+            },
+            {
+              "python": "100",
+              "label": "100"
+            },
+            {
+              "python": "300",
+              "label": "300"
+            }
+          ],
+          "observation": "나무 수 증가에 따른 점수와 실행 시간의 변화"
+        },
+        {
+          "variable": "MAX_FEATURES",
+          "label": "분기별 특성 후보",
+          "default": "'sqrt'",
+          "choices": [
+            {
+              "python": "'sqrt'",
+              "label": "sqrt"
+            },
+            {
+              "python": "None",
+              "label": "None"
+            }
+          ],
+          "observation": "일부 특성과 전체 특성을 사용하는 투표 결과 차이"
+        }
+      ]
     },
     {
       "id": "knn",
@@ -223,7 +385,57 @@
       "default": 5,
       "concept": "가까운 K개 사례의 정답을 이용한 다수결 분류",
       "question": "이웃 수와 예측의 민감도",
-      "parameter_note": "작은 K: 개별 사례에 민감 · 큰 K: 넓은 범위의 이웃 반영"
+      "parameter_note": "작은 K: 개별 사례에 민감 · 큰 K: 넓은 범위의 이웃 반영",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "n_neighbors 비교값",
+          "default": "[1, 5, 15]",
+          "choices": [
+            {
+              "python": "[1, 5, 15]",
+              "label": "[1, 5, 15]"
+            },
+            {
+              "python": "[1, 3, 5, 15]",
+              "label": "[1, 3, 5, 15]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "NEIGHBOR_WEIGHTS",
+          "label": "이웃 투표 방식",
+          "default": "'uniform'",
+          "choices": [
+            {
+              "python": "'uniform'",
+              "label": "uniform"
+            },
+            {
+              "python": "'distance'",
+              "label": "distance"
+            }
+          ],
+          "observation": "동일 투표와 거리 가중 투표의 차이"
+        },
+        {
+          "variable": "DISTANCE_P",
+          "label": "거리 계산",
+          "default": "2",
+          "choices": [
+            {
+              "python": "1",
+              "label": "1"
+            },
+            {
+              "python": "2",
+              "label": "2"
+            }
+          ],
+          "observation": "맨해튼 거리(p=1)와 유클리드 거리(p=2)의 이웃 차이"
+        }
+      ]
     },
     {
       "id": "svm",
@@ -238,7 +450,61 @@
       "default": 1.0,
       "concept": "RBF 커널과 서포트 벡터를 이용한 분류 경계 학습",
       "question": "오류 벌점과 분류 경계의 관계",
-      "parameter_note": "큰 C: 학습 오류의 벌점 증가 · RBF 커널과 gamma 고정"
+      "parameter_note": "큰 C: 학습 오류의 벌점 증가 · RBF 커널과 gamma 고정",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "C 비교값",
+          "default": "[0.1, 1.0, 10.0]",
+          "choices": [
+            {
+              "python": "[0.1, 1.0, 10.0]",
+              "label": "[0.1, 1.0, 10.0]"
+            },
+            {
+              "python": "[0.01, 0.1, 1.0, 10.0]",
+              "label": "[0.01, 0.1, 1.0, 10.0]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "SVM_KERNEL",
+          "label": "커널",
+          "default": "'rbf'",
+          "choices": [
+            {
+              "python": "'rbf'",
+              "label": "rbf"
+            },
+            {
+              "python": "'linear'",
+              "label": "linear"
+            }
+          ],
+          "observation": "비선형 경계와 선형 경계의 검증 결과 차이"
+        },
+        {
+          "variable": "SVM_GAMMA",
+          "label": "RBF의 영향 범위",
+          "default": "'scale'",
+          "choices": [
+            {
+              "python": "'scale'",
+              "label": "scale"
+            },
+            {
+              "python": "0.1",
+              "label": "0.1"
+            },
+            {
+              "python": "1.0",
+              "label": "1.0"
+            }
+          ],
+          "observation": "RBF 커널에서 gamma 증가에 따른 경계의 민감도"
+        }
+      ]
     }
   ]
 }

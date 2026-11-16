@@ -13,6 +13,13 @@
   ],
   "algorithm": "tree",
   "algorithm_name": "결정트리",
+  "configuration": {
+    "model_options": {
+      "min_samples_leaf": 1,
+      "criterion": "gini"
+    },
+    "prediction_threshold": null
+  },
   "baseline": {
     "n": 130,
     "accuracy": 0.8461538461538461,

@@ -13,6 +13,12 @@
   ],
   "algorithm": "logistic",
   "algorithm_name": "로지스틱 회귀",
+  "configuration": {
+    "model_options": {
+      "class_weight": null
+    },
+    "prediction_threshold": 0.5
+  },
   "baseline": {
     "n": 130,
     "accuracy": 0.8461538461538461,

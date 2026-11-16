@@ -39,6 +39,30 @@ ALGORITHMS = [
 ]
 
 
+def control(variable, label, default, choices, observation):
+    return dict(variable=variable, label=label, default=repr(default),
+                choices=[dict(python=repr(value), label=str(value)) for value in choices], observation=observation)
+
+
+CONTROLS = {
+    "logistic": [control("CLASS_WEIGHT", "범주 가중치", None, [None, "balanced"], "소수 범주 재현율과 전체 정확도의 변화"), control("PREDICTION_THRESHOLD", "분류 기준값", 0.5, [0.3, 0.5, 0.7], "낮은 기준값에서 누락과 오표시 인원 수의 변화")],
+    "tree": [control("MIN_SAMPLES_LEAF", "말단 노드의 최소 사례 수", 1, [1, 5, 10], "작은 잎과 큰 잎의 학습·검증 점수 차이"), control("SPLIT_CRITERION", "분할 기준", "gini", ["gini", "entropy"], "같은 깊이에서의 분할과 오류 사례 차이")],
+    "forest": [control("N_ESTIMATORS", "나무 수", 100, [10, 100, 300], "나무 수 증가에 따른 점수와 실행 시간의 변화"), control("MAX_FEATURES", "분기별 특성 후보", "sqrt", ["sqrt", None], "일부 특성과 전체 특성을 사용하는 투표 결과 차이")],
+    "knn": [control("NEIGHBOR_WEIGHTS", "이웃 투표 방식", "uniform", ["uniform", "distance"], "동일 투표와 거리 가중 투표의 차이"), control("DISTANCE_P", "거리 계산", 2, [1, 2], "맨해튼 거리(p=1)와 유클리드 거리(p=2)의 이웃 차이")],
+    "svm": [control("SVM_KERNEL", "커널", "rbf", ["rbf", "linear"], "비선형 경계와 선형 경계의 검증 결과 차이"), control("SVM_GAMMA", "RBF의 영향 범위", "scale", ["scale", 0.1, 1.0], "RBF 커널에서 gamma 증가에 따른 경계의 민감도")],
+}
+OPTION_EXPRESSIONS = {
+    "logistic": '{"class_weight": CLASS_WEIGHT}',
+    "tree": '{"min_samples_leaf": MIN_SAMPLES_LEAF, "criterion": SPLIT_CRITERION}',
+    "forest": '{"n_estimators": N_ESTIMATORS, "max_features": MAX_FEATURES}',
+    "knn": '{"weights": NEIGHBOR_WEIGHTS, "p": DISTANCE_P}',
+    "svm": '{"kernel": SVM_KERNEL, "gamma": SVM_GAMMA}',
+}
+for item in ALGORITHMS:
+    alternative = [0.01, 0.1, 1.0, 10.0] if item["id"] in {"logistic", "svm"} else [1, 2, 4, 8, None] if item["id"] in {"tree", "forest"} else [1, 3, 5, 15]
+    item["controls"] = [control("PARAMETER_VALUES", item["parameter"] + " 비교값", item["values"], [item["values"], alternative], "비교 범위를 바꾼 뒤 학습·검증 점수의 변화")] + CONTROLS[item["id"]]
+
+
 def write_json(file: Path, value):
     file.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -158,11 +182,11 @@ def build_model(algorithm, value, columns=FEATURES):
         transforms.append(("category", OneHotEncoder(handle_unknown="ignore", sparse_output=False), categories))
     preprocessor = ColumnTransformer(transforms, remainder="drop")
     estimators = {
-        "logistic": lambda: LogisticRegression(C=value, max_iter=3000, random_state=42),
-        "tree": lambda: DecisionTreeClassifier(max_depth=value, random_state=42),
-        "forest": lambda: RandomForestClassifier(n_estimators=100, max_depth=value, random_state=42, n_jobs=1),
-        "knn": lambda: KNeighborsClassifier(n_neighbors=value),
-        "svm": lambda: SVC(C=value, kernel="rbf", gamma="scale"),
+        "logistic": lambda: LogisticRegression(C=value, max_iter=3000, random_state=42, **MODEL_OPTIONS),
+        "tree": lambda: DecisionTreeClassifier(max_depth=value, random_state=42, **MODEL_OPTIONS),
+        "forest": lambda: RandomForestClassifier(max_depth=value, random_state=42, n_jobs=1, **MODEL_OPTIONS),
+        "knn": lambda: KNeighborsClassifier(n_neighbors=value, **MODEL_OPTIONS),
+        "svm": lambda: SVC(C=value, **MODEL_OPTIONS),
     }
     return Pipeline([("prepare", preprocessor), ("model", estimators[algorithm]())])
 
@@ -175,8 +199,16 @@ def metrics(y_true, prediction):
                 missed_below_10=int(fn), false_flags=int(fp),
                 tn=int(tn), fp=int(fp), fn=int(fn), tp=int(tp))
 
+def predict_labels(model, data):
+    if ALGORITHM == "logistic" and isinstance(model, Pipeline):
+        return (model.predict_proba(data)[:, 1] >= PREDICTION_THRESHOLD).astype(int)
+    return model.predict(data)
+
 def evaluate(model, data=validation, columns=FEATURES):
-    return metrics(data[TARGET], model.predict(data[columns]))
+    return metrics(data[TARGET], predict_labels(model, data[columns]))
+
+def importance_score(model, data, y_true):
+    return balanced_accuracy_score(y_true, predict_labels(model, data))
 
 baseline = DummyClassifier(strategy="most_frequent")
 baseline.fit(train[FEATURES], train[TARGET])
@@ -191,7 +223,7 @@ for value in PARAMETER_VALUES:
     model = build_model(ALGORITHM, value)
     model.fit(train[FEATURES], train[TARGET])
     result = {"parameter": PARAMETER_NAME, "value": value,
-              "train_accuracy": float(accuracy_score(train[TARGET], model.predict(train[FEATURES]))),
+              "train_accuracy": float(accuracy_score(train[TARGET], predict_labels(model, train[FEATURES]))),
               **evaluate(model)}
     runs.append(result)
     models[str(value)] = model
@@ -201,9 +233,9 @@ print("값을 고르는 기준은 정확도인가요, 10점 미만 사례를 놓
 '''
 
 inspect_code = '''# 자동으로 1등을 고르지 않습니다. 우선 페이지에 지정된 기본 설정을 살펴봅니다.
-SELECTED_VALUE = DEFAULT_VALUE
+SELECTED_VALUE = DEFAULT_VALUE if DEFAULT_VALUE in PARAMETER_VALUES else PARAMETER_VALUES[0]
 selected_model = models[str(SELECTED_VALUE)]
-pred = selected_model.predict(validation[FEATURES])
+pred = predict_labels(selected_model, validation[FEATURES])
 cases = validation[["row_id"] + FEATURES + [TARGET]].copy()
 cases["prediction"] = pred
 cases["wrong"] = cases[TARGET] != cases.prediction
@@ -212,7 +244,7 @@ cases["error_type"] = np.where((cases[TARGET] == 1) & (cases.prediction == 0), "
 display(cases.loc[cases.wrong].head(10))
 print("틀린 사례가 없더라도 다른 자료에서도 완벽하다는 뜻은 아닙니다.")
 importance = permutation_importance(selected_model, validation[FEATURES], validation[TARGET],
-                                    scoring="balanced_accuracy", n_repeats=10, random_state=42)
+                                    scoring=importance_score, n_repeats=10, random_state=42)
 display(pd.DataFrame({"항목": FEATURES, "검증점수_감소_평균": importance.importances_mean,
                       "흔들림_표준편차": importance.importances_std}).sort_values("검증점수_감소_평균", ascending=False))
 print("이 중요도는 이 모델과 자료에서의 의존도를 뜻합니다. 학생 성적의 원인이나 지원의 효과를 증명하지 않습니다.")
@@ -221,22 +253,22 @@ print("이 중요도는 이 모델과 자료에서의 의존도를 뜻합니다.
 stress_code = '''# 세 조건은 매번 원본 학습 자료에서 따로 시작합니다. 검증 대상과 정답은 그대로 둡니다.
 stress_rows = []
 small = train.groupby(TARGET, group_keys=False).sample(n=10, random_state=42)
-small_model = build_model(ALGORITHM, DEFAULT_VALUE)
+small_model = build_model(ALGORITHM, SELECTED_VALUE)
 small_model.fit(small[FEATURES], small[TARGET])
 stress_rows.append({"condition": "학습 20명(범주별 10명)", **evaluate(small_model)})
 
 noisy = train.copy()
 flip_ids = noisy.sample(frac=0.2, random_state=42).index
 noisy.loc[flip_ids, TARGET] = 1 - noisy.loc[flip_ids, TARGET]
-noisy_model = build_model(ALGORITHM, DEFAULT_VALUE)
+noisy_model = build_model(ALGORITHM, SELECTED_VALUE)
 noisy_model.fit(noisy[FEATURES], noisy[TARGET])
 stress_rows.append({"condition": f"학습 정답 {len(flip_ids)}개 뒤집기", **evaluate(noisy_model)})
 
 reduced_features = [c for c in FEATURES if c != "absences"]
-reduced_model = build_model(ALGORITHM, DEFAULT_VALUE, reduced_features)
+reduced_model = build_model(ALGORITHM, SELECTED_VALUE, reduced_features)
 reduced_model.fit(train[reduced_features], train[TARGET])
 stress_rows.append({"condition": "결석 항목 제외", **evaluate(reduced_model, columns=reduced_features)})
-display(pd.DataFrame([{"condition": "기본 설정", **evaluate(models[str(DEFAULT_VALUE)])}] + stress_rows).round(4))
+display(pd.DataFrame([{"condition": "선택 설정", **evaluate(selected_model)}] + stress_rows).round(4))
 print("20명 실험은 학습량과 범주 비율이 함께 바뀝니다. 차이를 자료 수만의 효과라고 단정하지 마세요.")
 print("오류나 항목 제거가 이번 분할에서 반드시 점수를 낮추는 것은 아닙니다.")
 '''
@@ -245,6 +277,7 @@ export_code = '''report = {
     "schema_version": 1, "data_version": DATA_VERSION, "dataset_sha256": actual_hash,
     "split_id": SPLIT_ID, "scope": "validation", "features": FEATURES,
     "algorithm": ALGORITHM, "algorithm_name": ALGORITHM_NAME,
+    "configuration": {"model_options": MODEL_OPTIONS, "prediction_threshold": PREDICTION_THRESHOLD if ALGORITHM == "logistic" else None},
     "baseline": baseline_metrics, "runs": runs, "stress": stress_rows,
     "selected_value": SELECTED_VALUE, "selected_metrics": evaluate(selected_model),
     "validation_row_ids": validation.row_id.tolist(),
@@ -298,10 +331,14 @@ def formal_code(source):
 verification = []
 code_blocks = {}
 for item in ALGORITHMS:
-    settings = f'ALGORITHM = {item["id"]!r}\nALGORITHM_NAME = {item["name"]!r}\nPARAMETER_NAME = {item["parameter"]!r}\nPARAMETER_VALUES = {item["values"]!r}\nDEFAULT_VALUE = {item["default"]!r}\n'
+    settings = '# 변경 설정: 한 번에 항목 하나 변경 후 전체 코드 재실행\n' + f'ALGORITHM = {item["id"]!r}\nALGORITHM_NAME = {item["name"]!r}\nPARAMETER_NAME = {item["parameter"]!r}\nPARAMETER_VALUES = {item["values"]!r}\nDEFAULT_VALUE = {item["default"]!r}\n'
+    settings += "\n".join(c["variable"] + " = " + c["default"] for c in CONTROLS[item["id"]]) + "\n"
+    if item["id"] != "logistic":
+        settings += "PREDICTION_THRESHOLD = 0.5\n"
+    settings += "MODEL_OPTIONS = " + OPTION_EXPRESSIONS[item["id"]] + "\n"
     blocks = [
-        dict(title="01 · CSV 업로드", code=formal_code(core_imports + "\n" + load_data)),
-        dict(title="02 · 모델 정의와 세 설정 비교", code=formal_code(settings + "\n" + helpers + "\n" + experiment_code)),
+        dict(title="01 · 변경 설정과 CSV 업로드", code=formal_code(settings + "\n" + core_imports + "\n" + load_data)),
+        dict(title="02 · 모델 정의와 설정 비교", code=formal_code(helpers + "\n" + experiment_code)),
         dict(title="03 · 오분류와 항목 중요도", code=formal_code(inspect_code)),
         dict(title="04 · 자료 변경과 결과 파일 저장", code=formal_code(stress_code + "\n" + export_code)),
         dict(title="05 · 설정 확정 후 최종 확인", code=formal_code(final_code)),

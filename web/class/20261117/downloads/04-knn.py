@@ -3,7 +3,18 @@
 # 데이터: students-v1.csv 선택
 # 출처: Cortez, P. (2008). Student Performance. UCI Machine Learning Repository. https://doi.org/10.24432/C5TG7T
 
-# 01 · CSV 업로드
+# 01 · 변경 설정과 CSV 업로드
+# 변경 설정: 한 번에 항목 하나 변경 후 전체 코드 재실행
+ALGORITHM = 'knn'
+ALGORITHM_NAME = 'K-NN'
+PARAMETER_NAME = 'n_neighbors'
+PARAMETER_VALUES = [1, 5, 15]
+DEFAULT_VALUE = 5
+NEIGHBOR_WEIGHTS = 'uniform'
+DISTANCE_P = 2
+PREDICTION_THRESHOLD = 0.5
+MODEL_OPTIONS = {"weights": NEIGHBOR_WEIGHTS, "p": DISTANCE_P}
+
 from pathlib import Path
 import hashlib, io, json, platform
 import numpy as np
@@ -59,13 +70,7 @@ print("studytime: 1=<2시간, 2=2~5시간, 3=5~10시간, 4=>10시간 (주당)")
 print("최종 보관 자료 평가 제외")
 
 
-# 02 · 모델 정의와 세 설정 비교
-ALGORITHM = 'knn'
-ALGORITHM_NAME = 'K-NN'
-PARAMETER_NAME = 'n_neighbors'
-PARAMETER_VALUES = [1, 5, 15]
-DEFAULT_VALUE = 5
-
+# 02 · 모델 정의와 설정 비교
 train = df.loc[df.split == "train"].copy()
 validation = df.loc[df.split == "validation"].copy()
 test = df.loc[df.split == "test"].copy()
@@ -82,11 +87,11 @@ def build_model(algorithm, value, columns=FEATURES):
         transforms.append(("category", OneHotEncoder(handle_unknown="ignore", sparse_output=False), categories))
     preprocessor = ColumnTransformer(transforms, remainder="drop")
     estimators = {
-        "logistic": lambda: LogisticRegression(C=value, max_iter=3000, random_state=42),
-        "tree": lambda: DecisionTreeClassifier(max_depth=value, random_state=42),
-        "forest": lambda: RandomForestClassifier(n_estimators=100, max_depth=value, random_state=42, n_jobs=1),
-        "knn": lambda: KNeighborsClassifier(n_neighbors=value),
-        "svm": lambda: SVC(C=value, kernel="rbf", gamma="scale"),
+        "logistic": lambda: LogisticRegression(C=value, max_iter=3000, random_state=42, **MODEL_OPTIONS),
+        "tree": lambda: DecisionTreeClassifier(max_depth=value, random_state=42, **MODEL_OPTIONS),
+        "forest": lambda: RandomForestClassifier(max_depth=value, random_state=42, n_jobs=1, **MODEL_OPTIONS),
+        "knn": lambda: KNeighborsClassifier(n_neighbors=value, **MODEL_OPTIONS),
+        "svm": lambda: SVC(C=value, **MODEL_OPTIONS),
     }
     return Pipeline([("prepare", preprocessor), ("model", estimators[algorithm]())])
 
@@ -99,8 +104,16 @@ def metrics(y_true, prediction):
                 missed_below_10=int(fn), false_flags=int(fp),
                 tn=int(tn), fp=int(fp), fn=int(fn), tp=int(tp))
 
+def predict_labels(model, data):
+    if ALGORITHM == "logistic" and isinstance(model, Pipeline):
+        return (model.predict_proba(data)[:, 1] >= PREDICTION_THRESHOLD).astype(int)
+    return model.predict(data)
+
 def evaluate(model, data=validation, columns=FEATURES):
-    return metrics(data[TARGET], model.predict(data[columns]))
+    return metrics(data[TARGET], predict_labels(model, data[columns]))
+
+def importance_score(model, data, y_true):
+    return balanced_accuracy_score(y_true, predict_labels(model, data))
 
 baseline = DummyClassifier(strategy="most_frequent")
 baseline.fit(train[FEATURES], train[TARGET])
@@ -114,7 +127,7 @@ for value in PARAMETER_VALUES:
     model = build_model(ALGORITHM, value)
     model.fit(train[FEATURES], train[TARGET])
     result = {"parameter": PARAMETER_NAME, "value": value,
-              "train_accuracy": float(accuracy_score(train[TARGET], model.predict(train[FEATURES]))),
+              "train_accuracy": float(accuracy_score(train[TARGET], predict_labels(model, train[FEATURES]))),
               **evaluate(model)}
     runs.append(result)
     models[str(value)] = model
@@ -125,9 +138,9 @@ print("설정 선택 기준: 전체 정확도 또는 10점 미만 재현율")
 
 # 03 · 오분류와 항목 중요도
 # 자동으로 1등을 고르지 않습니다. 우선 페이지에 지정된 기본 설정을 살펴봅니다.
-SELECTED_VALUE = DEFAULT_VALUE
+SELECTED_VALUE = DEFAULT_VALUE if DEFAULT_VALUE in PARAMETER_VALUES else PARAMETER_VALUES[0]
 selected_model = models[str(SELECTED_VALUE)]
-pred = selected_model.predict(validation[FEATURES])
+pred = predict_labels(selected_model, validation[FEATURES])
 cases = validation[["row_id"] + FEATURES + [TARGET]].copy()
 cases["prediction"] = pred
 cases["wrong"] = cases[TARGET] != cases.prediction
@@ -136,7 +149,7 @@ cases["error_type"] = np.where((cases[TARGET] == 1) & (cases.prediction == 0), "
 display(cases.loc[cases.wrong].head(10))
 print("오분류 0건의 다른 자료에 대한 일반화 불가")
 importance = permutation_importance(selected_model, validation[FEATURES], validation[TARGET],
-                                    scoring="balanced_accuracy", n_repeats=10, random_state=42)
+                                    scoring=importance_score, n_repeats=10, random_state=42)
 display(pd.DataFrame({"항목": FEATURES, "검증점수_감소_평균": importance.importances_mean,
                       "흔들림_표준편차": importance.importances_std}).sort_values("검증점수_감소_평균", ascending=False))
 print("중요도: 해당 모델과 자료에서의 의존도. 인과관계의 근거 아님")
@@ -146,22 +159,22 @@ print("중요도: 해당 모델과 자료에서의 의존도. 인과관계의 �
 # 세 조건은 매번 원본 학습 자료에서 따로 시작합니다. 검증 대상과 정답은 그대로 둡니다.
 stress_rows = []
 small = train.groupby(TARGET, group_keys=False).sample(n=10, random_state=42)
-small_model = build_model(ALGORITHM, DEFAULT_VALUE)
+small_model = build_model(ALGORITHM, SELECTED_VALUE)
 small_model.fit(small[FEATURES], small[TARGET])
 stress_rows.append({"condition": "학습 20명(범주별 10명)", **evaluate(small_model)})
 
 noisy = train.copy()
 flip_ids = noisy.sample(frac=0.2, random_state=42).index
 noisy.loc[flip_ids, TARGET] = 1 - noisy.loc[flip_ids, TARGET]
-noisy_model = build_model(ALGORITHM, DEFAULT_VALUE)
+noisy_model = build_model(ALGORITHM, SELECTED_VALUE)
 noisy_model.fit(noisy[FEATURES], noisy[TARGET])
 stress_rows.append({"condition": f"학습 정답 {len(flip_ids)}개 뒤집기", **evaluate(noisy_model)})
 
 reduced_features = [c for c in FEATURES if c != "absences"]
-reduced_model = build_model(ALGORITHM, DEFAULT_VALUE, reduced_features)
+reduced_model = build_model(ALGORITHM, SELECTED_VALUE, reduced_features)
 reduced_model.fit(train[reduced_features], train[TARGET])
 stress_rows.append({"condition": "결석 항목 제외", **evaluate(reduced_model, columns=reduced_features)})
-display(pd.DataFrame([{"condition": "기본 설정", **evaluate(models[str(DEFAULT_VALUE)])}] + stress_rows).round(4))
+display(pd.DataFrame([{"condition": "선택 설정", **evaluate(selected_model)}] + stress_rows).round(4))
 print("20명 실험: 학습량과 범주 비율의 동시 변경. 자료 수 단독 효과로 해석 불가")
 print("오류 추가와 항목 제거에 따른 점수 하락의 보장 없음")
 
@@ -169,6 +182,7 @@ report = {
     "schema_version": 1, "data_version": DATA_VERSION, "dataset_sha256": actual_hash,
     "split_id": SPLIT_ID, "scope": "validation", "features": FEATURES,
     "algorithm": ALGORITHM, "algorithm_name": ALGORITHM_NAME,
+    "configuration": {"model_options": MODEL_OPTIONS, "prediction_threshold": PREDICTION_THRESHOLD if ALGORITHM == "logistic" else None},
     "baseline": baseline_metrics, "runs": runs, "stress": stress_rows,
     "selected_value": SELECTED_VALUE, "selected_metrics": evaluate(selected_model),
     "validation_row_ids": validation.row_id.tolist(),

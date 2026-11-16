@@ -2,7 +2,7 @@
 
 ## 2026년 11월 17일 자료
 
-[ML 실험실](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117/index.html)
+[알고리즘](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117/index.html)
 
 - 알고리즘 5개: 실제 계산 기반 SVG 시각화, 4단계 재생, 설정·입력 위치 조절
 - 실행 방식: 공통 CSV 다운로드 → 페이지의 전체 코드 복사 → Colab 코드 셀 실행 → CSV 선택
@@ -19,6 +19,7 @@ Python 의존성: numpy, pandas, scikit-learn
 ```text
 python scripts/build-colab-materials.py
 python scripts/build-colab-pages.py
+python scripts/check-colab-variants.py
 node scripts/check.cjs
 node --test test/*.test.mjs
 node scripts/build-worker.cjs
@@ -31,3 +32,5 @@ node scripts/build-worker.cjs
 수치 테스트 범위: 로지스틱 회귀 로그손실, K-NN 이웃과 투표, CART 분기, 랜덤포레스트 복원추출과 투표, RBF SVM의 쌍대 제약 및 비선형 분류. UI 검증 범위: 단계 이동, 자동 재생, 감소 동작 설정, 입력 조절, 코드 복사, 모바일 레이아웃.
 
 CSV 변경 시 manifest, 복사 코드의 SHA256, 참고 결과의 동시 갱신 필요. CSV 바이트 보존 및 Python LF 줄바꿈은 .gitattributes로 지정합니다.
+
+페이지에는 기본 코드와 변경 변수·예시 값·관찰 항목만 제공합니다. 값의 수정과 실행은 코랩에서 직접 수행합니다. 결과 파일에 추가 설정을 기록하며 같은 알고리즘의 서로 다른 설정도 함께 비교합니다. 색은 #000000과 #ffffff만 사용하며 회색·투명도 혼합은 제외합니다. 상단 이름·소속·저장 상태 문구는 표시하지 않습니다.

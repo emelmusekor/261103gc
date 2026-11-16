@@ -13,6 +13,13 @@
   ],
   "algorithm": "forest",
   "algorithm_name": "랜덤포레스트",
+  "configuration": {
+    "model_options": {
+      "n_estimators": 100,
+      "max_features": "sqrt"
+    },
+    "prediction_threshold": null
+  },
   "baseline": {
     "n": 130,
     "accuracy": 0.8461538461538461,

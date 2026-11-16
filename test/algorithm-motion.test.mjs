@@ -4,6 +4,10 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 const context={};vm.createContext(context);vm.runInContext(fs.readFileSync('web/class/20261117/algorithm-motion.js','utf8'),context);const M=context.AlgorithmMotionModel;
 const data=M.dataset();
+test('motion source uses only exact black and white without blending attributes',()=>{
+const source=fs.readFileSync('web/class/20261117/algorithm-motion.js','utf8');const colors=[...source.matchAll(/#[0-9a-f]{3,8}/gi)].map(match=>match[0].toLowerCase());
+assert(colors.length>0);assert(colors.every(color=>color==='#000000'||color==='#ffffff'));assert(!/\b(?:opacity|rgba|hsla)\b/i.test(source));assert(!source.includes('최종 배경'));
+});
 test('logistic training lowers log loss and prediction matches displayed sigmoid',()=>{
 const model=M.logisticTrain(data,1);assert(model.loss<Math.log(2));
 for(const query of [{x:.8,y:.8},{x:-.8,y:-.8},{x:.1,y:-.1}]){assert.equal(model.predict(query),model.probability(query)>=.5?1:0);assert(Math.abs(model.probability(query)-M.sigmoid(model.w[0]*query.x+model.w[1]*query.y+model.b))<1e-12);}
