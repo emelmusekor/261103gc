@@ -35,7 +35,14 @@ const css=fs.readFileSync(path.resolve('web/class/20261117/lesson.css'),'utf8');
 const colors=css.match(/#[0-9a-fA-F]{3,8}\b/g)||[];
 assert(colors.length>0);assert(colors.every(color=>['#000000','#ffffff'].includes(color.toLowerCase())));
 assert(!/opacity\s*:\s*0?\.\d/.test(css));
-const pages=['index','data','practice','results','productivity','education','notes'].map(name=>name+'.html').concat(manifest.algorithms.map(a=>'algorithms/'+a.id+'.html'));
+const pages=['index','data','practice','results','notes'].map(name=>name+'.html').concat(manifest.algorithms.map(a=>'algorithms/'+a.id+'.html'));
 for(const name of pages){const html=fs.readFileSync(path.resolve('web/class/20261117',name),'utf8');for(const label of ['가천대학교 머신러닝','브라우저 내 기록 저장','ML 실험실','ML · DATA · HUMAN DECISIONS'])assert(!html.includes(label),name+' contains '+label);}
 for(const a of manifest.algorithms){const html=fs.readFileSync(path.resolve('web/class/20261117/algorithms',a.id+'.html'),'utf8');for(const control of a.controls)assert(html.includes(control.variable));assert(!html.includes('data-code-variable'));assert(html.includes('코랩에서 위 변수 직접 수정'));}
+});
+
+test('algorithm practice integrates prediction and transfer without separate agenda pages',()=>{
+const root=path.resolve('web/class/20261117');
+assert(!fs.existsSync(path.join(root,'productivity.html')));assert(!fs.existsSync(path.join(root,'education.html')));
+for(const file of ['index.html','practice.html',...manifest.algorithms.map(a=>'algorithms/'+a.id+'.html')]){const html=fs.readFileSync(path.join(root,file),'utf8');assert(!html.includes('productivity.html'));assert(!html.includes('education.html'));assert(!html.includes('>생산성<'));assert(!html.includes('>교육학<'));}
+for(const a of manifest.algorithms){const html=fs.readFileSync(path.join(root,'algorithms',a.id+'.html'),'utf8');assert(html.includes('data-note="'+a.id+'_forecast"'));assert(html.includes('data-note="'+a.id+'_errorcase"'));assert(html.includes('data-note="'+a.id+'_transfer"'));assert(html.includes('AI 도움 없는 2문장 설명'));}
 });

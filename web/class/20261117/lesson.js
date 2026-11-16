@@ -19,22 +19,13 @@ setTimeout(()=>button.textContent=button.dataset.copyLabel||'프롬프트 복사
 }));
 function download(filename,content,type='text/plain;charset=utf-8'){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 document.querySelectorAll('[data-export-notes]').forEach(button=>button.addEventListener('click',()=>{
-const labels={algorithm:'내 알고리즘',forecast:'실행 전 예상',observation:'예상과 실제의 차이',errorcase:'틀린 사례와 근거',conclusion:'나의 모델 선택과 이유',before:'AI 도움 전 설명',after:'AI를 닫고 다시 쓴 설명',transfer:'새 문제에 대한 내 답',policy:'교육적 사용 원칙',report_revision:'AI 초안에서 내가 수정한 내용',productivity_decision:'다음 작업의 역할 분담',unknown:'여전히 모르는 점',counsel_choice:'상담 상황의 선택',penalty_choice:'자동 불이익 상황의 선택',education_reason:'두 상황에서 선택한 이유'};
+const labels={algorithm:'알고리즘',forecast:'실행 전 예상',observation:'예상과 실제의 차이',errorcase:'오분류 사례와 근거',conclusion:'모델 선택과 이유',unknown:'추가 확인 사항'};
+const algorithms={logistic:'로지스틱 회귀',tree:'결정트리',forest:'랜덤포레스트',knn:'K-NN',svm:'SVM'};
+const fields={forecast:'실행 전 예상',observation:'예상과 실제의 차이',errorcase:'오분류 사례',transfer:'다른 조건의 판단과 근거'};
+for(const [id,name]of Object.entries(algorithms))for(const [key,title]of Object.entries(fields))labels[id+'_'+key]=name+' · '+title;
 const lines=['# 11월 17일 · 실험 기록','','실측값과 작성자의 관찰·판단 기록',''];
-for(const [key,value]of Object.entries(notes)){if(value===''||value===false)continue;lines.push('## '+(labels[key]||key),String(value),'');}
+for(const [key,value]of Object.entries(notes)){if(!Object.hasOwn(labels,key)||value===''||value===false)continue;lines.push('## '+labels[key],String(value),'');}
 download('my-ml-learning-notes.md',lines.join('\n'));message(document.getElementById('export-status'),'기록 파일 다운로드 완료');
-}));
-if(document.getElementById('time-total')){
-const ids=['time-prompt','time-wait','time-fix','time-check'];
-function updateTime(){const values=ids.map(id=>Math.max(0,Number(document.getElementById(id).value)||0));const total=values.reduce((a,b)=>a+b,0);const after=values[2]+values[3];document.getElementById('time-total').textContent=total.toFixed(1)+'분';document.getElementById('time-after').textContent=after.toFixed(1)+'분';
-notes['소요 시간 합계']=total.toFixed(1)+'분';notes['초안 이후 수정·검증 시간']=after.toFixed(1)+'분';}
-ids.forEach(id=>document.getElementById(id).addEventListener('input',updateTime));updateTime();
-}
-document.querySelectorAll('[name=counsel],[name=penalty]').forEach(radio=>radio.addEventListener('change',()=>{
-const counsel=document.querySelector('[name=counsel]:checked')?.value;
-const penalty=document.querySelector('[name=penalty]:checked')?.value;
-const out=document.getElementById('decision-feedback');
-if(counsel&&penalty){out.hidden=false;out.textContent=counsel===penalty?'두 상황의 동일 선택. 오류의 영향과 별도 확인 절차의 필요성 검토':'상황별 상이한 선택. 목적과 오류의 영향에 따른 판단 기준 비교';}
 }));
 const fileInput=document.getElementById('result-files');
 if(fileInput){
