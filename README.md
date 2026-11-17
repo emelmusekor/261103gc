@@ -1,8 +1,8 @@
-[실험 모음](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site)
+[실험 모음](https://emelmusekor.github.io/261103gc/web/)
 
 ## 2026년 11월 17일 자료
 
-[알고리즘](https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117/index.html)
+[알고리즘](https://emelmusekor.github.io/261103gc/web/class/20261117/index.html)
 
 - 알고리즘 5개: 실제 계산 기반 SVG 시각화, 4단계 재생, 설정·입력 위치 조절
 - 실행 방식: 공통 CSV 다운로드 → 페이지의 전체 코드 복사 → Colab 코드 셀 실행 → CSV 선택
@@ -23,7 +23,6 @@ python scripts/check-colab-variants.py
 python scripts/check-colab-experiments.py
 node scripts/check.cjs
 node --test test/*.test.mjs
-node scripts/build-worker.cjs
 ```
 
 첫 명령은 알고리즘별 전체 코드를 실행하고, 모의 Colab 파일 선택·다운로드 동작과 결과 수치를 확인합니다. 실제 코랩 계정 안에서의 실행과는 별도 검증입니다. 코드 복사 버튼의 내용은 .py 파일 및 단계별 코드와 동일합니다.

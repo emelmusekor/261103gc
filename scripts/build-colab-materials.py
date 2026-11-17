@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 LESSON = ROOT / "web" / "class" / "20261117"
 DATA = LESSON / "downloads"
 DATA.mkdir(parents=True, exist_ok=True)
-SITE = "https://learning-experiments-gc261103.incheon-seok-1409.chatgpt.site/class/20261117"
+SITE = "https://emelmusekor.github.io/261103gc/web/class/20261117"
 SOURCE_URL = "https://archive.ics.uci.edu/static/public/320/student%2Bperformance.zip"
 FEATURES = ["studytime", "failures", "absences", "schoolsup", "internet"]
 ALGORITHMS = [
