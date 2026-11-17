@@ -1,0 +1,646 @@
+{
+  "version": "gc-20261117-v1",
+  "sha256": "5e01746d0128a964c31cb02597fc1176c182bd502c31a2f669aa8ab0f16de387",
+  "source_sha256": "a7594a11d7771c0efe1a740824e0e833da9c4cad07c39a9766a874575563fb3f",
+  "source_url": "https://archive.ics.uci.edu/static/public/320/student%2Bperformance.zip",
+  "source_page": "https://archive.ics.uci.edu/dataset/320/student+performance",
+  "attribution": "Cortez, P. (2008). Student Performance. UCI Machine Learning Repository. https://doi.org/10.24432/C5TG7T",
+  "license": "CC BY 4.0",
+  "rows": 649,
+  "features": [
+    "studytime",
+    "failures",
+    "absences",
+    "schoolsup",
+    "internet"
+  ],
+  "target": "below_10",
+  "target_definition": "1 if G3 < 10, otherwise 0",
+  "split_seed": 42,
+  "split_id": "gc-20261117-stratified-60-20-20-v1",
+  "validation_row_ids": [
+    "POR-002",
+    "POR-005",
+    "POR-009",
+    "POR-014",
+    "POR-015",
+    "POR-029",
+    "POR-036",
+    "POR-037",
+    "POR-042",
+    "POR-045",
+    "POR-051",
+    "POR-054",
+    "POR-055",
+    "POR-056",
+    "POR-061",
+    "POR-064",
+    "POR-065",
+    "POR-084",
+    "POR-089",
+    "POR-092",
+    "POR-099",
+    "POR-103",
+    "POR-112",
+    "POR-117",
+    "POR-120",
+    "POR-127",
+    "POR-134",
+    "POR-140",
+    "POR-142",
+    "POR-143",
+    "POR-150",
+    "POR-168",
+    "POR-172",
+    "POR-174",
+    "POR-177",
+    "POR-178",
+    "POR-179",
+    "POR-181",
+    "POR-183",
+    "POR-185",
+    "POR-188",
+    "POR-189",
+    "POR-197",
+    "POR-198",
+    "POR-205",
+    "POR-208",
+    "POR-209",
+    "POR-210",
+    "POR-216",
+    "POR-220",
+    "POR-221",
+    "POR-225",
+    "POR-227",
+    "POR-232",
+    "POR-233",
+    "POR-234",
+    "POR-245",
+    "POR-252",
+    "POR-254",
+    "POR-261",
+    "POR-263",
+    "POR-267",
+    "POR-279",
+    "POR-288",
+    "POR-290",
+    "POR-294",
+    "POR-299",
+    "POR-303",
+    "POR-306",
+    "POR-310",
+    "POR-314",
+    "POR-316",
+    "POR-326",
+    "POR-334",
+    "POR-339",
+    "POR-344",
+    "POR-349",
+    "POR-363",
+    "POR-369",
+    "POR-376",
+    "POR-378",
+    "POR-380",
+    "POR-383",
+    "POR-384",
+    "POR-389",
+    "POR-391",
+    "POR-405",
+    "POR-420",
+    "POR-421",
+    "POR-431",
+    "POR-435",
+    "POR-436",
+    "POR-449",
+    "POR-457",
+    "POR-462",
+    "POR-463",
+    "POR-471",
+    "POR-473",
+    "POR-475",
+    "POR-477",
+    "POR-482",
+    "POR-498",
+    "POR-500",
+    "POR-501",
+    "POR-508",
+    "POR-517",
+    "POR-520",
+    "POR-523",
+    "POR-524",
+    "POR-529",
+    "POR-541",
+    "POR-542",
+    "POR-543",
+    "POR-558",
+    "POR-564",
+    "POR-577",
+    "POR-578",
+    "POR-579",
+    "POR-582",
+    "POR-586",
+    "POR-588",
+    "POR-595",
+    "POR-597",
+    "POR-604",
+    "POR-620",
+    "POR-627",
+    "POR-630",
+    "POR-640",
+    "POR-646",
+    "POR-647"
+  ],
+  "validation_targets": {
+    "POR-002": 0,
+    "POR-005": 0,
+    "POR-009": 0,
+    "POR-014": 0,
+    "POR-015": 0,
+    "POR-029": 0,
+    "POR-036": 0,
+    "POR-037": 0,
+    "POR-042": 0,
+    "POR-045": 0,
+    "POR-051": 0,
+    "POR-054": 0,
+    "POR-055": 0,
+    "POR-056": 0,
+    "POR-061": 0,
+    "POR-064": 0,
+    "POR-065": 0,
+    "POR-084": 0,
+    "POR-089": 0,
+    "POR-092": 0,
+    "POR-099": 0,
+    "POR-103": 0,
+    "POR-112": 0,
+    "POR-117": 0,
+    "POR-120": 0,
+    "POR-127": 0,
+    "POR-134": 0,
+    "POR-140": 0,
+    "POR-142": 0,
+    "POR-143": 0,
+    "POR-150": 0,
+    "POR-168": 0,
+    "POR-172": 0,
+    "POR-174": 0,
+    "POR-177": 0,
+    "POR-178": 1,
+    "POR-179": 1,
+    "POR-181": 0,
+    "POR-183": 0,
+    "POR-185": 0,
+    "POR-188": 0,
+    "POR-189": 0,
+    "POR-197": 0,
+    "POR-198": 0,
+    "POR-205": 0,
+    "POR-208": 0,
+    "POR-209": 0,
+    "POR-210": 0,
+    "POR-216": 0,
+    "POR-220": 1,
+    "POR-221": 0,
+    "POR-225": 0,
+    "POR-227": 0,
+    "POR-232": 0,
+    "POR-233": 0,
+    "POR-234": 0,
+    "POR-245": 0,
+    "POR-252": 0,
+    "POR-254": 0,
+    "POR-261": 0,
+    "POR-263": 1,
+    "POR-267": 0,
+    "POR-279": 0,
+    "POR-288": 0,
+    "POR-290": 0,
+    "POR-294": 0,
+    "POR-299": 0,
+    "POR-303": 0,
+    "POR-306": 1,
+    "POR-310": 0,
+    "POR-314": 0,
+    "POR-316": 0,
+    "POR-326": 0,
+    "POR-334": 0,
+    "POR-339": 0,
+    "POR-344": 0,
+    "POR-349": 0,
+    "POR-363": 0,
+    "POR-369": 0,
+    "POR-376": 0,
+    "POR-378": 0,
+    "POR-380": 0,
+    "POR-383": 0,
+    "POR-384": 0,
+    "POR-389": 0,
+    "POR-391": 0,
+    "POR-405": 0,
+    "POR-420": 0,
+    "POR-421": 0,
+    "POR-431": 0,
+    "POR-435": 0,
+    "POR-436": 0,
+    "POR-449": 0,
+    "POR-457": 0,
+    "POR-462": 0,
+    "POR-463": 0,
+    "POR-471": 0,
+    "POR-473": 0,
+    "POR-475": 0,
+    "POR-477": 1,
+    "POR-482": 0,
+    "POR-498": 0,
+    "POR-500": 0,
+    "POR-501": 1,
+    "POR-508": 0,
+    "POR-517": 0,
+    "POR-520": 1,
+    "POR-523": 1,
+    "POR-524": 1,
+    "POR-529": 1,
+    "POR-541": 0,
+    "POR-542": 0,
+    "POR-543": 0,
+    "POR-558": 0,
+    "POR-564": 1,
+    "POR-577": 0,
+    "POR-578": 0,
+    "POR-579": 0,
+    "POR-582": 1,
+    "POR-586": 1,
+    "POR-588": 1,
+    "POR-595": 0,
+    "POR-597": 0,
+    "POR-604": 1,
+    "POR-620": 0,
+    "POR-627": 1,
+    "POR-630": 1,
+    "POR-640": 1,
+    "POR-646": 0,
+    "POR-647": 1
+  },
+  "splits": {
+    "test": {
+      "rows": 130,
+      "below_10": 20
+    },
+    "train": {
+      "rows": 389,
+      "below_10": 60
+    },
+    "validation": {
+      "rows": 130,
+      "below_10": 20
+    }
+  },
+  "algorithms": [
+    {
+      "id": "logistic",
+      "name": "로지스틱 회귀",
+      "filename": "01-logistic-regression.py",
+      "parameter": "C",
+      "values": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "default": 1.0,
+      "concept": "가중합과 시그모이드 함수를 통한 이진 분류",
+      "question": "규제 강도와 분류 경계의 관계",
+      "parameter_note": "작은 C: 규제 강화 · 큰 C: 규제 완화",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "C 비교값",
+          "default": "[0.1, 1.0, 10.0]",
+          "choices": [
+            {
+              "python": "[0.1, 1.0, 10.0]",
+              "label": "[0.1, 1.0, 10.0]"
+            },
+            {
+              "python": "[0.01, 0.1, 1.0, 10.0]",
+              "label": "[0.01, 0.1, 1.0, 10.0]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "CLASS_WEIGHT",
+          "label": "범주 가중치",
+          "default": "None",
+          "choices": [
+            {
+              "python": "None",
+              "label": "None"
+            },
+            {
+              "python": "'balanced'",
+              "label": "balanced"
+            }
+          ],
+          "observation": "소수 범주 재현율과 전체 정확도의 변화"
+        },
+        {
+          "variable": "PREDICTION_THRESHOLD",
+          "label": "분류 기준값",
+          "default": "0.5",
+          "choices": [
+            {
+              "python": "0.3",
+              "label": "0.3"
+            },
+            {
+              "python": "0.5",
+              "label": "0.5"
+            },
+            {
+              "python": "0.7",
+              "label": "0.7"
+            }
+          ],
+          "observation": "낮은 기준값에서 누락과 오표시 인원 수의 변화"
+        }
+      ]
+    },
+    {
+      "id": "tree",
+      "name": "결정트리",
+      "filename": "02-decision-tree.py",
+      "parameter": "max_depth",
+      "values": [
+        2,
+        4,
+        null
+      ],
+      "default": 4,
+      "concept": "불순도 감소에 따른 조건 분기와 말단 노드의 분류",
+      "question": "트리 깊이와 과적합의 관계",
+      "parameter_note": "깊이 증가: 세부 분기 증가 · None: 깊이 제한 해제",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "max_depth 비교값",
+          "default": "[2, 4, None]",
+          "choices": [
+            {
+              "python": "[2, 4, None]",
+              "label": "[2, 4, None]"
+            },
+            {
+              "python": "[1, 2, 4, 8, None]",
+              "label": "[1, 2, 4, 8, None]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "MIN_SAMPLES_LEAF",
+          "label": "말단 노드의 최소 사례 수",
+          "default": "1",
+          "choices": [
+            {
+              "python": "1",
+              "label": "1"
+            },
+            {
+              "python": "5",
+              "label": "5"
+            },
+            {
+              "python": "10",
+              "label": "10"
+            }
+          ],
+          "observation": "작은 잎과 큰 잎의 학습·검증 점수 차이"
+        },
+        {
+          "variable": "SPLIT_CRITERION",
+          "label": "분할 기준",
+          "default": "'gini'",
+          "choices": [
+            {
+              "python": "'gini'",
+              "label": "gini"
+            },
+            {
+              "python": "'entropy'",
+              "label": "entropy"
+            }
+          ],
+          "observation": "같은 깊이에서의 분할과 오류 사례 차이"
+        }
+      ]
+    },
+    {
+      "id": "forest",
+      "name": "랜덤포레스트",
+      "filename": "03-random-forest.py",
+      "parameter": "max_depth",
+      "values": [
+        2,
+        4,
+        null
+      ],
+      "default": 4,
+      "concept": "복원추출과 무작위 특성 선택으로 만든 여러 트리의 예측 결합",
+      "question": "개별 트리와 결합 예측의 차이",
+      "parameter_note": "나무 수 고정 실험에서 개별 깊이 비교 · 기본 나무 수 100개",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "max_depth 비교값",
+          "default": "[2, 4, None]",
+          "choices": [
+            {
+              "python": "[2, 4, None]",
+              "label": "[2, 4, None]"
+            },
+            {
+              "python": "[1, 2, 4, 8, None]",
+              "label": "[1, 2, 4, 8, None]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "N_ESTIMATORS",
+          "label": "나무 수",
+          "default": "100",
+          "choices": [
+            {
+              "python": "10",
+              "label": "10"
+            },
+            {
+              "python": "100",
+              "label": "100"
+            },
+            {
+              "python": "300",
+              "label": "300"
+            }
+          ],
+          "observation": "나무 수 증가에 따른 점수와 실행 시간의 변화"
+        },
+        {
+          "variable": "MAX_FEATURES",
+          "label": "분기별 특성 후보",
+          "default": "'sqrt'",
+          "choices": [
+            {
+              "python": "'sqrt'",
+              "label": "sqrt"
+            },
+            {
+              "python": "None",
+              "label": "None"
+            }
+          ],
+          "observation": "일부 특성과 전체 특성을 사용하는 투표 결과 차이"
+        }
+      ]
+    },
+    {
+      "id": "knn",
+      "name": "K-NN",
+      "filename": "04-knn.py",
+      "parameter": "n_neighbors",
+      "values": [
+        1,
+        5,
+        15
+      ],
+      "default": 5,
+      "concept": "가까운 K개 사례의 정답을 이용한 다수결 분류",
+      "question": "이웃 수와 예측의 민감도",
+      "parameter_note": "작은 K: 개별 사례에 민감 · 큰 K: 넓은 범위의 이웃 반영",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "n_neighbors 비교값",
+          "default": "[1, 5, 15]",
+          "choices": [
+            {
+              "python": "[1, 5, 15]",
+              "label": "[1, 5, 15]"
+            },
+            {
+              "python": "[1, 3, 5, 15]",
+              "label": "[1, 3, 5, 15]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "NEIGHBOR_WEIGHTS",
+          "label": "이웃 투표 방식",
+          "default": "'uniform'",
+          "choices": [
+            {
+              "python": "'uniform'",
+              "label": "uniform"
+            },
+            {
+              "python": "'distance'",
+              "label": "distance"
+            }
+          ],
+          "observation": "동일 투표와 거리 가중 투표의 차이"
+        },
+        {
+          "variable": "DISTANCE_P",
+          "label": "거리 계산",
+          "default": "2",
+          "choices": [
+            {
+              "python": "1",
+              "label": "1"
+            },
+            {
+              "python": "2",
+              "label": "2"
+            }
+          ],
+          "observation": "맨해튼 거리(p=1)와 유클리드 거리(p=2)의 이웃 차이"
+        }
+      ]
+    },
+    {
+      "id": "svm",
+      "name": "SVM",
+      "filename": "05-svm.py",
+      "parameter": "C",
+      "values": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "default": 1.0,
+      "concept": "RBF 커널과 서포트 벡터를 이용한 분류 경계 학습",
+      "question": "오류 벌점과 분류 경계의 관계",
+      "parameter_note": "큰 C: 학습 오류의 벌점 증가 · RBF 커널과 gamma 고정",
+      "controls": [
+        {
+          "variable": "PARAMETER_VALUES",
+          "label": "C 비교값",
+          "default": "[0.1, 1.0, 10.0]",
+          "choices": [
+            {
+              "python": "[0.1, 1.0, 10.0]",
+              "label": "[0.1, 1.0, 10.0]"
+            },
+            {
+              "python": "[0.01, 0.1, 1.0, 10.0]",
+              "label": "[0.01, 0.1, 1.0, 10.0]"
+            }
+          ],
+          "observation": "비교 범위를 바꾼 뒤 학습·검증 점수의 변화"
+        },
+        {
+          "variable": "SVM_KERNEL",
+          "label": "커널",
+          "default": "'rbf'",
+          "choices": [
+            {
+              "python": "'rbf'",
+              "label": "rbf"
+            },
+            {
+              "python": "'linear'",
+              "label": "linear"
+            }
+          ],
+          "observation": "비선형 경계와 선형 경계의 검증 결과 차이"
+        },
+        {
+          "variable": "SVM_GAMMA",
+          "label": "RBF의 영향 범위",
+          "default": "'scale'",
+          "choices": [
+            {
+              "python": "'scale'",
+              "label": "scale"
+            },
+            {
+              "python": "0.1",
+              "label": "0.1"
+            },
+            {
+              "python": "1.0",
+              "label": "1.0"
+            },
+            {
+              "python": "10.0",
+              "label": "10.0"
+            }
+          ],
+          "observation": "RBF 커널에서 gamma 증가에 따른 경계의 민감도"
+        }
+      ]
+    }
+  ]
+}

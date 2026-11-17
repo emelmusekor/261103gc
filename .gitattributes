@@ -1,0 +1,3 @@
+web/class/20261117/downloads/*.csv -text
+web/class/20261117/downloads/*.zip binary
+web/class/20261117/downloads/*.py text eol=lf

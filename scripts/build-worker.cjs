@@ -2,7 +2,7 @@
 const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),web=path.join(root,'web'),dist=path.join(root,'dist');
 if(path.basename(root)!=='261103gc'||dist!==path.join(root,'dist')||!dist.startsWith(root+path.sep)||!fs.existsSync(path.join(web,'index.html')))throw Error('Invalid build paths');
 function walk(d){return fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>{const full=path.join(d,e.name);if(e.isSymbolicLink())throw Error('Symbolic links are not allowed');return e.isDirectory()?walk(full):[full]})}
-const assets={};for(const f of walk(web)){const name='/'+path.relative(web,f).replaceAll(path.sep,'/');assets[name]=fs.readFileSync(f,'utf8');}
+const assets={};for(const f of walk(web)){const name='/'+path.relative(web,f).replaceAll(path.sep,'/');assets[name]=path.extname(f)==='.zip'?{base64:fs.readFileSync(f).toString('base64')}:fs.readFileSync(f,'utf8');}
 const core=fs.readFileSync(path.join(root,'server/ai.mjs'),'utf8').replace(/^export /gm,''),worker=fs.readFileSync(path.join(root,'server/worker.mjs'),'utf8').replace(/^export /gm,'');
 const manifestPath=path.join(root,'.openai/hosting.json'),manifest=fs.existsSync(manifestPath)?JSON.parse(fs.readFileSync(manifestPath,'utf8')):{};delete manifest.static;
 const bundle=core+'\n'+worker+'\nconst ASSETS='+JSON.stringify(assets)+';\nexport default createWorker(ASSETS,handleAI);\n';
