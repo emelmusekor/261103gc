@@ -38,7 +38,7 @@
       "parameter": "n_neighbors",
       "value": 1,
       "train_accuracy": 0.9074550128534704,
-      "fit_seconds": 0.009444000002986286,
+      "fit_seconds": 0.01901920000091195,
       "n": 130,
       "accuracy": 0.8384615384615385,
       "balanced_accuracy": 0.6181818181818182,
@@ -56,8 +56,8 @@
     {
       "parameter": "n_neighbors",
       "value": 5,
-      "train_accuracy": 0.8586118251928021,
-      "fit_seconds": 0.010243199998512864,
+      "train_accuracy": 0.8611825192802056,
+      "fit_seconds": 0.03925199998775497,
       "n": 130,
       "accuracy": 0.8307692307692308,
       "balanced_accuracy": 0.5113636363636364,
@@ -69,14 +69,14 @@
       "fp": 3,
       "fn": 19,
       "tp": 1,
-      "generalization_gap": 0.027842594423571287,
+      "generalization_gap": 0.0304132885109748,
       "flagged": 4
     },
     {
       "parameter": "n_neighbors",
       "value": 15,
       "train_accuracy": 0.8457583547557841,
-      "fit_seconds": 0.008015599996724632,
+      "fit_seconds": 0.026767600007588044,
       "n": 130,
       "accuracy": 0.8461538461538461,
       "balanced_accuracy": 0.5,
@@ -96,42 +96,42 @@
     {
       "condition": "학습 20명(범주별 10명)",
       "n": 130,
-      "accuracy": 0.8,
-      "balanced_accuracy": 0.5545454545454546,
+      "accuracy": 0.7923076923076923,
+      "balanced_accuracy": 0.55,
       "recall_below_10": 0.2,
-      "recall_at_least_10": 0.9090909090909091,
+      "recall_at_least_10": 0.9,
       "missed_below_10": 16,
-      "false_flags": 10,
-      "tn": 100,
-      "fp": 10,
+      "false_flags": 11,
+      "tn": 99,
+      "fp": 11,
       "fn": 16,
       "tp": 4
     },
     {
       "condition": "학습 정답 78개 뒤집기",
       "n": 130,
-      "accuracy": 0.7846153846153846,
-      "balanced_accuracy": 0.5863636363636363,
-      "recall_below_10": 0.3,
+      "accuracy": 0.7615384615384615,
+      "balanced_accuracy": 0.5113636363636364,
+      "recall_below_10": 0.15,
       "recall_at_least_10": 0.8727272727272727,
-      "missed_below_10": 14,
+      "missed_below_10": 17,
       "false_flags": 14,
       "tn": 96,
       "fp": 14,
-      "fn": 14,
-      "tp": 6
+      "fn": 17,
+      "tp": 3
     },
     {
       "condition": "결석 항목 제외",
       "n": 130,
-      "accuracy": 0.8538461538461538,
-      "balanced_accuracy": 0.5659090909090909,
+      "accuracy": 0.8461538461538461,
+      "balanced_accuracy": 0.5613636363636364,
       "recall_below_10": 0.15,
-      "recall_at_least_10": 0.9818181818181818,
+      "recall_at_least_10": 0.9727272727272728,
       "missed_below_10": 17,
-      "false_flags": 2,
-      "tn": 108,
-      "fp": 2,
+      "false_flags": 3,
+      "tn": 107,
+      "fp": 3,
       "fn": 17,
       "tp": 3
     }
@@ -707,7 +707,7 @@
         {
           "row_id": "POR-541",
           "actual": 0,
-          "predicted": 0
+          "predicted": 1
         },
         {
           "row_id": "POR-542",
@@ -722,7 +722,7 @@
         {
           "row_id": "POR-558",
           "actual": 0,
-          "predicted": 1
+          "predicted": 0
         },
         {
           "row_id": "POR-564",

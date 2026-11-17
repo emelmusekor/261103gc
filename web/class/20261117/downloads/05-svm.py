@@ -28,8 +28,9 @@ except ImportError:
     display = print
 from sklearn.base import clone
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, FunctionTransformer
 from sklearn.pipeline import Pipeline
+from threadpoolctl import threadpool_limits
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.ensemble import RandomForestClassifier
@@ -48,9 +49,9 @@ EXPECTED_SHA256 = "5e01746d0128a964c31cb02597fc1176c182bd502c31a2f669aa8ab0f16de
 DATA_VERSION = "gc-20261117-v1"
 SPLIT_ID = "gc-20261117-stratified-60-20-20-v1"
 csv_path = Path("students-v1.csv")
-if csv_path.exists():
-    data_bytes = csv_path.read_bytes()
-else:
+data_bytes = csv_path.read_bytes() if csv_path.exists() else b""
+if hashlib.sha256(data_bytes).hexdigest() != EXPECTED_SHA256:
+    # 폴더에 원본 CSV가 없거나 다른 파일이면 다시 업로드
     try:
         from google.colab import files
     except ImportError as error:
@@ -78,6 +79,10 @@ validation = df.loc[df.split == "validation"].copy()
 test = df.loc[df.split == "test"].copy()
 assert not (set(train.row_id) & set(validation.row_id) or set(train.row_id) & set(test.row_id) or set(validation.row_id) & set(test.row_id))
 
+def snap_to_grid(values):
+    # K-NN 거리 동점 처리 고정: 1/1024 단위 값으로 맞춰 컴퓨터마다 같은 거리 계산
+    return np.round(values * 1024) / 1024
+
 def build_model(algorithm, value, columns=FEATURES):
     # studytime과 failures의 구간 코드를 연속 시간/횟수라고 가정하지 않습니다.
     numeric = [c for c in ["absences"] if c in columns]
@@ -88,11 +93,15 @@ def build_model(algorithm, value, columns=FEATURES):
     if categories:
         transforms.append(("category", OneHotEncoder(handle_unknown="ignore", sparse_output=False), categories))
     preprocessor = ColumnTransformer(transforms, remainder="drop")
+    if algorithm == "knn":
+        # 이 자료는 거리가 같은 이웃이 많음. 동점 이웃 선택이 실행 환경에 따라 바뀌지 않도록 계산 순서 고정
+        threadpool_limits(limits=1, user_api="openmp")
+        preprocessor = Pipeline([("columns", preprocessor), ("grid", FunctionTransformer(snap_to_grid, feature_names_out="one-to-one"))])
     estimators = {
         "logistic": lambda: LogisticRegression(C=value, max_iter=3000, random_state=42, **MODEL_OPTIONS),
         "tree": lambda: DecisionTreeClassifier(max_depth=value, random_state=42, **MODEL_OPTIONS),
         "forest": lambda: RandomForestClassifier(max_depth=value, random_state=42, n_jobs=1, **MODEL_OPTIONS),
-        "knn": lambda: KNeighborsClassifier(n_neighbors=value, **MODEL_OPTIONS),
+        "knn": lambda: KNeighborsClassifier(n_neighbors=value, algorithm="brute", **MODEL_OPTIONS),
         "svm": lambda: SVC(C=value, **MODEL_OPTIONS),
     }
     return Pipeline([("prepare", preprocessor), ("model", estimators[algorithm]())])
@@ -168,7 +177,9 @@ print("설정 선택 기준: 전체 정확도 또는 10점 미만 재현율")
 
 # 03 · 오분류와 항목 중요도
 # 자동으로 1등을 고르지 않습니다. 우선 페이지에 지정된 기본 설정을 살펴봅니다.
-SELECTED_VALUE = DEFAULT_VALUE if DEFAULT_VALUE in PARAMETER_VALUES else PARAMETER_VALUES[0]
+SELECTED_VALUE = next((v for v in PARAMETER_VALUES if v == DEFAULT_VALUE), PARAMETER_VALUES[0])
+if DEFAULT_VALUE not in PARAMETER_VALUES:
+    print("DEFAULT_VALUE가 PARAMETER_VALUES에 없음 → 첫 값", SELECTED_VALUE, "사용")
 selected_model = models[str(SELECTED_VALUE)]
 pred = predict_labels(selected_model, validation[FEATURES])
 cases = validation[["row_id"] + FEATURES + [TARGET]].copy()

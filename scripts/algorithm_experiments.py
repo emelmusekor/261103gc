@@ -136,7 +136,7 @@ LABS = {
              ('예측 변경 사례 수', '커널에 따라 판단이 달라진 학생 수')],
             '두 결과 JSON에서 예측 변경 학생 1명 선택. 두 실행의 decision_score 부호와 정답 비교',
             '더 유연한 경계가 이번 검증 자료에도 도움이 되었는지 판단',
-            'C=1 고정. gamma=scale은 RBF에만 적용. decision_score는 확률 아님'),
+            'C=1 고정. gamma는 rbf·poly·sigmoid 커널에 적용, linear에서는 미사용. decision_score는 확률 아님'),
         lab('한 사례가 영향을 미치는 범위',
             'RBF에서 gamma=0.1 → 1 → 10: 경계의 국소성, 학습·검증 격차와 소수 범주 탐지의 변화 예상',
             dict(PARAMETER_VALUES=[1.0], DEFAULT_VALUE=1.0, SVM_KERNEL='rbf', SVM_GAMMA=0.1),
